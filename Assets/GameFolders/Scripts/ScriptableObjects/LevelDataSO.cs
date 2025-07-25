@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace GameFolders.Scripts.ScriptableObjects
@@ -12,7 +13,9 @@ namespace GameFolders.Scripts.ScriptableObjects
         [SerializeField] private int targetLuggageCount;
         [SerializeField] private int junkPieceCount;
         [SerializeField] private bool hasCollectiblePiece;
+        [SerializeField] private List<LuggageType> luggageTypes;
         
+        public List<LuggageType> LuggageTypes => luggageTypes;
         public float Time => levelTime;
         public LuggageType TargetLuggageType => _targetLuggageType;
         public CollectiblePieceType CollectiblePieceType => collectiblePieceType;
@@ -34,5 +37,9 @@ namespace GameFolders.Scripts.ScriptableObjects
         None,
         Type1,
         Type2,
+        Type3,
+        Type4,
+        Type5,
+        Type6,
     }
 }

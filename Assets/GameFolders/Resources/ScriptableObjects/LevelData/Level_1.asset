@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 89b21b5d0567bef4aa52dc9b3c0f8ad4, type: 3}
-  m_Name: Level_0
+  m_Name: Level_1
   m_EditorClassIdentifier: 
-  levelTime: 5
+  levelTime: 4
   _targetLuggageType: 1
   collectiblePieceType: 0
-  targetLuggageCount: 5
-  junkPieceCount: 7
+  targetLuggageCount: 4
+  junkPieceCount: 4
   hasCollectiblePiece: 0
-  luggageTypes: 010000000200000004000000
+  luggageTypes: 01000000020000000400000003000000
