@@ -9,8 +9,9 @@ namespace GameFolders.Scripts
         public static Timer Instance { get; private set; }
         public float CurrentLevelTime => levelData.Time;
 
-        public Action OnTimerEnd;
+        public Action OnTimerStop;
         public Action OnTimerStart;
+        public Action OnTimerEnd;
         
         [Header("References")] 
         [SerializeField] private LevelDataSO levelData;
@@ -25,7 +26,7 @@ namespace GameFolders.Scripts
         private void OnEnable()
         {
             OnTimerStart += StartTimer;
-            OnTimerEnd += StopTimer;
+            OnTimerStop += StopTimer;
         }
 
         private void Update()
@@ -36,8 +37,8 @@ namespace GameFolders.Scripts
                 if (_currentTime >= levelData.Time)
                 {
                     _isTimerRunning = false;
-                    _currentTime = 0f;
                     OnTimerEnd?.Invoke();
+                    _currentTime = 0f;
                 }
             }
         }
@@ -45,10 +46,19 @@ namespace GameFolders.Scripts
         private void OnDisable()
         {
             OnTimerStart -= StartTimer;
-            OnTimerEnd -= StopTimer;
+            OnTimerStop -= StopTimer;
         }
 
-        public void StartTimer() => _isTimerRunning = true;
-        public void StopTimer() => _isTimerRunning = false;
+        public void StartTimer()
+        {
+            OnTimerStart?.Invoke();
+            _isTimerRunning = true; 
+        }
+
+        public void StopTimer()
+        {
+            OnTimerStop?.Invoke();
+            _isTimerRunning = false;
+        }
     }
 }
