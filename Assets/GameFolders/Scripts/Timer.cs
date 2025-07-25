@@ -6,59 +6,55 @@ namespace GameFolders.Scripts
 {
     public class Timer : MonoBehaviour
     {
-        public static Timer Instance { get; private set; }
-        public float CurrentLevelTime => levelData.Time;
-
-        public Action OnTimerStop;
-        public Action OnTimerStart;
-        public Action OnTimerEnd;
-        
         [Header("References")] 
         [SerializeField] private LevelDataSO levelData;
-        
+
+        public static Timer Instance { get; private set; }
+        public float TimerStartValue => levelData.Time;
+        public float CurrentTime => _currentTime;
+
+        public event Action OnTimerStart;
+        public event Action OnTimerStop;
+        public event Action OnTimerEnd;
+
         private float _currentTime;
         private bool _isTimerRunning;
-        
+
         private void Awake()
         {
-            Instance = this;
-        }
-        private void OnEnable()
-        {
-            OnTimerStart += StartTimer;
-            OnTimerStop += StopTimer;
+            if (Instance == null)
+                Instance = this;
+            else
+                Destroy(gameObject);
         }
 
         private void Update()
         {
             if (_isTimerRunning)
             {
-                _currentTime += Time.deltaTime;
-                if (_currentTime >= levelData.Time)
+                _currentTime -= Time.deltaTime;
+                if (_currentTime <= 0f)
                 {
+                    _currentTime = 0f;
                     _isTimerRunning = false;
                     OnTimerEnd?.Invoke();
-                    _currentTime = 0f;
                 }
             }
         }
-
-        private void OnDisable()
-        {
-            OnTimerStart -= StartTimer;
-            OnTimerStop -= StopTimer;
-        }
-
         public void StartTimer()
         {
+            _currentTime = levelData.Time;
+            _isTimerRunning = true;
             OnTimerStart?.Invoke();
-            _isTimerRunning = true; 
         }
-
         public void StopTimer()
         {
-            OnTimerStop?.Invoke();
             _isTimerRunning = false;
+            OnTimerStop?.Invoke();
+        }
+        public void SetTimer(float time)
+        {
+            _currentTime = time;
         }
     }
 }
