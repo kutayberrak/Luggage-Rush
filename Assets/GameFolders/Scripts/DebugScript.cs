@@ -16,8 +16,8 @@ public class DebugScript : MonoBehaviour
     }
     public void SpawnBlock()
     {
-        GameObject block = ObjectPoolManager.Instance.GetRandomObjectFromPool(new Vector3(0, 0, 0), transform.rotation);
-        StartCoroutine(DeactivateObject(block));
+        //  GameObject block = ObjectPoolManager.Instance.GetRandomObjectFromPool(new Vector3(0, 0, 0), transform.rotation);
+        //StartCoroutine(DeactivateObject(block));
     }
 
     private IEnumerator DeactivateObject(GameObject block)

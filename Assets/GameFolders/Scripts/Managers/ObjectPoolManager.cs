@@ -39,17 +39,17 @@ public class ObjectPoolManager : MonoBehaviour
 
     private void InitializePool()
     {
-        List<LuggageType> allowedTypes = LevelManager.Instance.CurrentLevelData.LuggageTypes;
+        //List<LuggageType> allowedTypes = LevelManager.Instance.CurrentLevelData.LuggageTypes;
 
         foreach (GameObject prefab in prefabsToPool)
         {
             if (prefab == null || pooledPrefabs.Exists(p => p.prefab == prefab))
                 continue;
 
-            LuggageInfo luggageInfo = prefab.GetComponent<LuggageInfo>(); // Bavullarda olan script
+            // LuggageInfo luggageInfo = prefab.GetComponent<LuggageInfo>(); // Bavullarda olan script
 
-            if (luggageInfo == null || !allowedTypes.Contains(luggageInfo.luggageType)) // Bavulda olan type 
-                continue;
+            // if (luggageInfo == null || !allowedTypes.Contains(luggageInfo.luggageType)) // Bavulda olan type 
+            //     continue;
 
             PooledPrefabEntry entry = new PooledPrefabEntry();
             entry.prefab = prefab;
@@ -65,40 +65,79 @@ public class ObjectPoolManager : MonoBehaviour
         }
     }
 
-    public GameObject GetRandomObjectFromPool(Vector3 position, Quaternion rotation)
+    public GameObject GetObjectFromPool(GameObject prefab, Vector3 position, Quaternion rotation)
     {
-        if (pooledPrefabs.Count == 0)
+
+        var entry = pooledPrefabs.Find(p => p.prefab == prefab);
+
+        if (entry == null)
         {
-            Debug.LogError("No prefabs initialized in pool.");
+            Debug.LogError($"Prefab {prefab.name} not found in pool.");
             return null;
         }
 
-        int startIndex = Random.Range(0, pooledPrefabs.Count);
-
-        for (int i = 0; i < pooledPrefabs.Count; i++)
+        foreach (var obj in entry.objects)
         {
-            int index = (startIndex + i) % pooledPrefabs.Count;
-            var entry = pooledPrefabs[index];
-
-            foreach (var obj in entry.objects)
+            if (!obj.activeInHierarchy)
             {
-                if (!obj.activeInHierarchy)
-                {
-                    obj.transform.SetPositionAndRotation(position, rotation);
-                    obj.SetActive(true);
-                    return obj;
-                }
+                obj.transform.SetPositionAndRotation(position, rotation);
+                obj.SetActive(true);
+                return obj;
             }
         }
 
-        int fallbackIndex = Random.Range(0, pooledPrefabs.Count);
-        var fallbackEntry = pooledPrefabs[fallbackIndex];
 
-        GameObject newObj = Instantiate(fallbackEntry.prefab, position, rotation);
+        GameObject newObj = Instantiate(prefab, position, rotation);
         newObj.transform.SetParent(poolParent);
-        fallbackEntry.objects.Add(newObj);
+        entry.objects.Add(newObj);
         return newObj;
     }
+
+
+    public List<GameObject> GetAllPrefabs()
+    {
+        List<GameObject> allPrefabs = new List<GameObject>();
+        foreach (var entry in pooledPrefabs)
+        {
+            allPrefabs.Add(entry.prefab);
+        }
+        return allPrefabs;
+    }
+
+    // public GameObject GetRandomObjectFromPool(Vector3 position, Quaternion rotation)
+    // {
+    //     if (pooledPrefabs.Count == 0)
+    //     {
+    //         Debug.LogError("No prefabs initialized in pool.");
+    //         return null;
+    //     }
+
+    //     int startIndex = Random.Range(0, pooledPrefabs.Count);
+
+    //     for (int i = 0; i < pooledPrefabs.Count; i++)
+    //     {
+    //         int index = (startIndex + i) % pooledPrefabs.Count;
+    //         var entry = pooledPrefabs[index];
+
+    //         foreach (var obj in entry.objects)
+    //         {
+    //             if (!obj.activeInHierarchy)
+    //             {
+    //                 obj.transform.SetPositionAndRotation(position, rotation);
+    //                 obj.SetActive(true);
+    //                 return obj;
+    //             }
+    //         }
+    //     }
+
+    //     int fallbackIndex = Random.Range(0, pooledPrefabs.Count);
+    //     var fallbackEntry = pooledPrefabs[fallbackIndex];
+
+    //     GameObject newObj = Instantiate(fallbackEntry.prefab, position, rotation);
+    //     newObj.transform.SetParent(poolParent);
+    //     fallbackEntry.objects.Add(newObj);
+    //     return newObj;
+    // }
 
     public void ReturnObjectToPool(GameObject obj)
     {
