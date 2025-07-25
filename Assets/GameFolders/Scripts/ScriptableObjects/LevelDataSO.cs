@@ -7,17 +7,17 @@ namespace GameFolders.Scripts.ScriptableObjects
     {
         [Header("Level Information")] 
         [SerializeField] private float levelTime;
-        [SerializeField] private BagType targetBagType;
+        [SerializeField] private LuggageType _targetLuggageType;
         [SerializeField] private CollectiblePieceType collectiblePieceType;
-        [SerializeField] private int targetBagCount;
+        [SerializeField] private int targetLuggageCount;
         [SerializeField] private int junkPieceCount;
         [SerializeField] private bool hasCollectiblePiece;
-
+        
         public float Time => levelTime;
-        public BagType TargetBagType => targetBagType;
+        public LuggageType TargetLuggageType => _targetLuggageType;
         public CollectiblePieceType CollectiblePieceType => collectiblePieceType;
         public bool HasCollectiblePiece => hasCollectiblePiece;
-        public int TargetBagCount => targetBagCount;
+        public int TargetLuggageCount => targetLuggageCount;
         public int JunkPieceCount => junkPieceCount;
     }
 
@@ -29,8 +29,10 @@ namespace GameFolders.Scripts.ScriptableObjects
     {
         None
     }
-    public enum BagType
+    public enum LuggageType
     {
         None,
+        Type1,
+        Type2,
     }
 }
