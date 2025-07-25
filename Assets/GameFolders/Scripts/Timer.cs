@@ -10,7 +10,6 @@ namespace GameFolders.Scripts
         [SerializeField] private LevelDataSO levelData;
 
         public static Timer Instance { get; private set; }
-        public float TimerStartValue => levelData.Time;
         public float CurrentTime => _currentTime;
 
         public event Action OnTimerStart;
@@ -43,7 +42,6 @@ namespace GameFolders.Scripts
         }
         public void StartTimer()
         {
-            _currentTime = levelData.Time;
             _isTimerRunning = true;
             OnTimerStart?.Invoke();
         }
@@ -52,9 +50,9 @@ namespace GameFolders.Scripts
             _isTimerRunning = false;
             OnTimerStop?.Invoke();
         }
-        public void SetTimer(float time)
+        public void ResetTimer(float timerStartValue)
         {
-            _currentTime = time;
+            _currentTime = timerStartValue;
         }
     }
 }
