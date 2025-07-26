@@ -18,12 +18,16 @@ public class ClickableObject : MonoBehaviour
 
     public Canvas mainCanvas;
 
-    private bool isMoving = false;
+    public bool isMoving = false;
     private Slot targetSlot = null;
     private bool isArriving = false;
 
     public float finalScale = 0.2f;
     public float shrinkStartDistance = 1.0f;
+
+    public static float lastClickTime = -100f;
+    public static float clickDelayThreshold = 0.15f;
+    public static float extraDelayAmount = 0.15f;
 
     void Update()
     {
@@ -54,6 +58,12 @@ public class ClickableObject : MonoBehaviour
     private void OnMouseDown()
     {
         if (isMoving) return;
+
+        float timeSinceLastClick = Time.time - lastClickTime;
+        lastClickTime = Time.time;
+
+        float extraDelay = timeSinceLastClick < clickDelayThreshold ? extraDelayAmount : 0f;
+        float actualWaitAfterScale = waitAfterScale + extraDelay;
 
         // Eşleşen slotları bul
         var matches = new List<Slot>();
@@ -87,7 +97,7 @@ public class ClickableObject : MonoBehaviour
         Sequence seq = DOTween.Sequence();
         seq.Append(transform.DOScale(clickScale, scaleDuration).SetEase(Ease.InCubic));
         seq.Join(transform.DORotate(Vector3.zero, rotateDuration).SetEase(Ease.InCubic));
-        seq.AppendInterval(waitAfterScale);
+        seq.AppendInterval(actualWaitAfterScale);
         seq.OnComplete(() =>
         {
             isArriving = true; // Hareket başlayacak
@@ -108,10 +118,7 @@ public class ClickableObject : MonoBehaviour
     {
         transform.position = GetSlotWorldPosition(targetSlot);
 
-        targetSlot.FillSlotWithSprite(objectSprite);
-        targetSlot.StoredUniqueID = uniqueId;
-        targetSlot.SetOccupied(true);
-        targetSlot.SetReserved(false);
+        targetSlot.FillSlot(objectSprite, uniqueId);
 
         isMoving = false;
         isArriving = false;
