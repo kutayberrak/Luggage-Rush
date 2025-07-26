@@ -263,10 +263,11 @@ MonoBehaviour:
   clickScale: 1.3
   scaleDuration: 0.7
   rotateDuration: 0.6
-  waitAfterScale: 0.05
+  waitAfterScale: 0.1
   mainCanvas: {fileID: 2083932705}
+  isMoving: 0
   finalScale: 0.2
-  shrinkStartDistance: 1
+  shrinkStartDistance: 3
 --- !u!65 &142610617
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -635,10 +636,11 @@ MonoBehaviour:
   clickScale: 1.3
   scaleDuration: 0.7
   rotateDuration: 0.6
-  waitAfterScale: 0.05
+  waitAfterScale: 0.2
   mainCanvas: {fileID: 2083932705}
+  isMoving: 0
   finalScale: 0.2
-  shrinkStartDistance: 1
+  shrinkStartDistance: 3
 --- !u!1 &475089962
 GameObject:
   m_ObjectHideFlags: 0
@@ -1303,10 +1305,11 @@ MonoBehaviour:
   clickScale: 1.3
   scaleDuration: 0.7
   rotateDuration: 0.6
-  waitAfterScale: 0.05
+  waitAfterScale: 0.25
   mainCanvas: {fileID: 2083932705}
+  isMoving: 0
   finalScale: 0.2
-  shrinkStartDistance: 1
+  shrinkStartDistance: 2
 --- !u!65 &986386771
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1559,10 +1562,11 @@ MonoBehaviour:
   clickScale: 1.3
   scaleDuration: 0.7
   rotateDuration: 0.6
-  waitAfterScale: 0.05
+  waitAfterScale: 0.3
   mainCanvas: {fileID: 2083932705}
+  isMoving: 0
   finalScale: 0.2
-  shrinkStartDistance: 1
+  shrinkStartDistance: 2
 --- !u!65 &1724695982
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1935,8 +1939,9 @@ MonoBehaviour:
   rotateDuration: 0.6
   waitAfterScale: 0.05
   mainCanvas: {fileID: 2083932705}
+  isMoving: 0
   finalScale: 0.2
-  shrinkStartDistance: 1
+  shrinkStartDistance: 2
 --- !u!65 &1909410941
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2218,10 +2223,11 @@ MonoBehaviour:
   clickScale: 1.3
   scaleDuration: 0.7
   rotateDuration: 0.6
-  waitAfterScale: 0.05
+  waitAfterScale: 0.15
   mainCanvas: {fileID: 2083932705}
+  isMoving: 0
   finalScale: 0.2
-  shrinkStartDistance: 1
+  shrinkStartDistance: 3
 --- !u!65 &2133446877
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2408,12 +2414,12 @@ SceneRoots:
   m_Roots:
   - {fileID: 713802194}
   - {fileID: 578555646}
-  - {fileID: 277266478}
+  - {fileID: 1909410944}
   - {fileID: 142610620}
   - {fileID: 2133446880}
-  - {fileID: 1724695985}
+  - {fileID: 277266478}
   - {fileID: 986386774}
-  - {fileID: 1909410944}
+  - {fileID: 1724695985}
   - {fileID: 2083932706}
   - {fileID: 643023744}
   - {fileID: 1699659051}
