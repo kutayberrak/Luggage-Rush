@@ -30,6 +30,7 @@ public class Slot : MonoBehaviour
         iconImage.sprite = null;
         iconImage.enabled = false;
         isOccupied = false;
+        StoredUniqueID = null;
     }
 
     public void CopyFrom(Slot other)
