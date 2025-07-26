@@ -62,7 +62,7 @@ public class ClickableObject : MonoBehaviour
             // Animasyon bittiğinde kesin dolumu yapacağız.
             reservedSlot.SetOccupied(true);
             reservedSlot.StoredUniqueID = this.uniqueId; // Henüz sprite atanmadı ama unique ID tutulur
-
+            reservedSlot.iconImage.sprite = this.objectSprite;
             // Animasyon dizisi
             Sequence seq = DOTween.Sequence();
             seq.Append(transform.DOScale(clickScale, scaleDuration).SetEase(Ease.InCubic));
