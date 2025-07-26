@@ -8,6 +8,8 @@ public class Slot : MonoBehaviour
     private bool isOccupied = false;
     public bool IsOccupied => isOccupied;
 
+    public string StoredUniqueID;
+
     public void FillSlotWithSprite(Sprite newSprite)
     {
         if (iconImage == null)
@@ -28,6 +30,13 @@ public class Slot : MonoBehaviour
         iconImage.sprite = null;
         iconImage.enabled = false;
         isOccupied = false;
+    }
+
+    public void CopyFrom(Slot other)
+    {
+        this.iconImage.sprite = other.iconImage.sprite;
+        this.StoredUniqueID = other.StoredUniqueID;
+        this.SetOccupied(true);
     }
 
     public void SetOccupied(bool value)
