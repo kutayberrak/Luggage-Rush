@@ -179,7 +179,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad11ca51ee491644e85784d3dfe3625a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  conveyorSpeed: 2
+  conveyorSpeed: 3.5
   conveyorRigidbody: {fileID: 24122129}
 --- !u!65 &24122131
 BoxCollider:

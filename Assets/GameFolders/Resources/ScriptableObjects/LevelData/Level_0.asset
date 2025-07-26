@@ -18,4 +18,4 @@ MonoBehaviour:
   targetLuggageCount: 5
   junkPieceCount: 7
   hasCollectiblePiece: 0
-  luggageTypes: 010000000200000003000000
+  luggageTypes: 
