@@ -256,15 +256,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectSprite: {fileID: 21300000, guid: f4eed5c1bcbba6f4a94406cbea98b092, type: 3}
-  mainCanvas: {fileID: 2083932705}
-  moveDuration: 0.6
+  uniqueId: 1
+  moveSpeed: 20
   curveHeight: 2
+  stopDistance: 0.05
   clickScale: 1.3
-  slotScale: 0.3
   scaleDuration: 0.7
   rotateDuration: 0.6
   waitAfterScale: 0.05
-  uniqueId: 1
+  mainCanvas: {fileID: 2083932705}
+  finalScale: 0.2
+  shrinkStartDistance: 1
 --- !u!65 &142610617
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -626,15 +628,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectSprite: {fileID: 21300000, guid: f4eed5c1bcbba6f4a94406cbea98b092, type: 3}
-  mainCanvas: {fileID: 2083932705}
-  moveDuration: 0.6
+  uniqueId: 1
+  moveSpeed: 20
   curveHeight: 2
+  stopDistance: 0.05
   clickScale: 1.3
-  slotScale: 0.3
   scaleDuration: 0.7
   rotateDuration: 0.6
   waitAfterScale: 0.05
-  uniqueId: 1
+  mainCanvas: {fileID: 2083932705}
+  finalScale: 0.2
+  shrinkStartDistance: 1
 --- !u!1 &475089962
 GameObject:
   m_ObjectHideFlags: 0
@@ -1292,15 +1296,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectSprite: {fileID: 21300000, guid: c3489252689bb4c4b987c976568fc420, type: 3}
-  mainCanvas: {fileID: 2083932705}
-  moveDuration: 0.6
+  uniqueId: 2
+  moveSpeed: 20
   curveHeight: 2
+  stopDistance: 0.05
   clickScale: 1.3
-  slotScale: 0.3
   scaleDuration: 0.7
   rotateDuration: 0.6
   waitAfterScale: 0.05
-  uniqueId: 2
+  mainCanvas: {fileID: 2083932705}
+  finalScale: 0.2
+  shrinkStartDistance: 1
 --- !u!65 &986386771
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1546,15 +1552,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectSprite: {fileID: 21300000, guid: c3489252689bb4c4b987c976568fc420, type: 3}
-  mainCanvas: {fileID: 2083932705}
-  moveDuration: 0.6
+  uniqueId: 2
+  moveSpeed: 20
   curveHeight: 2
+  stopDistance: 0.05
   clickScale: 1.3
-  slotScale: 0.3
   scaleDuration: 0.7
   rotateDuration: 0.6
   waitAfterScale: 0.05
-  uniqueId: 2
+  mainCanvas: {fileID: 2083932705}
+  finalScale: 0.2
+  shrinkStartDistance: 1
 --- !u!65 &1724695982
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1918,15 +1926,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectSprite: {fileID: 21300000, guid: c3489252689bb4c4b987c976568fc420, type: 3}
-  mainCanvas: {fileID: 2083932705}
-  moveDuration: 0.6
+  uniqueId: 2
+  moveSpeed: 20
   curveHeight: 2
+  stopDistance: 0.05
   clickScale: 1.3
-  slotScale: 0.3
   scaleDuration: 0.7
   rotateDuration: 0.6
   waitAfterScale: 0.05
-  uniqueId: 2
+  mainCanvas: {fileID: 2083932705}
+  finalScale: 0.2
+  shrinkStartDistance: 1
 --- !u!65 &1909410941
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2201,15 +2211,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectSprite: {fileID: 21300000, guid: f4eed5c1bcbba6f4a94406cbea98b092, type: 3}
-  mainCanvas: {fileID: 2083932705}
-  moveDuration: 0.6
+  uniqueId: 1
+  moveSpeed: 20
   curveHeight: 2
+  stopDistance: 0.05
   clickScale: 1.3
-  slotScale: 0.3
   scaleDuration: 0.7
   rotateDuration: 0.6
   waitAfterScale: 0.05
-  uniqueId: 1
+  mainCanvas: {fileID: 2083932705}
+  finalScale: 0.2
+  shrinkStartDistance: 1
 --- !u!65 &2133446877
 BoxCollider:
   m_ObjectHideFlags: 0

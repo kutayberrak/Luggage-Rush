@@ -1,30 +1,28 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System.Linq; // LINQ kullanmak için gerekli
+using System.Linq;
 
 public class SlotManager : MonoBehaviour
 {
     public static SlotManager Instance;
 
-    public List<Slot> slots = new List<Slot>(); // Slot sırasını burada tut
+    public List<Slot> slots = new List<Slot>();
 
     void Awake()
     {
         Instance = this;
     }
 
-    // Boş slot döndürür (eşleşme yoksa)
     public Slot GetFirstEmptySlot()
     {
         foreach (var slot in slots)
         {
-            if (!slot.IsOccupied)
+            if (!slot.IsOccupied && !slot.IsReserved)
                 return slot;
         }
-        return null; // Tüm slotlar doluysa null döner
+        return null;
     }
 
-    // Eşleşen slot varsa onu döndür
     public Slot GetMatchingSlot(Sprite itemSprite)
     {
         foreach (var slot in slots)
@@ -35,47 +33,36 @@ public class SlotManager : MonoBehaviour
         return null;
     }
 
-    // Sağa kaydırma işlemi (belirli bir başlangıç slotundan itibaren)
-    public void ShiftRightFrom(Slot startSlot)
+    public bool ShiftRightFrom(int startIndex)
     {
-        // Liste boşsa veya sadece bir eleman varsa kaydırma yapmaya gerek yok
-        if (slots.Count <= 1)
+        if (slots.Count <= 1 || startIndex < 0 || startIndex >= slots.Count)
         {
-            Debug.LogWarning("Slot listesi kaydırma için yeterli değil.");
-            return;
+            Debug.LogWarning("Geçersiz slot indeksi veya slot listesi küçük.");
+            return false;
         }
 
-        int index = slots.IndexOf(startSlot);
-
-        // Eğer başlangıç slotu listede yoksa veya son slot ise kaydırma yapmaya gerek yok
-        if (index == -1 || index == slots.Count - 1)
+        // Eğer en sağ slot doluysa → kaydırma yapılamaz
+        if (slots[slots.Count - 1].IsOccupied)
         {
-            // Debug.LogWarning("Başlangıç slotu bulunamadı veya son slot. Sağa kaydırma yapılamadı.");
-            return; // Hata yerine sadece uyarı verip çıkabiliriz
+            return false;
         }
 
-        // Sondan başlayarak index'e kadar olan slotları sağa kaydır
-        for (int i = slots.Count - 2; i >= index; i--)
+        // Sağdan sola kaydır: i = slots.Count - 2 → startIndex
+        for (int i = slots.Count - 2; i >= startIndex; i--)
         {
-            var current = slots[i];
-            var next = slots[i + 1];
+            Slot current = slots[i];
+            Slot next = slots[i + 1];
 
-            if (current.IsOccupied)
+            if (current.IsOccupied && !current.IsReserved)
             {
-                // Slot içeriğini kopyala (sprite ve uniqueId)
-                next.FillSlotWithSprite(current.iconImage.sprite);
-                next.StoredUniqueID = current.StoredUniqueID; // Unique ID'yi de kopyala!
-                current.ClearSlot(); // Eski slotu temizle
-            }
-            else
-            {
-                // Mevcut slot boşsa, yanındaki dolu slotu çekmek yerine sadece temizlemek yeterli
+                next.CopyFrom(current);
                 current.ClearSlot();
             }
         }
+
+        return true;
     }
 
-    // Slotları tamamen temizle (örneğin oyun bittiğinde veya yeniden başlatıldığında)
     public void ClearAllSlots()
     {
         foreach (var slot in slots)
@@ -83,57 +70,45 @@ public class SlotManager : MonoBehaviour
             slot.ClearSlot();
         }
     }
-
-    // YENİ METOT: Eşleşmeleri kontrol et ve temizle
     public void CheckForMatches(Slot changedSlot)
     {
-        // Yereleşen objenin ID'sini al
-        string changedSlotID = changedSlot.StoredUniqueID;
+        string targetID = changedSlot.StoredUniqueID;
 
-        // Eğer yerleşen slot boşsa veya ID'si yoksa kontrol etmeye gerek yok
-        if (!changedSlot.IsOccupied || string.IsNullOrEmpty(changedSlotID))
-        {
+        if (!changedSlot.IsOccupied || string.IsNullOrEmpty(targetID))
             return;
-        }
 
-        // Aynı ID'ye sahip tüm dolu slotları bul
-        List<Slot> matchingSlots = new List<Slot>();
-        foreach (var slot in slots)
+        List<Slot> consecutiveMatches = new List<Slot>();
+
+        for (int i = 0; i < slots.Count; i++)
         {
-            if (slot.IsOccupied && slot.StoredUniqueID == changedSlotID)
+            if (slots[i].IsOccupied && !slots[i].IsReserved && slots[i].StoredUniqueID == targetID)
             {
-                matchingSlots.Add(slot);
-            }
-        }
+                consecutiveMatches.Add(slots[i]);
 
-        // Eğer 3 veya daha fazla eşleşen slot varsa
-        if (matchingSlots.Count >= 3)
-        {
-            Debug.Log($"{matchingSlots.Count} adet {changedSlotID} eşleşmesi bulundu! Temizleniyor...");
-            foreach (var slotToClear in matchingSlots)
+                if (consecutiveMatches.Count >= 3)
+                {
+                    // Eşleşme bulundu
+                    Debug.Log($"{consecutiveMatches.Count} adet {targetID} eşleşmesi bulundu! Temizleniyor...");
+                    foreach (var matchSlot in consecutiveMatches)
+                    {
+                        matchSlot.ClearSlot();
+                    }
+                    CompactSlots();
+                    return; // sadece ilk eşleşme temizleniyor
+                }
+            }
+            else
             {
-                slotToClear.ClearSlot(); // Eşleşen slotu temizle
+                consecutiveMatches.Clear(); // zincir bozuldu
             }
-            // Slotlar temizlendikten sonra, boşlukları doldurmak için sola kaydırma gerekebilir
-            // Buraya yeni bir "ShiftLeft" veya "CompactSlots" metodu ekleyebilirsiniz.
-            CompactSlots(); // Slotları sola doğru sıkıştır
-
-            // Not: Eğer birden fazla 3'lü eşleşme aynı anda temizleniyorsa,
-            // (örneğin 6 tane aynı anda geldiyse ve 2 tane 3'lü oluştuysa)
-            // bu mevcut mantık doğru çalışacaktır.
-            // Puanlama veya efekt gibi ek mantıkları buraya ekleyebilirsiniz.
         }
     }
 
-    // YENİ METOT: Boşlukları doldurmak için slotları sola sıkıştır
-    // SlotManager.cs içindeki CompactSlots metodu
+
     public void CompactSlots()
     {
-        // Geçici bir liste oluşturacağız. Bu listeye dolu slotların verilerini kopyalayacağız.
-        // Boş slotların verileriyle uğraşmaya gerek yok, onlar sonra temizlenecek.
         List<(Sprite sprite, string uniqueId)> tempOccupiedData = new List<(Sprite, string)>();
 
-        // Dolu slotların verilerini (sprite ve uniqueId) geçici listeye kopyala
         foreach (var slot in slots)
         {
             if (slot.IsOccupied)
@@ -141,21 +116,30 @@ public class SlotManager : MonoBehaviour
                 tempOccupiedData.Add((slot.iconImage.sprite, slot.StoredUniqueID));
             }
         }
-
-        // Şimdi orijinal 'slots' listesini baştan sona düzenleyeceğiz.
-        // Önce tüm dolu slotları yerleştir, sonra kalanları temizle.
-
-        // Dolu slot verilerini başa yerleştir
         for (int i = 0; i < tempOccupiedData.Count; i++)
         {
             slots[i].FillSlotWithSprite(tempOccupiedData[i].sprite);
             slots[i].StoredUniqueID = tempOccupiedData[i].uniqueId;
         }
 
-        // Kalan slotları (yani önceden dolu olup şimdi boş olan yerler veya zaten boş olan yerler) temizle
         for (int i = tempOccupiedData.Count; i < slots.Count; i++)
         {
             slots[i].ClearSlot();
         }
+    }
+
+    public Slot GetLatestTargetSlot(string uniqueId)
+    {
+        // Aynı ID'ye sahip ilk slotu bul
+        foreach (var slot in slots)
+        {
+            if (slot.IsOccupied && slot.StoredUniqueID == uniqueId)
+            {
+                return slot;
+            }
+        }
+
+        // Yoksa en sağda boş slot bul
+        return GetFirstEmptySlot();
     }
 }

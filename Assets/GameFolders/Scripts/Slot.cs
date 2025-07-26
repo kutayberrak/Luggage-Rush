@@ -8,8 +8,16 @@ public class Slot : MonoBehaviour
     private bool isOccupied = false;
     public bool IsOccupied => isOccupied;
 
+
+    private bool isReserved = false;
+    public bool IsReserved => isReserved;
+
     public string StoredUniqueID;
 
+    public void SetReserved(bool value)
+    {
+        isReserved = value;
+    }
     public void FillSlotWithSprite(Sprite newSprite)
     {
         if (iconImage == null)
@@ -30,7 +38,9 @@ public class Slot : MonoBehaviour
         iconImage.sprite = null;
         iconImage.enabled = false;
         isOccupied = false;
+        isReserved = false;   // 👈 burada!
         StoredUniqueID = null;
+        transform.localScale = Vector3.one;
     }
 
     public void CopyFrom(Slot other)
@@ -38,6 +48,8 @@ public class Slot : MonoBehaviour
         this.iconImage.sprite = other.iconImage.sprite;
         this.StoredUniqueID = other.StoredUniqueID;
         this.SetOccupied(true);
+        this.SetReserved(false);   // 🔧 ekle
+        iconImage.enabled = true;
     }
 
     public void SetOccupied(bool value)
