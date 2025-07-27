@@ -1,7 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using GameFolders.Scripts.ScriptableObjects;
-using GameFolders.Scripts.Managers;
 
 public class ObjectPoolManager : MonoBehaviour
 {
@@ -12,8 +10,14 @@ public class ObjectPoolManager : MonoBehaviour
         public List<GameObject> objects = new();
     }
 
-    [Header("Prefabs to Pool")]
-    [SerializeField] private List<GameObject> prefabsToPool = new();
+    [Header("Luggage Prefabs")]
+    [SerializeField] private List<GameObject> luggagePrefabs = new();
+
+    [Header("Garbage Prefabs")]
+    [SerializeField] private List<GameObject> garbagePrefabs = new();
+
+    [Header("Collection Prefabs")]
+    [SerializeField] private List<GameObject> collectionPrefabs = new();
 
     public static ObjectPoolManager Instance { get; private set; }
 
@@ -21,6 +25,9 @@ public class ObjectPoolManager : MonoBehaviour
 
     private List<PooledPrefabEntry> pooledPrefabs = new();
     private Transform poolParent;
+    private Transform lugageParent;
+    private Transform garbageParent;
+    private Transform collecitonParent;
 
     private void Awake()
     {
@@ -31,32 +38,45 @@ public class ObjectPoolManager : MonoBehaviour
         }
 
         Instance = this;
+
         GameObject poolParentObj = new GameObject("PooledObjects");
         poolParent = poolParentObj.transform;
+
+        GameObject luggageParenObj = new GameObject("Lugages");
+        lugageParent = luggageParenObj.transform;
+        lugageParent.SetParent(poolParent);
+
+        GameObject garbageParentObj = new GameObject("Garbages");
+        garbageParent = garbageParentObj.transform;
+        garbageParent.SetParent(poolParent);
+
+        GameObject collectionParenObj = new GameObject("Collections");
+        collecitonParent = collectionParenObj.transform;
+        collecitonParent.SetParent(poolParent);
 
         InitializePool();
     }
 
     private void InitializePool()
     {
-        //List<LuggageType> allowedTypes = LevelManager.Instance.CurrentLevelData.LuggageTypes;
+        AddToPool(luggagePrefabs, lugageParent);
+        AddToPool(garbagePrefabs, garbageParent);
+        AddToPool(collectionPrefabs, collecitonParent);
+    }
 
-        foreach (GameObject prefab in prefabsToPool)
+    private void AddToPool(List<GameObject> prefabs, Transform parent)
+    {
+        foreach (GameObject prefab in prefabs)
         {
             if (prefab == null || pooledPrefabs.Exists(p => p.prefab == prefab))
                 continue;
-
-            // LuggageInfo luggageInfo = prefab.GetComponent<LuggageInfo>(); // Bavullarda olan script
-
-            // if (luggageInfo == null || !allowedTypes.Contains(luggageInfo.luggageType)) // Bavulda olan type 
-            //     continue;
 
             PooledPrefabEntry entry = new PooledPrefabEntry();
             entry.prefab = prefab;
 
             for (int i = 0; i < poolSize; i++)
             {
-                GameObject obj = Instantiate(prefab, poolParent);
+                GameObject obj = Instantiate(prefab, parent);
                 obj.SetActive(false);
                 entry.objects.Add(obj);
             }
@@ -103,42 +123,6 @@ public class ObjectPoolManager : MonoBehaviour
         }
         return allPrefabs;
     }
-
-    // public GameObject GetRandomObjectFromPool(Vector3 position, Quaternion rotation)
-    // {
-    //     if (pooledPrefabs.Count == 0)
-    //     {
-    //         Debug.LogError("No prefabs initialized in pool.");
-    //         return null;
-    //     }
-
-    //     int startIndex = Random.Range(0, pooledPrefabs.Count);
-
-    //     for (int i = 0; i < pooledPrefabs.Count; i++)
-    //     {
-    //         int index = (startIndex + i) % pooledPrefabs.Count;
-    //         var entry = pooledPrefabs[index];
-
-    //         foreach (var obj in entry.objects)
-    //         {
-    //             if (!obj.activeInHierarchy)
-    //             {
-    //                 obj.transform.SetPositionAndRotation(position, rotation);
-    //                 obj.SetActive(true);
-    //                 return obj;
-    //             }
-    //         }
-    //     }
-
-    //     int fallbackIndex = Random.Range(0, pooledPrefabs.Count);
-    //     var fallbackEntry = pooledPrefabs[fallbackIndex];
-
-    //     GameObject newObj = Instantiate(fallbackEntry.prefab, position, rotation);
-    //     newObj.transform.SetParent(poolParent);
-    //     fallbackEntry.objects.Add(newObj);
-    //     return newObj;
-    // }
-
     public void ReturnObjectToPool(GameObject obj)
     {
         Rigidbody rb = obj.GetComponent<Rigidbody>();
@@ -148,6 +132,5 @@ public class ObjectPoolManager : MonoBehaviour
             rb.angularVelocity = Vector3.zero;
         }
         obj.SetActive(false);
-        obj.transform.SetParent(poolParent);
     }
 }
