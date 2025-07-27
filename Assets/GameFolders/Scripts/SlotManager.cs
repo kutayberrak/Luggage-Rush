@@ -352,6 +352,18 @@ public class SlotManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Şu anda ne kadar boş (veya rezerve edilmemiş) slot varsa
+    /// en az bir tane kalmış mı kontrol eder.
+    /// </summary>
+    public bool HasFreeSlot()
+    {
+        // IsReserved da rezerve edilmişse boş sayılmaz
+        foreach (var s in slots)
+            if (!s.IsOccupied && !s.IsReserved)
+                return true;
+        return false;
+    }
     private IEnumerator ProcessSlotChanges()
     {
         yield return StartCoroutine(CheckForMatchesCoroutine3D());

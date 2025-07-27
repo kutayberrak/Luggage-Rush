@@ -59,7 +59,18 @@ public class ClickableObject : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (reservedSlotIndex >= 0) return;
+        // Eğer zaten bir slot’a rezerveliysen veya hâlihazırda hareket ediyorsa
+        if (reservedSlotIndex >= 0)
+            return;
+
+        // **YENİ**: eğer o anda hiç boş slot kalmadıysa, tıklamayı yoksay
+        if (!SlotManager.Instance.HasFreeSlot())
+        {
+            Debug.Log("No free slots right now — click ignored.");
+            return;
+        }
+
+        // Aksi halde yerleştirme akışını başlat
         SlotManager.Instance.TryPlaceObject3D(gameObject, UniqueID);
     }
 }
