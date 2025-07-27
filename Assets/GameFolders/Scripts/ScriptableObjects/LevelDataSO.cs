@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using GameFolders.Scripts.Data;
 using GameFolders.Scripts.Enums;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace GameFolders.Scripts.ScriptableObjects
@@ -8,6 +9,8 @@ namespace GameFolders.Scripts.ScriptableObjects
     [CreateAssetMenu(fileName = "LevelDataSO", menuName = "ScriptableObjects/LevelDataSO")]
     public class LevelDataSO : ScriptableObject
     {
+        [InfoBox("For luggage target count must be power of 3 (3, 9, 27, etc.)")]
+        
         [Header("Level Configuration")]
         [Tooltip("Seconds")]
         [SerializeField] private float levelTimeInSeconds;
