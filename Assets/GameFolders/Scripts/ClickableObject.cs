@@ -31,6 +31,10 @@ public class ClickableObject : MonoBehaviour
     public float initialLiftHeight = 0.5f; // Obje tıklanınca ne kadar yükselecek (Unity birimi).
     public float initialAnimationDuration = 0.2f; // Yükselme ve rotasyon animasyonunun süresi (saniye).
 
+    // Yeni: Slota girerken küçülme ayarları
+    public float shrinkScaleFactor = 0.8f; // Slota girerken objenin küçüleceği oran (örn: 0.8f = %80'ine küçül).
+    public Ease shrinkEaseType = Ease.OutQuad; // Küçülme animasyonunun yumuşama tipi.
+
     /// <summary>
     /// Her karede çağrılır. Objelerin hedef slota hareketini yönetir.
     /// </summary>
@@ -135,19 +139,33 @@ public class ClickableObject : MonoBehaviour
             float distance = Vector3.Distance(transform.position, targetPos);
             float duration = distance / (moveSpeed * 5f); // moveSpeed ayarlanabilir
 
+            // Hareket ve küçülme animasyonlarını birleştirmek için bir Sequence oluştur.
+            Sequence moveAndShrinkSequence = DOTween.Sequence();
+
             // UI elementi mi yoksa 3D obje mi kontrol et ve ona göre tween başlat
             if (GetComponent<RectTransform>() != null)
             {
-                currentMoveTween = GetComponent<RectTransform>().DOAnchorPos(targetPos, duration, false)
-                    .SetEase(Ease.OutQuad)
-                    .OnComplete(() => OnMoveComplete());
+                moveAndShrinkSequence.Append(
+                    GetComponent<RectTransform>().DOAnchorPos(targetPos, duration, false)
+                        .SetEase(Ease.OutQuad)
+                );
             }
             else
             {
-                currentMoveTween = transform.DOMove(targetPos, duration)
-                    .SetEase(Ease.OutQuad)
-                    .OnComplete(() => OnMoveComplete());
+                moveAndShrinkSequence.Append(
+                    transform.DOMove(targetPos, duration)
+                        .SetEase(Ease.OutQuad)
+                );
             }
+
+            // Objeyi hedef slota doğru hareket ederken küçült.
+            // Bu animasyonu, hareket animasyonu ile eş zamanlı olarak '.Join()' ile ekliyoruz.
+            moveAndShrinkSequence.Join(
+                transform.DOScale(Vector3.one * shrinkScaleFactor, duration)
+                    .SetEase(shrinkEaseType) // Küçülme animasyonu için seçilen yumuşama tipi
+            );
+
+            currentMoveTween = moveAndShrinkSequence.OnComplete(() => OnMoveComplete());
         }
         else
         {
