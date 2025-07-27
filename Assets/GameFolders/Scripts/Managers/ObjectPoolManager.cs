@@ -123,6 +123,21 @@ public class ObjectPoolManager : MonoBehaviour
         }
         return allPrefabs;
     }
+
+    public List<GameObject> GetObjectsByType(ObjectType type)
+    {
+        switch (type)
+        {
+            case ObjectType.Luggage:
+                return luggagePrefabs;
+            case ObjectType.Garbage:
+                return garbagePrefabs;
+            case ObjectType.Collection:
+                return collectionPrefabs;
+            default:
+                return new List<GameObject>();
+        }
+    }
     public void ReturnObjectToPool(GameObject obj)
     {
         Rigidbody rb = obj.GetComponent<Rigidbody>();

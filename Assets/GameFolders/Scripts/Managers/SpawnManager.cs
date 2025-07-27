@@ -65,8 +65,10 @@ public class SpawnManager : MonoBehaviour
         }
 
         var levelData = LevelManager.Instance.CurrentLevelData;
-        var allPrefabs = ObjectPoolManager.Instance.GetAllPrefabs();
 
+        var luggagePrefabs = ObjectPoolManager.Instance.GetObjectsByType(ObjectType.Luggage);
+        var garbagePrefabs = ObjectPoolManager.Instance.GetObjectsByType(ObjectType.Garbage);
+        var collectionPrefabs = ObjectPoolManager.Instance.GetObjectsByType(ObjectType.Collection);
 
         _hasCollectiblePiece = levelData.HasCollectiblePiece;
 
@@ -81,7 +83,7 @@ public class SpawnManager : MonoBehaviour
         foreach (var luggageType in levelData.LuggageTypesToSpawn)
         {
 
-            foreach (GameObject prefab in allPrefabs)
+            foreach (GameObject prefab in luggagePrefabs)
             {
                 var luggageInfo = prefab.GetComponent<LuggageItem>();
                 if (luggageInfo != null && luggageInfo.luggageType == luggageType)
@@ -97,7 +99,7 @@ public class SpawnManager : MonoBehaviour
         foreach (var garbageType in levelData.junkPieceInfo)
         {
 
-            foreach (GameObject prefab in allPrefabs)
+            foreach (GameObject prefab in garbagePrefabs)
             {
                 var garbageInfo = prefab.GetComponent<GarbageItem>();
                 if (garbageInfo != null && garbageInfo.garbageType == garbageType.JunkPieceType)
@@ -113,7 +115,7 @@ public class SpawnManager : MonoBehaviour
         foreach (var collectionType in levelData.CollectablePieceInfo)
         {
 
-            foreach (GameObject prefab in allPrefabs)
+            foreach (GameObject prefab in collectionPrefabs)
             {
                 var collectionInfo = prefab.GetComponent<CollectionItem>();
                 if (collectionInfo != null && collectionInfo.collectionType == collectionType.CollectiblePieceType)
