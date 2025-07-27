@@ -1,129 +1,91 @@
 using UnityEngine;
-using DG.Tweening;
-using System.Collections.Generic;
 
 public class ClickableObject : MonoBehaviour
 {
-    public Sprite objectSprite;
-    public string uniqueId;
+    public string uniqueId; // The unique ID of this clickable object.
+    public Sprite objectSprite; // The sprite representation of this object.
+    public Canvas mainCanvas; // Reference to the main UI Canvas.
 
-    public float moveSpeed = 5f;
-    public float curveHeight = 1.5f;
-    public float stopDistance = 0.05f;
+    private bool isFlying = false; // True if the object is currently moving towards a slot.
+    private Slot currentTargetSlot; // The slot this object is currently flying towards.
 
-    public float clickScale = 1.2f;
-    public float scaleDuration = 0.15f;
-    public float rotateDuration = 0.25f;
-    public float waitAfterScale = 0.15f;
+    public float moveSpeed = 5f; // Speed at which the object moves towards a slot.
+    public float stopDistance = 0.05f; // Initial distance to target before it's considered "placed".
 
-    public Canvas mainCanvas;
+    private float realStopDistance; // The calculated stop distance, potentially adjusted by rapid clicks.
 
-    public bool isMoving = false;
-    private Slot targetSlot = null;
-    private bool isArriving = false;
-
-    public float finalScale = 0.2f;
-    public float shrinkStartDistance = 1.0f;
-
-    public static float lastClickTime = -100f;
-    public static float clickDelayThreshold = 0.15f;
-    public static float extraDelayAmount = 0.15f;
+    // Static variables to manage click timing for dynamic stop distance.
+    public static float lastClickTime = -100f; // Stores the Time.time of the last click.
+    public static float clickDelayThreshold = 0.3f; // If clicks are faster than this, add to stop distance.
+    public static float addedStopPerClick = 0.2f; // Amount added to stop distance for rapid clicks.
+    public static float baseStopDistance = 0.05f; // Minimum stop distance.
+    public static float maxStopDistance = 0.6f; // Maximum stop distance to prevent excessive "hang time".
 
     void Update()
     {
-        if (!isArriving || targetSlot == null) return;
+        // Only proceed if the object is in "flying" mode.
+        if (!isFlying) return;
 
-        Vector3 targetPos = GetSlotWorldPosition(targetSlot);
-        targetPos.z = transform.position.z;
+        // Continuously get the most up-to-date valid target slot.
+        // This is crucial because the slot the object targets might change
+        // due to other items being placed or matches occurring.
+        Slot newTarget = SlotManager.Instance.GetCurrentValidInsertSlot(uniqueId);
 
-        Vector3 direction = (targetPos - transform.position).normalized;
-        transform.position += direction * moveSpeed * Time.deltaTime;
-
-        float distance = Vector3.Distance(transform.position, targetPos);
-
-        // 📏 Yaklaştıkça küçült
-        if (distance < shrinkStartDistance)
+        if (newTarget != null)
         {
-            float t = 1f - (distance / shrinkStartDistance); // 0 → 1
-            float scaleValue = Mathf.Lerp(1f, finalScale, t);
-            transform.localScale = Vector3.one * scaleValue;
-        }
+            currentTargetSlot = newTarget; // Update the target slot.
 
-        if (distance < stopDistance)
-        {
-            ArriveAtSlot();
-        }
-    }
+            // Calculate the world position of the target slot.
+            Vector3 targetPos = SlotManager.Instance.GetSlotWorldPosition(currentTargetSlot, mainCanvas);
+            // Calculate the direction vector from current position to target.
+            Vector3 dir = (targetPos - transform.position).normalized;
+            // Calculate the remaining distance to the target.
+            float distance = Vector3.Distance(transform.position, targetPos);
 
-    private void OnMouseDown()
-    {
-        if (isMoving) return;
+            // Move the object towards the target position.
+            transform.position += dir * moveSpeed * Time.deltaTime;
 
-        float timeSinceLastClick = Time.time - lastClickTime;
-        lastClickTime = Time.time;
-
-        float extraDelay = timeSinceLastClick < clickDelayThreshold ? extraDelayAmount : 0f;
-        float actualWaitAfterScale = waitAfterScale + extraDelay;
-
-        // Eşleşen slotları bul
-        var matches = new List<Slot>();
-        foreach (var slot in SlotManager.Instance.slots)
-        {
-            if (slot.IsOccupied && slot.StoredUniqueID == uniqueId)
+            // Check if the object is close enough to be considered "placed".
+            if (distance < realStopDistance)
             {
-                matches.Add(slot);
+                // Attempt to place the object into the slot system.
+                // mainCanvas'ı TryPlaceObject metoduna parametre olarak geçiyoruz.
+                SlotManager.Instance.TryPlaceObject(uniqueId, objectSprite, mainCanvas);
+                // Destroy this flying object as it has been placed.
+                Destroy(gameObject);
             }
-        }
-
-        // Hedef slot belirle
-        if (matches.Count > 0)
-        {
-            int insertIndex = SlotManager.Instance.slots.IndexOf(matches[0]);
-            bool shifted = SlotManager.Instance.ShiftRightFrom(insertIndex);
-            if (!shifted) return;
-            targetSlot = SlotManager.Instance.slots[insertIndex];
         }
         else
         {
-            targetSlot = SlotManager.Instance.GetFirstEmptySlot();
-            if (targetSlot == null) return;
+            // If there's no valid target slot (e.g., all slots full and no place for an item),
+            // the object might despawn or return to a pool. For now, it just destroys itself.
+            Debug.LogWarning($"ClickableObject '{uniqueId}' could not find a target slot and will be destroyed.");
+            Destroy(gameObject);
         }
-
-        // Rezerve et
-        targetSlot.SetReserved(true);
-        isMoving = true;
-
-        // Sadece scale/rotate efekti yapıyoruz burada
-        Sequence seq = DOTween.Sequence();
-        seq.Append(transform.DOScale(clickScale, scaleDuration).SetEase(Ease.InCubic));
-        seq.Join(transform.DORotate(Vector3.zero, rotateDuration).SetEase(Ease.InCubic));
-        seq.AppendInterval(actualWaitAfterScale);
-        seq.OnComplete(() =>
-        {
-            isArriving = true; // Hareket başlayacak
-        });
     }
 
-    private Vector3 GetSlotWorldPosition(Slot slot)
+    /// <summary>
+    /// Called when the mouse button is pressed over this collider/object.
+    /// Initiates the object's movement towards a slot.
+    /// </summary>
+    private void OnMouseDown()
     {
-        RectTransform rect = slot.GetComponent<RectTransform>();
-        Camera cam = mainCanvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : mainCanvas.worldCamera;
+        if (isFlying) return; // Prevent multiple clicks from affecting an already flying object.
 
-        Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(cam, rect.position);
-        float z = Vector3.Distance(Camera.main.transform.position, transform.position);
-        return Camera.main.ScreenToWorldPoint(new Vector3(screenPos.x, screenPos.y, z));
-    }
+        // Calculate time since last click for dynamic stop distance.
+        float timeSinceLastClick = Time.time - lastClickTime;
+        lastClickTime = Time.time; // Update last click time.
 
-    private void ArriveAtSlot()
-    {
-        transform.position = GetSlotWorldPosition(targetSlot);
+        // If clicks are rapid, add to the stop distance. This gives a feeling of "snappiness"
+        // or a slight delay for quick successive placements.
+        float addedStop = (timeSinceLastClick < clickDelayThreshold) ? addedStopPerClick : 0f;
 
-        targetSlot.FillSlot(objectSprite, uniqueId);
+        // Clamp the 'realStopDistance' to keep it within sensible bounds.
+        realStopDistance = Mathf.Clamp(baseStopDistance + addedStop, baseStopDistance, maxStopDistance);
 
-        isMoving = false;
-        isArriving = false;
+        isFlying = true; // Start the object's movement.
 
-        SlotManager.Instance.CheckForMatches(targetSlot);
-        Destroy(gameObject);
+        // You could add a small visual animation here (e.g., a slight scale change)
+        // before the object starts flying, similar to what Slot.cs does.
     }
 }
