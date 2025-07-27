@@ -47,6 +47,7 @@ public class ClickableObject : MonoBehaviour
         Slot newTarget = SlotManager.Instance.GetCurrentValidInsertSlot(uniqueId);
 
         // Eğer hedef slot değiştiyse, mevcut hareketi durdur ve yeni hedefe doğru yeniden başlat.
+        // Bu, FindInsertIndex'in dinamik olarak farklı bir yere yönlendirmesi durumunda önemlidir.
         if (newTarget != null && newTarget != currentTargetSlot)
         {
             currentTargetSlot = newTarget; // Hedefi güncelle
@@ -58,7 +59,7 @@ public class ClickableObject : MonoBehaviour
         }
         else if (newTarget == null && currentTargetSlot != null) // Hedef null olduysa ama daha önce bir hedef vardıysa
         {
-            Debug.LogWarning($"ClickableObject '{uniqueId}' lost its target slot and will be destroyed.");
+            Debug.LogWarning($"ClickableObject '{uniqueId}' could not find a target slot and will be destroyed.");
             if (currentMoveTween != null && currentMoveTween.IsPlaying())
             {
                 currentMoveTween.Kill();
@@ -72,9 +73,10 @@ public class ClickableObject : MonoBehaviour
     /// </summary>
     private void OnMoveComplete()
     {
-        // Hedefe ulaşıldığında nesneyi yerleştirme mantığını çağır.
-        SlotManager.Instance.TryPlaceObject(uniqueId, objectSprite, mainCanvas);
-        Destroy(gameObject); // Objeyi yok et.
+        // Hedefe ulaşıldığında nesneyi yerleştirme mantığını SlotManager'a devret.
+        // SlotManager, tüm işlemler bittikten sonra bu ClickableObject'i yok edecek.
+        SlotManager.Instance.TryPlaceObject(uniqueId, objectSprite, mainCanvas, this); // 'this' keyword'ü ile ClickableObject referansını gönderdik.
+        // Destroy(gameObject); // ARTIK ClickableObject kendi kendini burada yok etmeyecek.
     }
 
     /// <summary>
