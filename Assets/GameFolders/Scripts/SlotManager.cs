@@ -103,79 +103,7 @@ public class SlotManager : MonoBehaviour
          // Animasyon sırasında Layout Group'ın otomatik düzenlemesini devre dışı bırakın.
          if (slotsLayoutGroup != null) slotsLayoutGroup.enabled = false;
 
-         Sequence shiftSequence = DOTween.Sequence();
-
-         // Kaydırılacak ikonların listesi ve hedef pozisyonları
-         List<Image> iconsToShift = new List<Image>();
-         List<Vector3> targetPositions = new List<Vector3>();
-        /*
-         // Sondan başlayarak hedef startIndex'e kadar olan dolu slotları görsel olarak kaydırın.
-         for (int i = slots.Count - 2; i >= startIndex; i--)
-         {
-             Slot currentSlot = slots[i];
-             Slot nextSlot = slots[i + 1];
-
-             if (currentSlot.IsOccupied && currentSlot.iconImage != null)
-             {
-                 // İkonu animasyon için görünür ve tam alfa yap (zaten gizlenmişse)
-                 currentSlot.iconImage.enabled = true;
-                 currentSlot.iconImage.color = new Color(currentSlot.iconImage.color.r, currentSlot.iconImage.color.g, currentSlot.iconImage.color.b, 1);
-
-                 iconsToShift.Add(currentSlot.iconImage);
-                 // Objenin UI mı yoksa 3D mi olduğuna göre hedef pozisyonu belirle
-                 if (currentSlot.iconImage.rectTransform != null) // UI elemanı varsayımı
-                 {
-                     targetPositions.Add(nextSlot.GetComponent<RectTransform>().anchoredPosition);
-                 }
-                 else // 3D obje
-                 {
-                     targetPositions.Add(GetSlotWorldPosition(nextSlot, currentSlot.GetComponentInParent<Canvas>()));
-                 }
-             }
-         }
-
-         // Tüm ikonların hareket animasyonlarını başlatın
-         for (int i = 0; i < iconsToShift.Count; i++)
-         {
-             Image icon = iconsToShift[i];
-             Vector3 targetPos = targetPositions[i];
-
-             if (icon != null)
-             {
-                 if (icon.rectTransform != null) // UI elemanı
-                 {
-                     shiftSequence.Join(icon.rectTransform.DOAnchorPos(targetPos, duration).SetEase(Ease.OutQuad));
-                 }
-                 else // 3D obje
-                 {
-                     shiftSequence.Join(icon.transform.DOMove(targetPos, duration).SetEase(Ease.OutQuad));
-                 }
-
-                 // Kayan ikonları yavaşça görünmez yapın
-                 shiftSequence.Join(
-                     icon.DOFade(0, duration)
-                         .SetEase(Ease.InQuad) // Hızlı başlangıç, yavaş bitiş (görsel kaybolma için uygun)
-                 );
-             }
-         }
-
-         yield return shiftSequence.WaitForCompletion(); // Tüm animasyonların bitmesini */
-
-        // Animasyon bittikten sonra orijinal ikonları gizleyin ve sprite'larını temizleyin.
-        // Bu adım, PerformVisualShift bittikten sonra slot verisi ShiftRightFromData ile güncellenmeden önce yapılır.
         yield return new WaitForSeconds(0f);
-        /*foreach (var icon in iconsToShift)
-        {
-            if (icon != null)
-            {
-                icon.enabled = false;
-                icon.sprite = null;
-                icon.color = new Color(icon.color.r, icon.color.g, icon.color.b, 1); // Alfa değerini sıfırla
-                icon.rectTransform.localScale = Vector3.one; // Ölçeği sıfırla
-            }
-        }*/
-
-        // Boşalan startIndex slotunun ikonunu da temizleyin (eğer zaten gizlenmemişse)
         if (slots[startIndex].iconImage != null)
         {
             slots[startIndex].iconImage.enabled = false;
@@ -188,7 +116,7 @@ public class SlotManager : MonoBehaviour
                 0); // sadece görünmez yap
         }
 
-        // Animasyon bittikten sonra Layout Group'ı tekrar etkinleştirin ve yenileyin.
+
         if (slotsLayoutGroup != null) slotsLayoutGroup.enabled = true;
         RefreshLayout();
     }
