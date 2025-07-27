@@ -16,7 +16,7 @@ MonoBehaviour:
   targetLuggageInfo:
   - LuggageType: 1
     Count: 3
-  luggageTypesToSpawn: 01000000020000000300000004000000
+  luggageTypesToSpawn: 01000000020000000300000005000000
   collectablePieceInfo:
   - CollectiblePieceType: 1
     Count: 3
