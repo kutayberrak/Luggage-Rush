@@ -2044,6 +2044,8 @@ MonoBehaviour:
   shiftEase: 7
   matchEase: 5
   directMoveSpeed: 100
+  rapidClickThreshold: 0.25
+  moveDelayDuration: 0.2
 --- !u!1 &2083932702
 GameObject:
   m_ObjectHideFlags: 0
