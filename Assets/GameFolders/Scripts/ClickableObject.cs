@@ -9,14 +9,14 @@ public class ClickableObject : MonoBehaviour
     [HideInInspector] public int reservedSlotIndex = -1;
     private bool isMoving = false;
 
-    // **Yeni alanlar**:
+    // **Yeni** alanlar:
     private float moveDelay = 0f;
     private float moveStartTime = 0f;
 
     public string UniqueID;
 
     /// <summary>
-    /// SlotManager tarafından set edilecek.
+    /// SlotManager tarafından atanacak gecikme süresi.
     /// </summary>
     public void SetMoveDelay(float d)
     {
@@ -32,16 +32,16 @@ public class ClickableObject : MonoBehaviour
 
     private void Update()
     {
-        if (!isMoving || reservedSlotIndex < 0) return;
+        if (!isMoving || reservedSlotIndex < 0)
+            return;
 
-        // 1) Hava gecikmesi: delay süresi dolana kadar bekle
+        // ————— havada bekle —————
         if (Time.time - moveStartTime < moveDelay)
             return;
 
-        // 2) Dönüşümlü retargeting vs. varsa burada kalmalı (önceki kodunuzu koruyun)
-        //    …
+        // (eğer retargeting kodu varsa buraya gelmeden önce çalışır)
 
-        // 3) Asıl hareket
+        // ————— asıl hareket —————
         Vector3 targetPos = SlotManager.Instance.slots[reservedSlotIndex].transform.position;
         transform.position = Vector3.MoveTowards(
             transform.position,
@@ -49,7 +49,7 @@ public class ClickableObject : MonoBehaviour
             speed * Time.deltaTime
         );
 
-        // 4) Varış kontrolü
+        // varış kontrolü
         if (Vector3.Distance(transform.position, targetPos) <= arrivalThreshold)
         {
             isMoving = false;

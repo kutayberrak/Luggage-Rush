@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Collections; // Coroutine'ler için gerekli
 using UnityEngine.UI;
 using DG.Tweening; // DOTween kütüphanesini dahil et!
-using UnityEngine.EventSystems; // LayoutRebuilder için gerekli
+using UnityEngine.EventSystems;
+using System.Linq; // LayoutRebuilder için gerekli
 
 public class SlotManager : MonoBehaviour
 {
@@ -30,12 +31,15 @@ public class SlotManager : MonoBehaviour
     public float directMoveSpeed = 5f;
 
     [Header("Click Timing")]
-    [Tooltip("Bu süreden daha hızlı ikinci tıklama olursa delay uygula")]
+    [Tooltip("Bu süreden kısa aralıklarla gelen tıklamalar rapidClickCount'i artırır")]
     public float rapidClickThreshold = 0.25f;
-    [Tooltip("Havada bekleme süresi (saniye)")]
-    public float moveDelayDuration = 0.2f;
+    [Tooltip("Rapid tıklama başına eklenecek temel gecikme")]
+    public float baseMoveDelay = 0.1f;
+    [Tooltip("Maksimum gecikme sınırı")]
+    public float maxMoveDelay = 0.5f;
 
     private float lastClickTime = -Mathf.Infinity;
+    private int rapidClickCount = 0;
 
     // --- bu ikisi eklendi ---
     // hareket halindeki nesneleri takip edeceğiz
@@ -61,28 +65,46 @@ public class SlotManager : MonoBehaviour
     /// </summary>
     public void TryPlaceObject3D(GameObject item, string id)
     {
-        Debug.Log($"[TryPlace] Clicked id={id} at time={Time.time:F2}");
+        // ————— rapid tıklama sayısını güncelle —————
+        float now = Time.time;
+        if (now - lastClickTime < rapidClickThreshold)
+            rapidClickCount++;
+        else
+            rapidClickCount = 0;
+        lastClickTime = now;
 
-        int idx = FindInsertIndex(id);
-        Debug.Log($"[TryPlace] FindInsertIndex -> {idx}");
+        // delay = base * count, clampla
+        float delay = Mathf.Clamp(baseMoveDelay * rapidClickCount, 0f, maxMoveDelay);
 
-        if (idx < 0)
+        // 1) Hedef slotu bul
+        int insertIdx = FindInsertIndex(id);
+        if (insertIdx < 0)
         {
-            Debug.Log($"[TryPlace] No slot for id={id}, deactivating.");
             item.SetActive(false);
             return;
         }
 
-        slots[idx].SetReserved(true);
-        Debug.Log($"[TryPlace] Slot {idx} reserved for id={id}");
+        // 2) Tek kaydırma (stationary + movers)
+        ShiftRightFromData3D(insertIdx);
 
-        var mv = item.GetComponent<ClickableObject>() ?? item.AddComponent<ClickableObject>();
-        mv.speed = directMoveSpeed;
-        movingItems[mv] = id;
-        reservedIndices[mv] = idx;
-        mv.reservedSlotIndex = idx;
+        // 3) Rezerve et
+        slots[insertIdx].SetReserved(true);
 
-        StartCoroutine(PlaceCoroutine(item, id, idx, mv));
+        // 4) Mover’ı hazırla ve delay’i ayarla
+        var mvNew = item.GetComponent<ClickableObject>()
+                    ?? item.AddComponent<ClickableObject>();
+        mvNew.speed = directMoveSpeed;
+        movingItems[mvNew] = id;
+        reservedIndices[mvNew] = insertIdx;
+        mvNew.reservedSlotIndex = insertIdx;
+
+        // **yeni**: havada bekleme süresini set et
+        mvNew.SetMoveDelay(delay);
+
+        Debug.Log($"[TryPlace] rapidCount={rapidClickCount}, moveDelay={delay:F2}");
+
+        // 5) Hareketi başlat
+        mvNew.BeginMove(insertIdx);
     }
 
     // … OnMovableArrived, ShiftRightFromData3D, vb. aynı kalır …
@@ -126,39 +148,11 @@ public class SlotManager : MonoBehaviour
 
     public void OnMovableArrived(ClickableObject mv)
     {
-        Debug.Log($"[Arrived] {mv.UniqueID} arrived at reservedSlotIndex={mv.reservedSlotIndex}");
-
-        if (!movingItems.ContainsKey(mv))
-        {
-            Debug.LogWarning($"[Arrived] {mv.UniqueID} not found in movingItems!");
-            return;
-        }
+        if (!movingItems.ContainsKey(mv)) return;
 
         int idx = reservedIndices[mv];
         string id = movingItems[mv];
-        Debug.Log($"[Arrived] processing id={id} at idx={idx}, slot.IsOccupied={slots[idx].IsOccupied}");
 
-        // --- Burada en son saniye kollaması: eğer slot’a başkası yerleştiyse retarget et ---
-        if (slots[idx].IsOccupied && slots[idx].Occupant != mv.gameObject)
-        {
-            int newIdx = FindInsertIndex(id);
-            if (newIdx >= 0)
-            {
-                ChangeReservation(mv, newIdx);
-                mv.BeginMove(newIdx);
-                return;
-            }
-            else
-            {
-                // artık yer yok
-                mv.gameObject.SetActive(false);
-                movingItems.Remove(mv);
-                reservedIndices.Remove(mv);
-                return;
-            }
-        }
-
-        // --- Normal varış akışı: önce ASSIGN, sonra rezervi kaldır ---
         slots[idx].AssignOccupant(mv.gameObject, id);
         slots[idx].SetReserved(false);
 
@@ -166,51 +160,10 @@ public class SlotManager : MonoBehaviour
         reservedIndices.Remove(mv);
         mv.reservedSlotIndex = -1;
 
-        StartCoroutine(ProcessSlotChanges());
+        if (movingItems.Count == 0)
+            StartCoroutine(ProcessSlotChanges());
     }
 
-
-
-
-    private IEnumerator HandleDirectPlacement3D(GameObject item, string id, int idx)
-    {
-        // 1) Inspector’dan ayarlanan süreyi kullan
-        yield return item.transform
-                         .DOMove(slots[idx].transform.position, directMoveDuration)
-                         .SetEase(moveEase)
-                         .WaitForCompletion();
-
-        // 2) Veriyi ata
-        slots[idx].AssignOccupant(item, id);
-
-        // 3) Match & compact
-        yield return ProcessSlotChanges();
-    }
-
-
-    private IEnumerator HandlePlacementWithVisualShift3D(GameObject item, string id, int idx)
-    {
-        // Ön‑kaydırma
-        yield return PerformVisualShift3D(idx, visualShiftDuration);
-
-        bool shifted = ShiftRightFromData3D(idx);
-        if (!shifted)
-        {
-            item.SetActive(false);
-            item.transform.SetParent(null, true);
-            yield break;
-        }
-
-        // Slot’a taşıma
-        yield return item.transform
-                         .DOMove(slots[idx].transform.position, directMoveDuration)
-                         .SetEase(moveEase)
-                         .WaitForCompletion();
-
-        slots[idx].AssignOccupant(item, id);
-
-        yield return ProcessSlotChanges();
-    }
 
     public int FindInsertIndex(string id)
     {
@@ -245,66 +198,58 @@ public class SlotManager : MonoBehaviour
 
     public bool ShiftRightFromData3D(int startIndex)
     {
-        Debug.Log($"[ShiftData] Called with startIndex={startIndex}");
         if (startIndex < 0 || startIndex >= slots.Count)
-        {
-            Debug.LogError($"[ShiftData] Invalid startIndex {startIndex}");
             return false;
-        }
 
+        // Sondan başlayarak kaydır
         for (int i = slots.Count - 2; i >= startIndex; i--)
         {
             var src = slots[i];
             var dst = slots[i + 1];
-            Debug.Log($"[ShiftData] i={i}: src.Occ={src.IsOccupied}/{src.StoredUniqueID} -> dstIdx={i + 1}");
 
-            // rezerv flag
-            bool srcRes = src.IsReserved;
-            dst.SetReserved(srcRes);
-            Debug.Log($"[ShiftData]   Reserved moved: dst.IsReserved now={dst.IsReserved}");
-
-            // hareket edenler
-            foreach (var mv in new List<ClickableObject>(reservedIndices.Keys))
-            {
-                if (reservedIndices[mv] == i)
-                {
-                    reservedIndices[mv] = i + 1;
-                    mv.reservedSlotIndex = i + 1;
-                    Debug.Log($"[ShiftData]   MovingItem {mv.UniqueID} reservedIdx updated to {i + 1}");
-                }
-            }
-
+            // 1) Data‐only shift: stationar objeleri sağa taşı
             if (src.IsOccupied)
             {
                 var occ = src.Occupant;
                 var oid = src.StoredUniqueID;
-                Debug.Log($"[ShiftData]   Moving data {oid} from slot {i} to slot {i + 1}");
                 src.ClearDataOnly();
                 dst.ClearSlot();
                 dst.AssignOccupant(occ, oid);
             }
             else
             {
-                Debug.Log($"[ShiftData]   src empty -> clearing dst slot");
                 dst.ClearSlot();
+            }
+
+            // 2) Rezerve bayrağını taşı
+            bool srcRes = src.IsReserved;
+            dst.SetReserved(srcRes);
+
+            // 3) Havada hareket edenleri de aynı anda retarget et
+            foreach (var mv in new List<ClickableObject>(reservedIndices.Keys))
+            {
+                if (reservedIndices[mv] == i)
+                {
+                    reservedIndices[mv] = i + 1;
+                    mv.reservedSlotIndex = i + 1;
+                }
             }
         }
 
-        // başlangıç temizleme
+        // Başlangıç slotunu temizle
+        slots[startIndex].ClearSlot();
         slots[startIndex].SetReserved(false);
-        Debug.Log($"[ShiftData]   Cleared reserve at startIndex {startIndex}");
+
+        // Eğer havada kalsa bile oradaki rezervasyonu sil
         foreach (var mv in new List<ClickableObject>(reservedIndices.Keys))
         {
             if (reservedIndices[mv] == startIndex)
             {
                 reservedIndices.Remove(mv);
                 mv.reservedSlotIndex = -1;
-                Debug.Log($"[ShiftData]   Removed movingItem {mv.UniqueID} from reservedIndices");
             }
         }
 
-        slots[startIndex].ClearSlot();
-        Debug.Log($"[ShiftData]   Cleared slot {startIndex} data-only");
         return true;
     }
 
