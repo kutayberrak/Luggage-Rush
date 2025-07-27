@@ -56,6 +56,10 @@ public class SlotManager : MonoBehaviour
     private Dictionary<string, List<GameObject>> pendingObjects = new Dictionary<string, List<GameObject>>();
     private Dictionary<string, float> lastProcessTime = new Dictionary<string, float>();
     private const float SAME_ID_PROCESS_DELAY = 0.1f; // Aynı ID'li objeler arası minimum süre
+    
+    // **YENİ**: Match işlemi sırasında gelen objeleri handle etmek için
+    private bool isProcessingMatch = false;
+    private Queue<(GameObject item, string id)> matchQueue = new Queue<(GameObject item, string id)>();
 
     private void Awake()
     {
@@ -75,6 +79,14 @@ public class SlotManager : MonoBehaviour
     /// </summary>
     public void TryPlaceObject3D(GameObject item, string id)
     {
+        // **YENİ**: Match işlemi sırasında gelen objeleri match kuyruğuna ekle
+        if (isProcessingMatch)
+        {
+            matchQueue.Enqueue((item, id));
+            Debug.Log($"[TryPlaceObject3D] Match processing, added to match queue. Queue count: {matchQueue.Count}");
+            return;
+        }
+
         // **YENİ**: Aynı ID'li obje zaten işleniyorsa veya çok yakın zamanda işlendiyse
         if (processingIds.Contains(id))
         {
@@ -257,6 +269,19 @@ public class SlotManager : MonoBehaviour
             
             // Objeyi işle
             TryPlaceObject3D(pendingItem, id);
+        }
+    }
+
+    // **YENİ**: Match kuyruğundaki objeleri işle
+    private void ProcessMatchQueue()
+    {
+        Debug.Log($"[ProcessMatchQueue] Processing {matchQueue.Count} items from match queue");
+        
+        while (matchQueue.Count > 0)
+        {
+            var next = matchQueue.Dequeue();
+            Debug.Log($"[ProcessMatchQueue] Processing queued item with ID {next.id}");
+            TryPlaceObject3D(next.item, next.id);
         }
     }
 
@@ -616,6 +641,8 @@ public class SlotManager : MonoBehaviour
         var toDestroy = new List<GameObject>();
         Vector3 center = slots[startIndex].transform.position;
 
+        Debug.Log($"[AnimateMatchClearance3D] Starting match clearance for {count} objects at slot {startIndex}");
+
         for (int i = startIndex; i < startIndex + count; i++)
         {
             var slot = slots[i];
@@ -625,6 +652,7 @@ public class SlotManager : MonoBehaviour
                 slot.ClearDataOnly();
                 obj.transform.SetParent(null, true);
                 toDestroy.Add(obj);
+                Debug.Log($"[AnimateMatchClearance3D] Added object {obj.name} to destroy list");
             }
         }
 
@@ -645,6 +673,8 @@ public class SlotManager : MonoBehaviour
         {
             Destroy(obj); // Sadece match sonrası
         }
+        
+        Debug.Log($"[AnimateMatchClearance3D] Match clearance completed, destroyed {toDestroy.Count} objects");
     }
 
     /// <summary>
@@ -662,9 +692,18 @@ public class SlotManager : MonoBehaviour
     
     private IEnumerator ProcessSlotChanges()
     {
+        isProcessingMatch = true;
+        Debug.Log("[ProcessSlotChanges] Starting match processing");
+        
         yield return StartCoroutine(CheckForMatchesCoroutine3D());
         CompactSlots3D();
         yield return StartCoroutine(CheckForMatchesCoroutine3D());
+        
+        isProcessingMatch = false;
+        Debug.Log("[ProcessSlotChanges] Match processing completed");
+        
+        // **YENİ**: Match kuyruğundaki objeleri işle
+        ProcessMatchQueue();
     }
 
     // **YENİ**: Debug için slot durumlarını yazdır
@@ -679,6 +718,7 @@ public class SlotManager : MonoBehaviour
         }
         Debug.Log($"Moving Items: {movingItems.Count}, Reserved Indices: {reservedIndices.Count}");
         Debug.Log($"Pending Objects: {pendingObjects.Count} IDs, Processing IDs: {processingIds.Count}");
+        Debug.Log($"Match Queue: {matchQueue.Count} items, Processing Match: {isProcessingMatch}");
         
         // Pending objeleri detaylı göster
         foreach (var kvp in pendingObjects)
@@ -699,10 +739,12 @@ public class SlotManager : MonoBehaviour
         movingItems.Clear();
         reservedIndices.Clear();
         placementQueue.Clear();
+        matchQueue.Clear();
         processingIds.Clear();
         pendingObjects.Clear();
         lastProcessTime.Clear();
         isProcessingPlacement = false;
+        isProcessingMatch = false;
         
         Debug.Log("[SlotManager] Emergency reset completed");
     }
