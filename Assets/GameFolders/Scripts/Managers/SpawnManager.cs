@@ -28,10 +28,11 @@ public class SpawnManager : MonoBehaviour
     [Header("Runtime Controls")]
     [SerializeField] private float newSpawnInterval = 2f;
 
-    // Cached allowed objects by type
     private Dictionary<ObjectType, List<GameObject>> allowedObjectsByType = new Dictionary<ObjectType, List<GameObject>>();
     private CancellationTokenSource _cancellationTokenSource;
     private int _currentSpawnIndex = 0;
+
+    private bool _hasCollectiblePiece;
 
     void Awake()
     {
@@ -67,14 +68,16 @@ public class SpawnManager : MonoBehaviour
         var allPrefabs = ObjectPoolManager.Instance.GetAllPrefabs();
 
 
+        _hasCollectiblePiece = levelData.HasCollectiblePiece;
 
-        // Clear previous data
+
+
+
         foreach (var kvp in allowedObjectsByType)
         {
             kvp.Value.Clear();
         }
 
-        // Cache allowed luggage objects based on level data types
         foreach (var luggageType in levelData.LuggageTypesToSpawn)
         {
 
@@ -85,12 +88,12 @@ public class SpawnManager : MonoBehaviour
                 {
                     allowedObjectsByType[ObjectType.Luggage].Add(prefab);
 
-                    break; // Found the prefab for this type, no need to continue
+                    break;
                 }
             }
         }
 
-        // Cache allowed garbage objects based on level data types
+
         foreach (var garbageType in levelData.junkPieceInfo)
         {
 
@@ -101,12 +104,12 @@ public class SpawnManager : MonoBehaviour
                 {
                     allowedObjectsByType[ObjectType.Garbage].Add(prefab);
 
-                    break; // Found the prefab for this type, no need to continue
+                    break;
                 }
             }
         }
 
-        // Cache allowed collection objects based on level data types
+
         foreach (var collectionType in levelData.CollectablePieceInfo)
         {
 
@@ -117,7 +120,7 @@ public class SpawnManager : MonoBehaviour
                 {
                     allowedObjectsByType[ObjectType.Collection].Add(prefab);
 
-                    break; // Found the prefab for this type, no need to continue
+                    break;
                 }
             }
         }
@@ -151,27 +154,35 @@ public class SpawnManager : MonoBehaviour
 
     private ObjectType GetWeightedRandomObjectType()
     {
-        // Update weights
+
         foreach (var entry in spawnWeights)
         {
+
+            if (entry.objectType == ObjectType.Collection && !_hasCollectiblePiece)
+                continue;
+
             entry.currentWeight += entry.spawnWeight * Time.deltaTime;
         }
 
-        // Find highest weight
-        SpawnWeightEntry selectedEntry = spawnWeights[0];
+
+        SpawnWeightEntry selectedEntry = null;
         foreach (var entry in spawnWeights)
         {
-            if (entry.currentWeight > selectedEntry.currentWeight)
+
+            if (entry.objectType == ObjectType.Collection && !_hasCollectiblePiece)
+                continue;
+
+            if (selectedEntry == null || entry.currentWeight > selectedEntry.currentWeight)
             {
                 selectedEntry = entry;
             }
         }
 
-        // Reset selected weight
+
+        //reset selected weight
         selectedEntry.currentWeight = 0f;
         return selectedEntry.objectType;
     }
-
     private GameObject GetRandomPrefabOfType(ObjectType objectType)
     {
         if (!allowedObjectsByType.ContainsKey(objectType)) return null;

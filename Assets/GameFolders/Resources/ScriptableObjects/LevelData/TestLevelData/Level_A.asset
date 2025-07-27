@@ -20,7 +20,7 @@ MonoBehaviour:
   collectablePieceInfo:
   - CollectiblePieceType: 1
     Count: 3
-  hasCollectiblePiece: 1
+  hasCollectiblePiece: 0
   junkPieceInfo:
   - JunkPieceType: 1
     Count: 13
