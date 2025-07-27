@@ -2,6 +2,7 @@ using GameFolders.Scripts.ScriptableObjects;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System.Threading;
+using GameFolders.Scripts.Enums;
 
 public class LuggageInfo : MonoBehaviour
 {

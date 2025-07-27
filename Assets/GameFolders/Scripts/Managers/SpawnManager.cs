@@ -3,6 +3,7 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
+using GameFolders.Scripts.Enums;
 using GameFolders.Scripts.ScriptableObjects;
 using GameFolders.Scripts.Managers;
 

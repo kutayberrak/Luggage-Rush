@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using GameFolders.Scripts.Data;
+using GameFolders.Scripts.Enums;
 using UnityEngine;
 
 namespace GameFolders.Scripts.ScriptableObjects
@@ -6,40 +8,24 @@ namespace GameFolders.Scripts.ScriptableObjects
     [CreateAssetMenu(fileName = "LevelDataSO", menuName = "ScriptableObjects/LevelDataSO")]
     public class LevelDataSO : ScriptableObject
     {
-        [Header("Level Information")] 
-        [SerializeField] private float levelTime;
-        [SerializeField] private LuggageType _targetLuggageType;
-        [SerializeField] private CollectiblePieceType collectiblePieceType;
-        [SerializeField] private int targetLuggageCount;
-        [SerializeField] private int junkPieceCount;
-        [SerializeField] private bool hasCollectiblePiece;
+        [Header("Level Configuration")]
+        [Tooltip("Seconds")]
+        [SerializeField] private float levelTimeInSeconds;
+        [SerializeField] private List<TargetLuggageInfo> targetLuggageInfo;
+        [Tooltip("Different luggage types to spawn current level")]
         [SerializeField] private List<LuggageType> luggageTypes;
         
+        [Header("Collectible Configuration")]
+        [SerializeField] private List<CollectablePieceInfo> collectablePieceInfo;
+        [SerializeField] private bool hasCollectiblePiece;
+        
+        [Header("Junk Configuration")]
+        [SerializeField] private List<JunkPieceInfo> junkPieceInfo;
+        
         public List<LuggageType> LuggageTypes => luggageTypes;
-        public float Time => levelTime;
-        public LuggageType TargetLuggageType => _targetLuggageType;
-        public CollectiblePieceType CollectiblePieceType => collectiblePieceType;
+        public List<CollectablePieceInfo> CollectablePieceInfo => collectablePieceInfo;
+        public List<TargetLuggageInfo> TargetLuggageInfo => targetLuggageInfo;
         public bool HasCollectiblePiece => hasCollectiblePiece;
-        public int TargetLuggageCount => targetLuggageCount;
-        public int JunkPieceCount => junkPieceCount;
-    }
-
-    public enum CollectiblePieceType
-    {
-        None,
-    }
-    public enum JunkPieceType
-    {
-        None
-    }
-    public enum LuggageType
-    {
-        None,
-        Type1,
-        Type2,
-        Type3,
-        Type4,
-        Type5,
-        Type6,
+        public float TimeInSeconds => levelTimeInSeconds;
     }
 }

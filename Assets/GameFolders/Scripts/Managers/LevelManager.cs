@@ -7,11 +7,11 @@ namespace GameFolders.Scripts.Managers
     {
         [SerializeField] private LevelDataSO[] levelData;
         public static LevelManager Instance { get; private set; }
-
-        public LevelDataSO CurrentLevelData => levelData[_currentLevelIndex];
+        public LevelDataSO CurrentLevelData => _currentLevelData;
         public int CurrentLevel => _currentLevelIndex + 1; // Assuming levels are 1-indexed for display purposes
 
         private int _currentLevelIndex = 0;
+        private LevelDataSO _currentLevelData;
 
         private void Awake()
         {
@@ -29,7 +29,7 @@ namespace GameFolders.Scripts.Managers
         private void LoadLevelRequirements()
         {
             //load level data...
-
+            _currentLevelData = levelData[_currentLevelIndex];
 
             SpawnManager.Instance.LoadLevelSpawnRequirements();
 
@@ -41,7 +41,6 @@ namespace GameFolders.Scripts.Managers
         {
             LoadLevelRequirements();
             SpawnManager.Instance.RunSpawn();
-
         }
     }
 }
