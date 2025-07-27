@@ -85,45 +85,44 @@ public class ClickableObject : MonoBehaviour
     /// </summary>
     private void OnMouseDown()
     {
-        // Obje zaten hareket halindeyse (başlangıç animasyonu dahil) tekrar tıklamayı engelle.
         if (isFlying) return;
-
-        isFlying = true; // Objeyi genel "hareket" moduna geçir.
+        isFlying = true;
 
         float timeSinceLastClick = Time.time - lastClickTime;
         lastClickTime = Time.time;
 
+        float delay = Mathf.Clamp(0.15f - timeSinceLastClick, 0f, 0.15f); // 💡 hızlı tıklama varsa beklet
         float addedStop = (timeSinceLastClick < clickDelayThreshold) ? addedStopPerClick : 0f;
         realStopDistance = Mathf.Clamp(baseStopDistance + addedStop, baseStopDistance, maxStopDistance);
 
-        // DOTween Sequence oluştur. Bu, birden fazla animasyonu sırayla veya eş zamanlı çalıştırmamızı sağlar.
         initialAnimationSequence = DOTween.Sequence();
 
-        // 1. Obje yükselsin (Y ekseninde hareket)
-        // Eğer bir UI elementi ise, RectTransform'un yerel Y pozisyonunu kullanmak daha güvenli olabilir.
+        // ⏳ Gecikme varsa en başa bekleme ekle
+        if (delay > 0)
+            initialAnimationSequence.AppendInterval(delay);
+
+        Debug.Log("delay: " + delay);
+
+        // Yükselme animasyonu
         if (GetComponent<RectTransform>() != null)
         {
             initialAnimationSequence.Append(
                 GetComponent<RectTransform>().DOAnchorPos3DY(GetComponent<RectTransform>().anchoredPosition3D.y + initialLiftHeight, initialAnimationDuration)
-                .SetEase(Ease.OutQuad) // Yükselme animasyonuna yumuşak bitiş efekti ekle.
+                .SetEase(Ease.OutQuad)
             );
         }
         else
         {
             initialAnimationSequence.Append(
                transform.DOMoveY(transform.position.y + initialLiftHeight, initialAnimationDuration)
-               .SetEase(Ease.OutQuad) // Yükselme animasyonuna yumuşak bitiş efekti ekle.
+               .SetEase(Ease.OutQuad)
            );
         }
 
-        // 2. Yükselme bittikten sonra rotasyon değerleri smooth bir şekilde 0,0,0'a gelsin.
-        // '.Append()' kullanarak bu animasyonun yükselme bittikten sonra başlamasını sağlarız.
         initialAnimationSequence.Append(
-            transform.DORotate(Vector3.zero, initialAnimationDuration)
-            .SetEase(Ease.OutQuad) // Rotasyon animasyonuna yumuşak bitiş efekti ekle.
+            transform.DORotate(Vector3.zero, initialAnimationDuration).SetEase(Ease.OutQuad)
         );
 
-        // Başlangıç animasyonları tamamlandığında ana slota hareketini başlat.
         initialAnimationSequence.OnComplete(() => InitiateSlotMovement());
     }
 
