@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Level_3
   m_EditorClassIdentifier: 
   levelTime: 5
-  _targetLuggageType: 1
+  _targetLuggageType: 6
   collectiblePieceType: 0
   targetLuggageCount: 5
   junkPieceCount: 7
-  hasCollectiblePiece: 0
+  hasCollectiblePiece: 1
   luggageTypes: 010000000300000006000000

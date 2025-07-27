@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Level_1
   m_EditorClassIdentifier: 
   levelTime: 4
-  _targetLuggageType: 1
+  _targetLuggageType: 2
   collectiblePieceType: 0
   targetLuggageCount: 4
   junkPieceCount: 4
