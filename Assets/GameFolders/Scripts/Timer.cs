@@ -6,8 +6,8 @@ namespace GameFolders.Scripts
 {
     public class Timer : MonoBehaviour
     {
-        [Header("References")] 
-        [SerializeField] private LevelDataSO levelData;
+        //[Header("References")]
+        //[SerializeField] private LevelDataSO levelData;
 
         public static Timer Instance { get; private set; }
         public float CurrentTime => _currentTime;
@@ -22,9 +22,14 @@ namespace GameFolders.Scripts
         private void Awake()
         {
             if (Instance == null)
+            {
                 Instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
             else
+            {
                 Destroy(gameObject);
+            }
         }
 
         private void Update()

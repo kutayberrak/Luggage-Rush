@@ -58,13 +58,13 @@ public class SpawnManager : MonoBehaviour
 
     public void LoadLevelSpawnRequirements()
     {
-        if (LevelManager.Instance?.CurrentLevelData == null)
+        if (GameManager.Instance?.CurrentLevelData == null)
         {
             Debug.LogError("LevelManager.Instance or CurrentLevelData is null!");
             return;
         }
 
-        var levelData = LevelManager.Instance.CurrentLevelData;
+        var levelData = GameManager.Instance.CurrentLevelData;
 
         var luggagePrefabs = ObjectPoolManager.Instance.GetObjectsByType(ObjectType.Luggage);
         var garbagePrefabs = ObjectPoolManager.Instance.GetObjectsByType(ObjectType.Garbage);
