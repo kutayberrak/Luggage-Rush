@@ -260,6 +260,8 @@ MonoBehaviour:
   mainCanvas: {fileID: 2083932705}
   moveSpeed: 2
   stopDistance: 0.05
+  initialLiftHeight: 0.4
+  initialAnimationDuration: 0.4
 --- !u!65 &142610617
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -625,6 +627,8 @@ MonoBehaviour:
   mainCanvas: {fileID: 2083932705}
   moveSpeed: 2
   stopDistance: 0.05
+  initialLiftHeight: 0.4
+  initialAnimationDuration: 0.4
 --- !u!1 &475089962
 GameObject:
   m_ObjectHideFlags: 0
@@ -1286,6 +1290,8 @@ MonoBehaviour:
   mainCanvas: {fileID: 2083932705}
   moveSpeed: 2
   stopDistance: 0.05
+  initialLiftHeight: 0.4
+  initialAnimationDuration: 0.4
 --- !u!65 &986386771
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1535,6 +1541,8 @@ MonoBehaviour:
   mainCanvas: {fileID: 2083932705}
   moveSpeed: 2
   stopDistance: 0.05
+  initialLiftHeight: 0.4
+  initialAnimationDuration: 0.4
 --- !u!65 &1724695982
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1902,6 +1910,8 @@ MonoBehaviour:
   mainCanvas: {fileID: 2083932705}
   moveSpeed: 2
   stopDistance: 0.05
+  initialLiftHeight: 0.4
+  initialAnimationDuration: 0.4
 --- !u!65 &1909410941
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2180,6 +2190,8 @@ MonoBehaviour:
   mainCanvas: {fileID: 2083932705}
   moveSpeed: 2
   stopDistance: 0.05
+  initialLiftHeight: 0.4
+  initialAnimationDuration: 0.4
 --- !u!65 &2133446877
 BoxCollider:
   m_ObjectHideFlags: 0
