@@ -75,8 +75,9 @@ public class ClickableObject : MonoBehaviour
     {
         // Hedefe ulaşıldığında nesneyi yerleştirme mantığını SlotManager'a devret.
         // SlotManager, tüm işlemler bittikten sonra bu ClickableObject'i yok edecek.
+        
         SlotManager.Instance.TryPlaceObject(uniqueId, objectSprite, mainCanvas, this); // 'this' keyword'ü ile ClickableObject referansını gönderdik.
-        // Destroy(gameObject); // ARTIK ClickableObject kendi kendini burada yok etmeyecek.
+        Destroy(gameObject); // ARTIK ClickableObject kendi kendini burada yok etmeyecek.
     }
 
     /// <summary>
