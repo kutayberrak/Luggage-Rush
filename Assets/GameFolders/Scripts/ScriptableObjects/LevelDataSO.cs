@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using GameFolders.Scripts.Data;
 using GameFolders.Scripts.Enums;
 using Sirenix.OdinInspector;
@@ -31,6 +31,28 @@ namespace GameFolders.Scripts.ScriptableObjects
         public List<TargetLuggageInfo> TargetLuggageInfo => targetLuggageInfo;
         public bool HasCollectiblePiece => hasCollectiblePiece;
         public float TimeInSeconds => levelTimeInSeconds;
-        
+
+        private void OnValidate()
+        {
+#if UNITY_EDITOR
+            if (targetLuggageInfo == null || luggageTypesToSpawn == null) return;
+
+            var targetTypes = targetLuggageInfo
+                .Select(t => t.LuggageType)
+                .Distinct()
+                .ToHashSet();
+
+            var missingTypes = targetTypes
+                .Where(t => !luggageTypesToSpawn.Contains(t))
+                .ToList();
+            
+            // Add missing types to luggageTypesToSpawn if they are not already present
+            foreach (var type in missingTypes)
+            {
+                luggageTypesToSpawn.Add(type);
+                Debug.LogWarning($"[AutoFix] Added missing LuggageType '{type}' to luggageTypesToSpawn in '{name}'", this);
+            }
+#endif
+        }
     }
 }
