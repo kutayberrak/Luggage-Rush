@@ -339,52 +339,44 @@ public class SlotManager : MonoBehaviour
     /// <param name="sourceCanvas">UI konum dönüşümleri için kullanılan Canvas.</param>
     private IEnumerator AnimateMatchClearance(int startIndex, int count, Canvas sourceCanvas)
     {
-        /*Sequence matchSequence = DOTween.Sequence();
-        // Eşleşmenin ilk slotunun dünya pozisyonu (tüm eşleşen ikonlar buraya doğru kayacak)
-        Vector3 targetWorldPos = GetSlotWorldPosition(slots[startIndex], sourceCanvas);
+        List<GameObject> clones = new List<GameObject>();
+        Vector3 centerPos = slots[startIndex].transform.position;
 
         for (int i = startIndex; i < startIndex + count; i++)
         {
-            if (slots[i].IsOccupied && slots[i].iconImage != null)
+            Slot slot = slots[i];
+            if (slot.IsOccupied && slot.iconImage != null && slot.iconImage.sprite != null)
             {
-                // Mevcut slotun ikonunun görsel transformunu hareket ettirin.
-                // Objenin UI mı yoksa 3D mi olduğuna göre DOMove veya DOAnchorPos kullanın.
-                if (slots[i].iconImage.rectTransform != null) // UI elemanı varsayımı
-                {
-                    matchSequence.Join(
-                        slots[i].iconImage.rectTransform.DOAnchorPos(slots[startIndex].GetComponent<RectTransform>().anchoredPosition, matchClearanceAnimationDuration)
-                            .SetEase(Ease.OutQuad)
-                    );
-                }
-                else // 3D obje
-                {
-                    matchSequence.Join(
-                        slots[i].iconImage.transform.DOMove(targetWorldPos, matchClearanceAnimationDuration)
-                            .SetEase(Ease.OutQuad)
-                    );
-                }
-                // Eşleşen ikonları yavaşça görünmez yapın.
-                matchSequence.Join(slots[i].iconImage.DOFade(0, matchClearanceAnimationDuration / 2));
+                GameObject clone = new GameObject("IconClone");
+                clone.transform.SetParent(sourceCanvas.transform, false);
+                Image img = clone.AddComponent<Image>();
+                img.sprite = slot.iconImage.sprite;
+                img.rectTransform.sizeDelta = slot.iconImage.rectTransform.sizeDelta;
+                img.transform.position = slot.iconImage.transform.position;
+                img.raycastTarget = false;
+
+                clones.Add(clone);
+                slot.ClearSlot(); // Veriyi de temizle
             }
         }
 
-        yield return matchSequence.WaitForCompletion(); // Animasyonun bitmesini bekleyin*/
-        yield return new WaitForSeconds(delayAfterMatchAnimation); // Animasyon sonrası kısa bir bekleme
-
-        // Şimdi slotların verilerini temizleyin
-        for (int j = startIndex; j < startIndex + count; j++)
+        // 2. Klonları ortada toplayıp fade-out yap
+        float duration = matchClearanceAnimationDuration;
+        foreach (var clone in clones)
         {
-            slots[j].ClearDataOnly(); // Sadece veriyi temizle
-            // Görseli de anında sıfırlayın, animasyon bittiği için görünmez kalmalı
-            if (slots[j].iconImage != null)
-            {
-                slots[j].iconImage.sprite = null;
-                slots[j].iconImage.enabled = false;
-                slots[j].iconImage.rectTransform.localScale = Vector3.one;
-                slots[j].iconImage.color = new Color(slots[j].iconImage.color.r, slots[j].iconImage.color.g, slots[j].iconImage.color.b, 0); // Alfa değerini sıfırla
-            }
+            clone.transform.DOMove(centerPos, duration).SetEase(Ease.InOutQuad);
+            clone.GetComponent<Image>().DOFade(0, duration).SetEase(Ease.InQuad);
         }
-        RefreshLayout(); // Veri değiştiği için layout'u yenileyin
+
+        yield return new WaitForSeconds(duration + delayAfterMatchAnimation);
+
+        // 3. Klonları temizle
+        foreach (var clone in clones)
+        {
+            Destroy(clone);
+        }
+
+        RefreshLayout();
     }
 
     /// <summary>
