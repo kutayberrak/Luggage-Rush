@@ -4,19 +4,18 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using GameFolders.Scripts.Enums;
 
-public class LuggageInfo : MonoBehaviour
+public class GarbageItem : MonoBehaviour
 {
-    public LuggageType luggageType;
+    public JunkPieceType garbageType;
 
     [Header("Auto Return Settings")]
     private float maxLifeTime = 20f;
-    [SerializeField] private bool useColliderReturn = true;
+    private bool useColliderReturn = true;
 
     private CancellationTokenSource _cancellationTokenSource;
 
     private void OnEnable()
     {
-
         StartMaxLifeTimeTimer().Forget();
     }
 
@@ -35,7 +34,6 @@ public class LuggageInfo : MonoBehaviour
         {
             await UniTask.Delay((int)(maxLifeTime * 1000), cancellationToken: _cancellationTokenSource.Token);
 
-
             if (gameObject.activeInHierarchy)
             {
                 ReturnToPool();
@@ -43,13 +41,13 @@ public class LuggageInfo : MonoBehaviour
         }
         catch (System.OperationCanceledException)
         {
-            // Debug.Log("Timer was cancelled, normal operation.");
+            // Timer iptal edildi
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (useColliderReturn && other.CompareTag("DestroyZone")) // destroy zone, return to pool
+        if (useColliderReturn && other.CompareTag("DestroyZone"))
         {
             ReturnToPool();
         }

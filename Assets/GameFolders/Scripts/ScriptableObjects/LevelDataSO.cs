@@ -11,21 +11,21 @@ namespace GameFolders.Scripts.ScriptableObjects
     public class LevelDataSO : ScriptableObject
     {
         [InfoBox("Luggage target count must be power of 3 (3, 9, 27, etc.)")]
-        
+
         [Header("Level Configuration")]
         [Tooltip("Seconds")]
         [SerializeField] private float levelTimeInSeconds;
         [SerializeField] private List<TargetLuggageInfo> targetLuggageInfo;
         [Tooltip("Different luggage types to spawn current level")]
         [SerializeField] private List<LuggageType> luggageTypesToSpawn;
-        
+
         [Header("Collectible Configuration")]
         [SerializeField] private List<CollectablePieceInfo> collectablePieceInfo;
         [SerializeField] private bool hasCollectiblePiece;
-        
+
         [Header("Junk Configuration")]
-        [SerializeField] private List<JunkPieceInfo> junkPieceInfo;
-        
+        public List<JunkPieceInfo> junkPieceInfo;
+
         public List<LuggageType> LuggageTypesToSpawn => luggageTypesToSpawn;
         public List<CollectablePieceInfo> CollectablePieceInfo => collectablePieceInfo;
         public List<TargetLuggageInfo> TargetLuggageInfo => targetLuggageInfo;
@@ -45,7 +45,7 @@ namespace GameFolders.Scripts.ScriptableObjects
             var missingTypes = targetTypes
                 .Where(t => !luggageTypesToSpawn.Contains(t))
                 .ToList();
-            
+
             // Add missing types to luggageTypesToSpawn if they are not already present
             foreach (var type in missingTypes)
             {
