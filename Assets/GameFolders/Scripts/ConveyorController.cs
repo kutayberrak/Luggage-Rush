@@ -5,7 +5,7 @@ namespace GameFolders.Scripts
 
     public class ConveyorBeltController : MonoBehaviour
     {
-        [SerializeField] private float conveyorSpeed = 1f;
+        [SerializeField] public float conveyorSpeed = 1f;
         [SerializeField] private Rigidbody conveyorRigidbody;
 
         void FixedUpdate()

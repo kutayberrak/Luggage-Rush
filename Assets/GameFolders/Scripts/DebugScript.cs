@@ -1,9 +1,10 @@
-using System.Collections;
 using UnityEngine;
 
 public class DebugScript : MonoBehaviour
 {
     public static DebugScript Instance { get; private set; }
+    public PowerUpInventory powerUpInventory;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -14,15 +15,17 @@ public class DebugScript : MonoBehaviour
 
         Instance = this;
     }
-    public void SpawnBlock()
-    {
-        //  GameObject block = ObjectPoolManager.Instance.GetRandomObjectFromPool(new Vector3(0, 0, 0), transform.rotation);
-        //StartCoroutine(DeactivateObject(block));
-    }
 
-    private IEnumerator DeactivateObject(GameObject block)
+    public void TestFreeze()
     {
-        yield return new WaitForSeconds(3f);
-        ObjectPoolManager.Instance.ReturnObjectToPool(block);
+        if (powerUpInventory.TryUse(PowerUpType.Freeze, out var pu))
+        {
+            PowerUpScheduler.Instance.Schedule(pu, pu.Duration);
+            Debug.Log("Freeze PowerUp aktifleþtirildi!");
+        }
+        else
+        {
+            Debug.Log("Freeze PowerUp kalmadý.");
+        }
     }
 }
