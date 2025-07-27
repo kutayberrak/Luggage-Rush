@@ -13,6 +13,11 @@ public class ClickableObject : MonoBehaviour
     private float moveDelay = 0f;
     private float moveStartTime = 0f;
 
+    // **YENİ**: Tıklama kilidi
+    private bool isClickProcessed = false;
+    private float lastClickTime = 0f;
+    private const float CLICK_COOLDOWN = 0.05f; // 50ms tıklama bekleme süresi (daha hızlı)
+
     public string UniqueID;
 
     /// <summary>
@@ -28,6 +33,7 @@ public class ClickableObject : MonoBehaviour
         reservedSlotIndex = slotIndex;
         isMoving = true;
         moveStartTime = Time.time;
+        isClickProcessed = false; // Hareket başladığında tıklama kilidini kaldır
     }
 
     private void Update()
@@ -38,6 +44,13 @@ public class ClickableObject : MonoBehaviour
         // ————— havada bekle —————
         if (Time.time - moveStartTime < moveDelay)
             return;
+
+        // **YENİ**: Slot'un hala geçerli olduğunu kontrol et
+        if (reservedSlotIndex >= SlotManager.Instance.slots.Count)
+        {
+            isMoving = false;
+            return;
+        }
 
         // (eğer retargeting kodu varsa buraya gelmeden önce çalışır)
 
@@ -59,9 +72,26 @@ public class ClickableObject : MonoBehaviour
 
     private void OnMouseDown()
     {
-        // Eğer zaten bir slot’a rezerveliysen veya hâlihazırda hareket ediyorsa
-        if (reservedSlotIndex >= 0)
+        // **YENİ**: Tıklama cooldown kontrolü
+        if (Time.time - lastClickTime < CLICK_COOLDOWN)
+        {
             return;
+        }
+        lastClickTime = Time.time;
+
+        // Eğer zaten bir slot'a rezerveliysen veya hâlihazırda hareket ediyorsa
+        if (reservedSlotIndex >= 0 || isMoving)
+        {
+            Debug.Log($"[ClickableObject] Object already reserved or moving. Slot: {reservedSlotIndex}, Moving: {isMoving}");
+            return;
+        }
+
+        // **YENİ**: Tıklama işlemi zaten başlatıldıysa tekrar başlatma
+        if (isClickProcessed)
+        {
+            Debug.Log($"[ClickableObject] Click already being processed for {UniqueID}");
+            return;
+        }
 
         // **YENİ**: eğer o anda hiç boş slot kalmadıysa, tıklamayı yoksay
         if (!SlotManager.Instance.HasFreeSlot())
@@ -70,7 +100,25 @@ public class ClickableObject : MonoBehaviour
             return;
         }
 
+        // **YENİ**: Tıklama işlemini başlat
+        isClickProcessed = true;
+        Debug.Log($"[ClickableObject] Processing click for {UniqueID}");
+
         // Aksi halde yerleştirme akışını başlat
         SlotManager.Instance.TryPlaceObject3D(gameObject, UniqueID);
+    }
+
+    // **YENİ**: Obje yok edildiğinde temizlik
+    private void OnDestroy()
+    {
+        if (SlotManager.Instance != null)
+        {
+            // Eğer bu obje hala hareket ediyorsa, SlotManager'dan kaldır
+            if (isMoving && reservedSlotIndex >= 0)
+            {
+                // SlotManager'da bu objeyi temizle
+                // Bu işlem SlotManager'da yapılacak
+            }
+        }
     }
 }
