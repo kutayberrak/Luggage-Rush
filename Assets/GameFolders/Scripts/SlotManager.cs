@@ -8,460 +8,330 @@ using UnityEngine.EventSystems; // LayoutRebuilder için gerekli
 public class SlotManager : MonoBehaviour
 {
     public static SlotManager Instance;
-
     public List<Slot> slots = new List<Slot>();
 
-    // Unity Inspector'dan atayın: Slotların tamamını içeren GameObject'teki LayoutGroup bileşeni.
-    public LayoutGroup slotsLayoutGroup;
+    [Header("Movement Timings")]
+    public float directMoveDuration = 0.1f;
+    public float visualShiftDuration = 0.2f;
+    public float matchClearanceDuration = 0.25f;
+    public float postMatchDelay = 0.1f;
 
-    // Geçici ikon kopyaları prefab'ı artık kullanılmıyor, bu değişken silinebilir veya boş bırakılabilir.
-    // public GameObject floatingIconPrefab; 
+    [Header("Easing Settings")]
+    [Tooltip("Slot’a yürüyüşte kullanılacak Ease tipi")]
+    public Ease moveEase = Ease.InOutSine;
 
-    // Görsel kaydırma (pre-shift) animasyonunun süresi
-    public float visualShiftAnimationDuration = 0.2f;
+    [Tooltip("Pre‑shift animasyonunda kullanılacak Ease tipi")]
+    public Ease shiftEase = Ease.InOutQuad;
 
-    // Eşleşme temizleme animasyonunun süresi
-    public float matchClearanceAnimationDuration = 0.25f;
-    // Eşleşme animasyonu bittikten sonraki ek bekleme süresi
-    public float delayAfterMatchAnimation = 0.1f;
+    [Tooltip("Match ölçek animasyonunda kullanılacak Ease tipi")]
+    public Ease matchEase = Ease.InQuad;
+
+    [Header("Movement")]
+    public float directMoveSpeed = 5f;
+
+    // --- bu ikisi eklendi ---
+    // hareket halindeki nesneleri takip edeceğiz
+    private Dictionary<ClickableObject, string> movingItems = new Dictionary<ClickableObject, string>();
+    private Dictionary<ClickableObject, int> reservedIndices = new Dictionary<ClickableObject, int>();
 
     private void Awake()
     {
-        // Yalnızca tek bir SlotManager örneğinin var olduğundan emin olun.
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject); // Tekrar eden örnekleri yok edin.
-        }
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
     }
 
     /// <summary>
-    /// İlk boş ve rezerve edilmemiş slotu bulur ve döndürür.
+    /// Objeyi slota yerleştirme akışını yöneten coroutine.
     /// </summary>
-    /// <returns>İlk boş slot, bulunamazsa null.</returns>
-    public Slot GetFirstEmptySlot()
+    private IEnumerator TryPlaceObjectRoutine(GameObject item, string id)
     {
-        foreach (var slot in slots)
+        // 1) Hedef indeksi hesapla
+        int idx = FindInsertIndex(id);
+        if (idx < 0)
         {
-            if (!slot.IsOccupied && !slot.IsReserved)
-                return slot;
-        }
-        return null;
-    }
-
-    /// <summary>
-    /// Veri tarafında slotların içeriğini sağa kaydırır.
-    /// Bu metod görsel animasyon yapmaz, sadece Slot objelerinin içindeki veriyi günceller.
-    /// </summary>
-    /// <param name="startIndex">Kaydırmanın başlayacağı indeks.</param>
-    /// <returns>Kaydırma başarılıysa true, değilse false.</returns>
-    public bool ShiftRightFromData(int startIndex)
-    {
-        Debug.Log($"[ShiftRightFromData] Called with startIndex = {startIndex}");
-        if (startIndex < 0 || startIndex >= slots.Count)
-        {
-            Debug.LogError($"ShiftRightFromData called with invalid startIndex: {startIndex}. Slots count: {slots.Count}");
-            return false;
+            item.SetActive(false);
+            yield break;
         }
 
-        // Sondan başlayarak hedef startIndex'e kadar olan veriyi sağa kaydır.
-        // Son slotun içeriği dışarı itilecektir.
-        for (int i = slots.Count - 2; i >= startIndex; i--)
+        // 2) Eğer doluysa önce veriyi sağa kaydır
+        if (slots[idx].IsOccupied)
         {
-            Slot current = slots[i];
-            Slot next = slots[i + 1];
-            Debug.Log($"Slot {i} isOccupied = {current.IsOccupied}, StoredUniqueID = {current.StoredUniqueID}");
-            if (current.IsOccupied)
+            // (isteğe bağlı: görsel shift animasyonu)
+            // yield return StartCoroutine(PerformVisualShift3D(idx, visualShiftDuration));
+
+            bool shifted = ShiftRightFromData3D(idx);
+            if (!shifted)
             {
-                // Veriyi kopyala
-                next.CopyDataFrom(current);
-            }
-            else
-            {
-                // Mevcut slot boşsa, yanındaki slotu da temizle (boşluğu propagate et)
-                next.ClearDataOnly();
+                item.SetActive(false);
+                yield break;
             }
         }
 
-        // Başlangıç indeksi artık boşaltılmış veri olarak ayarlanır.
-        slots[startIndex].ClearDataOnly();
-        return true;
+        // 3) Slot'u rezerve et
+        slots[idx].SetReserved(true);
+
+        // 4) Hareket komponentini hazırla
+        var mv = item.GetComponent<ClickableObject>()
+                 ?? item.AddComponent<ClickableObject>();
+        mv.speed = directMoveSpeed;
+        movingItems[mv] = id;
+        reservedIndices[mv] = idx;
+
+        // 5) Hareketi başlat
+        mv.BeginMove(idx);
+
+        // Coroutine bu noktada biter; OnMovableArrived çağrısı ile kaldığı yerden devam eder.
     }
 
     /// <summary>
-    /// Belirli bir indeksten başlayarak dolu slotların ikonlarını görsel olarak sağa kaydırır.
-    /// Bu metod sadece görsel animasyon yapar, slotların içindeki veriyi değiştirmez.
-    /// Orijinal ikonlar hareket ettirilir ve sonra gizlenir.
+    /// Artık bu tek satırlık metot yerine coroutine başlatıyoruz.
     /// </summary>
-    /// <param name="startIndex">Kaydırmanın başlayacağı indeks.</param>
-    /// <param name="duration">Animasyonun süresi.</param>
-    public IEnumerator PerformVisualShift(int startIndex, float duration)
+    public void TryPlaceObject3D(GameObject item, string id)
     {
-         // Animasyon sırasında Layout Group'ın otomatik düzenlemesini devre dışı bırakın.
-         if (slotsLayoutGroup != null) slotsLayoutGroup.enabled = false;
-
-        yield return new WaitForSeconds(0f);
-        if (slots[startIndex].iconImage != null)
-        {
-            slots[startIndex].iconImage.enabled = false;
-            // slots[startIndex].iconImage.sprite = null; // ❌ BUNU SİL!
-            slots[startIndex].iconImage.rectTransform.localScale = Vector3.one;
-            slots[startIndex].iconImage.color = new Color(
-                slots[startIndex].iconImage.color.r,
-                slots[startIndex].iconImage.color.g,
-                slots[startIndex].iconImage.color.b,
-                0); // sadece görünmez yap
-        }
-
-
-        if (slotsLayoutGroup != null) slotsLayoutGroup.enabled = true;
-        RefreshLayout();
+        StartCoroutine(TryPlaceObjectRoutine(item, id));
     }
 
-    /// <summary>
-    /// Bellekteki slot verilerini sıkıştırır, boşlukları kaldırır.
-    /// Bu metod sadece veriyi manipüle eder, görsel animasyon yapmaz.
-    /// </summary>
-    public void CompactSlots()
+    public void OnMovableArrived(ClickableObject mv)
     {
-        List<(Sprite sprite, string id)> occupiedItems = new List<(Sprite, string)>();
+        if (!movingItems.ContainsKey(mv)) return;
+        int idx = reservedIndices[mv];
+        string id = movingItems[mv];
 
-        foreach (var slot in slots)
-        {
-            if (slot.IsOccupied)
-                occupiedItems.Add((slot.iconImage.sprite, slot.StoredUniqueID));
-        }
+        // 1) Rezerveyi kaldır
+        slots[idx].SetReserved(false);
 
-        for (int i = 0; i < slots.Count; i++)
-        {
-            if (i < occupiedItems.Count)
-            {
-                slots[i].FillSlotDataOnly(occupiedItems[i].sprite, occupiedItems[i].id);
-                // Kompaktlaşma sırasında ikonları anlık olarak görünür yapın
-                if (slots[i].iconImage != null)
-                {
-                    slots[i].iconImage.enabled = true;
-                    slots[i].iconImage.color = new Color(slots[i].iconImage.color.r, slots[i].iconImage.color.g, slots[i].iconImage.color.b, 1);
-                    slots[i].iconImage.rectTransform.localScale = Vector3.one; // Ölçeği sıfırla
-                }
-            }
-            else
-            {
-                slots[i].ClearSlot(); // Hem veriyi hem görseli temizleyin
-            }
-        }
-        RefreshLayout(); // Veri değiştiği için layout'u yenileyin
+        // 2) Slot’a ata
+        slots[idx].AssignOccupant(mv.gameObject, id);
+
+        // 3) Tracking’den temizle
+        movingItems.Remove(mv);
+        reservedIndices.Remove(mv);
+
+        // 4) Eşleşme & sıkıştırma sürecini başlat
+        StartCoroutine(ProcessSlotChanges());
     }
 
-    /// <summary>
-    /// Mevcut bir objenin yerleşeceği en uygun slot indeksini belirler.
-    /// </summary>
-    /// <param name="id">Yerleştirilecek objenin benzersiz kimliği.</param>
-    /// <returns>Uygun slot objesi, bulunamazsa null.</returns>
-    public Slot GetCurrentValidInsertSlot(string id)
-    {
-        int index = FindInsertIndex(id);
-        if (index >= 0 && index < slots.Count)
-            return slots[index];
 
-        return null;
+    private IEnumerator HandleDirectPlacement3D(GameObject item, string id, int idx)
+    {
+        // 1) Inspector’dan ayarlanan süreyi kullan
+        yield return item.transform
+                         .DOMove(slots[idx].transform.position, directMoveDuration)
+                         .SetEase(moveEase)
+                         .WaitForCompletion();
+
+        // 2) Veriyi ata
+        slots[idx].AssignOccupant(item, id);
+
+        // 3) Match & compact
+        yield return ProcessSlotChanges();
     }
 
-    /// <summary>
-    /// Belirli bir slotun dünya pozisyonunu döndürür.
-    /// </summary>
-    public Vector3 GetSlotWorldPosition(Slot slot, Canvas canvas)
+
+    private IEnumerator HandlePlacementWithVisualShift3D(GameObject item, string id, int idx)
     {
-        RectTransform rect = slot.GetComponent<RectTransform>();
-        Camera cam = canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera;
+        // Ön‑kaydırma
+        yield return PerformVisualShift3D(idx, visualShiftDuration);
 
-        Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(cam, rect.position);
-        float z = Mathf.Abs(Camera.main.transform.position.z);
-        return Camera.main.ScreenToWorldPoint(new Vector3(screenPos.x, screenPos.y, z));
-    }
-
-    /// <summary>
-    /// Yeni objeyi slot verisine yerleştirir. Bu metod, görsel ön-kaydırma animasyonu bittikten sonra çağrılmalıdır.
-    /// </summary>
-    /// <param name="id">Objenin kimliği.</param>
-    /// <param name="sprite">Objenin sprite'ı.</param>
-    /// <param name="targetIndex">Objenin yerleştirileceği nihai indeks.</param>
-    public void PlaceObjectDataOnly(string id, Sprite sprite, int targetIndex)
-    {
-        if (targetIndex < 0 || targetIndex >= slots.Count)
-        {
-            Debug.LogError($"PlaceObjectDataOnly called with invalid targetIndex: {targetIndex}");
-            return;
-        }
-
-        // Önce slotun verisini doldurun
-        slots[targetIndex].FillSlotDataOnly(sprite, id);
-
-        // İkonu görünür yapın ve alfa değerini 0'dan 1'e animasyonlu getirin
-        if (slots[targetIndex].iconImage != null)
-        {
-            slots[targetIndex].iconImage.enabled = true; // İkonu etkinleştirin
-            // Başlangıçta şeffaf yapıp sonra animasyonlu görünür hale getirin
-            slots[targetIndex].iconImage.color = new Color(slots[targetIndex].iconImage.color.r, slots[targetIndex].iconImage.color.g, slots[targetIndex].iconImage.color.b, 0);
-            slots[targetIndex].iconImage.DOFade(1, 0.1f); // Yavaşça görünür yapın
-
-            // İsteğe bağlı olarak PunchScale animasyonunu da burada çağırabiliriz
-            StartCoroutine(slots[targetIndex].PunchScaleCoroutine());
-        }
-    }
-
-    /// <summary>
-    /// Slot verisinde değişiklikler (yerleştirme, eşleşme, sıkıştırma) sonrası işlemleri yönetir.
-    /// </summary>
-    /// <param name="sourceCanvas">UI Canvas referansı.</param>
-    /// <param name="originatingClickableObject">Bu süreci başlatan ClickableObject.</param>
-    public IEnumerator ProcessSlotChanges(Canvas sourceCanvas, ClickableObject originatingClickableObject)
-    {
-        // Eşleşme kontrolü ve animasyon (varsa)
-        yield return StartCoroutine(CheckForMatchesCoroutine(sourceCanvas));
-
-        // Potansiyel eşleşmeler temizlendikten sonra slotları sıkıştırın.
-        CompactSlots();
-
-        // Sıkıştırma sonrası yeni eşleşmeleri kontrol edin (kaskadları ele alır)
-        yield return StartCoroutine(CheckForMatchesCoroutine(sourceCanvas));
-
-        // Tüm işlemler bittiğinde ClickableObject'i yok edin.
-        if (originatingClickableObject != null) Destroy(originatingClickableObject.gameObject);
-    }
-
-    /// <summary>
-    /// Yeni objeyi slot sistemine yerleştirmeye çalışır. Bu metod, kaydırma ve eşleşme mantığını yönetir.
-    /// </summary>
-    /// <param name="id">Yerleştirilecek objenin kimliği.</param>
-    /// <param name="sprite">Yerleştirilecek objenin sprite'ı.</param>
-    /// <param name="sourceCanvas">UI konum dönüşümleri için kullanılan Canvas.</param>
-    /// <param name="originatingClickableObject">Bu işlemi başlatan ClickableObject.</param>
-    public void TryPlaceObject(string id, Sprite sprite, Canvas sourceCanvas, ClickableObject originatingClickableObject)
-    {
-        int insertIndex = FindInsertIndex(id);
-        if (insertIndex == -1)
-        {
-            Debug.Log($"Cannot place object '{id}': No suitable slot found.");
-            // Uygun slot bulunamazsa ClickableObject'i yok edin.
-            if (originatingClickableObject != null) Destroy(originatingClickableObject.gameObject);
-            return; // Metottan çıkın
-        }
-
-        // Eğer hesaplanan insertIndex zaten doluysa, mevcut öğeleri sağa kaydırmamız gerekir.
-        // Bu, FindInsertIndex'in belirlediği "bloğun başına kaydır" senaryosudur.
-        if (slots[insertIndex].IsOccupied)
-        {
-            // Görsel kaydırma animasyonunu başlatın ve bitmesini bekleyin
-            StartCoroutine(HandlePlacementWithVisualShift(id, sprite, sourceCanvas, insertIndex, originatingClickableObject));
-        }
-        else // Hedef slot zaten boşsa, doğrudan yerleştirme yapın
-        {
-            PlaceObjectDataOnly(id, sprite, insertIndex);
-            Debug.Log($"Placing sprite for ID {id}, sprite name = {(sprite == null ? "NULL" : sprite.name)} at index {insertIndex}");
-            // Görsel kaydırma olmadığı için, yerleştirme sonrası süreçleri doğrudan başlatın
-            StartCoroutine(ProcessSlotChanges(sourceCanvas, originatingClickableObject));
-        }
-    }
-
-    /// <summary>
-    /// Görsel kaydırma (pre-shift) gerektiren yerleşim senaryolarını yöneten coroutine.
-    /// </summary>
-    private IEnumerator HandlePlacementWithVisualShift(string id, Sprite sprite, Canvas sourceCanvas, int insertIndex, ClickableObject originatingClickableObject)
-    {
-        // Görsel kaydırma animasyonunu başlatın ve bitmesini bekleyin
-        yield return StartCoroutine(PerformVisualShift(insertIndex, visualShiftAnimationDuration));
-
-        // Görsel kaydırma bittikten sonra, veri tarafında kaydırma işlemini gerçekleştirin.
-        bool shifted = ShiftRightFromData(insertIndex);
+        bool shifted = ShiftRightFromData3D(idx);
         if (!shifted)
         {
-            Debug.LogWarning($"Failed to shift elements (data only) for object '{id}' at index {insertIndex}.");
-            // Kaydırma başarısız olursa ClickableObject'i yok edin.
-            if (originatingClickableObject != null) Destroy(originatingClickableObject.gameObject);
-            yield break; // Coroutine'den çıkın
+            item.SetActive(false);
+            item.transform.SetParent(null, true);
+            yield break;
         }
 
-        // Artık 'insertIndex' slotunun boş olduğu garantilendi, yeni objeyle doldurun.
-        PlaceObjectDataOnly(id, sprite, insertIndex);
+        // Slot’a taşıma
+        yield return item.transform
+                         .DOMove(slots[idx].transform.position, directMoveDuration)
+                         .SetEase(moveEase)
+                         .WaitForCompletion();
 
-        // Yerleştirme sonrası süreçleri başlatın
-        yield return StartCoroutine(ProcessSlotChanges(sourceCanvas, originatingClickableObject));
+        slots[idx].AssignOccupant(item, id);
+
+        yield return ProcessSlotChanges();
     }
 
-    /// <summary>
-    /// Sıralı eşleşmeleri kontrol eder ve 3 veya daha fazla özdeş, ardışık öğe grubunu temizler.
-    /// Bu bir coroutine'dir ve eşleşme temizleme sırasında animasyon ve gecikmelere izin verir.
-    /// </summary>
-    private IEnumerator CheckForMatchesCoroutine(Canvas sourceCanvas)
-    {
-        if (slots.Count < 3)
-            yield break; // Hiçbir şey kontrol edilmeyecek
-
-        int count = 1; // Ardışık özdeş öğelerin sayısını izler
-        for (int i = 1; i < slots.Count; i++)
-        {
-            // Geçerli slot ve önceki slotun dolu olup olmadığını ve aynı benzersiz ID'ye sahip olup olmadığını kontrol edin.
-            if (slots[i].IsOccupied && slots[i - 1].IsOccupied &&
-                slots[i].StoredUniqueID == slots[i - 1].StoredUniqueID)
-            {
-                count++;
-            }
-            else // Uyumsuzluk veya boş slot, bu nedenle mevcut sırayı değerlendirin.
-            {
-                if (count >= 3)
-                {
-                    // Bir eşleşme bulundu, animasyonu başlatın ve temizleyin.
-                    yield return StartCoroutine(AnimateMatchClearance(i - count, count, sourceCanvas));
-                    // Bir eşleşme temizlendikten sonra durabiliriz ve ProcessSlotChanges
-                    // sonraki adımları (sıkıştırma ve kaskatlar için tekrar kontrol etme) yönetmesine izin verebiliriz.
-                    yield break;
-                }
-                count = 1; // Yeni sıra için sayacı sıfırlayın.
-            }
-        }
-
-        // Döngüden sonra, slot listesinin en sonunda bir eşleşme olup olmadığını kontrol edin.
-        if (count >= 3)
-        {
-            yield return StartCoroutine(AnimateMatchClearance(slots.Count - count, count, sourceCanvas));
-        }
-    }
-
-    /// <summary>
-    /// Eşleşen öğeleri eşleşmenin ilk slotuna doğru animasyonlu bir şekilde birleştirir, sonra onları temizler.
-    /// </summary>
-    /// <param name="startIndex">Eşleşen sıranın başlangıç indeksi.</param>
-    /// <param name="count">Eşleşen sıradaki öğe sayısı.</param>
-    /// <param name="sourceCanvas">UI konum dönüşümleri için kullanılan Canvas.</param>
-    private IEnumerator AnimateMatchClearance(int startIndex, int count, Canvas sourceCanvas)
-    {
-        List<GameObject> clones = new List<GameObject>();
-        Vector3 centerPos = slots[startIndex].transform.position;
-
-        for (int i = startIndex; i < startIndex + count; i++)
-        {
-            Slot slot = slots[i];
-            if (slot.IsOccupied && slot.iconImage != null && slot.iconImage.sprite != null)
-            {
-                GameObject clone = new GameObject("IconClone");
-                clone.transform.SetParent(sourceCanvas.transform, false);
-                Image img = clone.AddComponent<Image>();
-                img.sprite = slot.iconImage.sprite;
-                img.rectTransform.sizeDelta = slot.iconImage.rectTransform.sizeDelta;
-                img.transform.position = slot.iconImage.transform.position;
-                img.raycastTarget = false;
-
-                clones.Add(clone);
-                slot.ClearSlot(); // Veriyi de temizle
-            }
-        }
-
-        // 2. Klonları ortada toplayıp fade-out yap
-        float duration = matchClearanceAnimationDuration;
-        foreach (var clone in clones)
-        {
-            clone.transform.DOMove(centerPos, duration).SetEase(Ease.InOutQuad);
-            clone.GetComponent<Image>().DOFade(0, duration).SetEase(Ease.InQuad);
-        }
-
-        yield return new WaitForSeconds(duration + delayAfterMatchAnimation);
-
-        // 3. Klonları temizle
-        foreach (var clone in clones)
-        {
-            Destroy(clone);
-        }
-
-        RefreshLayout();
-    }
-
-    /// <summary>
-    /// Belirli bir ID'ye sahip nesneyi yerleştirmek için uygun indeksi bulur.
-    /// Öncelik:
-    /// 1. Eğer aynı ID'ye sahip bir blok varsa ve hemen sağında boş slot varsa, oraya yerleştir.
-    /// 2. Eğer aynı ID'ye sahip bir blok varsa ve hemen sağındaki slot doluysa, bloğun başına kaydır.
-    /// 3. Hiç aynı ID'ye sahip öğe yoksa, ilk boş slota yerleştir.
-    /// </summary>
-    /// <param name="id">Yerleştirilecek objenin benzersiz ID'si.</param>
-    /// <returns>Hesaplanan ekleme indeksi veya uygun slot bulunamazsa -1.</returns>
     private int FindInsertIndex(string id)
     {
-        int firstBlockIndex = -1;
-        int lastBlockIndex = -1;
-
-        // 1. Aynı ID'ye sahip ardışık bir bloğun başlangıcını ve sonunu bulun.
+        int firstBlock = -1, lastBlock = -1;
         for (int i = 0; i < slots.Count; i++)
         {
             if (slots[i].IsOccupied && slots[i].StoredUniqueID == id)
             {
-                if (firstBlockIndex == -1) // Bu ID'yi ilk kez görüyorsak
-                    firstBlockIndex = i;
-                lastBlockIndex = i; // En son görülen indeksi güncelleyin
+                firstBlock = firstBlock < 0 ? i : firstBlock;
+                lastBlock = i;
             }
-            else if (firstBlockIndex != -1) // Bir bloktan sonra farklı bir şey veya boşluk varsa
+            else if (firstBlock >= 0)
             {
-                break; // Ardışık blok burada bitti
+                break;
             }
         }
 
-        // Eğer aynı ID'ye sahip bir blok bulunduysa
-        if (firstBlockIndex != -1)
+        if (firstBlock >= 0)
         {
-            int nextSlotAfterBlock = lastBlockIndex + 1;
+            int next = lastBlock + 1;
+            if (next < slots.Count && !slots[next].IsOccupied)
+                return next;
+            return firstBlock;
+        }
 
-            // Senaryo 1: Bloğun hemen sağındaki slot boşsa -> Bloğun sonuna ekleyin
-            if (nextSlotAfterBlock < slots.Count && !slots[nextSlotAfterBlock].IsOccupied)
+        for (int i = 0; i < slots.Count; i++)
+            if (!slots[i].IsOccupied && !slots[i].IsReserved)
+                return i;
+
+        return -1;
+    }
+
+    public bool ShiftRightFromData3D(int startIndex)
+    {
+        if (startIndex < 0 || startIndex >= slots.Count) return false;
+
+        for (int i = slots.Count - 2; i >= startIndex; i--)
+        {
+            var src = slots[i];
+            var dst = slots[i + 1];
+
+            // --- burada rezerv flag’lerini taşı ---
+            bool srcRes = src.IsReserved;
+            dst.SetReserved(srcRes);
+
+            // eğer bu slotta hareket eden bir Movable varsa, onun reservedIndices’ini de güncelle
+            foreach (var kv in new List<ClickableObject>(reservedIndices.Keys))
             {
-                return nextSlotAfterBlock; // Bloğun sonundaki boş slota yerleştirin
+                if (reservedIndices[kv] == i)
+                    reservedIndices[kv] = i + 1;
             }
-            else // Senaryo 2: Bloğun hemen sağındaki slot doluysa veya dışındaysa -> Bloğun başına kaydırın
+
+            if (src.IsOccupied)
             {
-                // Bu durumda, tüm bloğu sağa kaydırıp yeni öğeyi başına eklemek istiyoruz.
-                // ShiftRightFromData metodu startIndex'teki slotu temizler ve sağa kaydırma yapar.
-                return firstBlockIndex;
+                // objeyi taşı
+                var occ = src.Occupant;
+                var oid = src.StoredUniqueID;
+                src.ClearDataOnly();
+                dst.ClearSlot();
+                dst.AssignOccupant(occ, oid);
+            }
+            else
+            {
+                dst.ClearSlot();
             }
         }
-        // Eğer aynı ID'ye sahip bir blok bulunamadıysa (firstBlockIndex hala -1)
-        else
+        // başlangıç rezerv flag’ini temizle
+        slots[startIndex].SetReserved(false);
+        // bu pozisyondaki var ise taşıma mapping’ini sil
+        foreach (var kv in new List<ClickableObject>(reservedIndices.Keys))
+            if (reservedIndices[kv] == startIndex)
+                reservedIndices.Remove(kv);
+
+        slots[startIndex].ClearSlot();
+        return true;
+    }
+
+    // (geri kalan FindInsertIndex, PerformVisualShift3D, CompactSlots3D, 
+    //  CheckForMatchesCoroutine3D, AnimateMatchClearance3D, ProcessSlotChanges 
+    //   metotların aynısını tutacağız)
+
+private IEnumerator PerformVisualShift3D(int startIndex, float duration)
+    {
+        for (int i = startIndex; i < slots.Count - 1; i++)
         {
-            // İlk boş slotu bulun
-            for (int i = 0; i < slots.Count; i++)
+            if (slots[i].IsOccupied)
             {
-                if (!slots[i].IsOccupied)
+                slots[i].Occupant
+                    .transform
+                    .DOMove(slots[i + 1].transform.position, duration)
+                    .SetEase(shiftEase);
+            }
+        }
+        yield return new WaitForSeconds(duration);
+    }
+
+    private void CompactSlots3D()
+    {
+        var buffer = new List<(GameObject obj, string id)>();
+        foreach (var s in slots)
+            if (s.IsOccupied)
+                buffer.Add((s.Occupant, s.StoredUniqueID));
+
+        foreach (var s in slots)
+            s.ClearSlot();
+
+        for (int i = 0; i < buffer.Count; i++)
+            slots[i].AssignOccupant(buffer[i].obj, buffer[i].id);
+    }
+
+    private IEnumerator CheckForMatchesCoroutine3D()
+    {
+        if (slots.Count < 3) yield break;
+        int count = 1;
+        for (int i = 1; i < slots.Count; i++)
+        {
+            if (slots[i].IsOccupied &&
+                slots[i - 1].IsOccupied &&
+                slots[i].StoredUniqueID == slots[i - 1].StoredUniqueID)
+            {
+                count++;
+            }
+            else
+            {
+                if (count >= 3)
                 {
-                    return i;
+                    yield return AnimateMatchClearance3D(i - count, count);
+                    yield break;
                 }
+                count = 1;
             }
-            // Boş slot bulunamadı
-            return -1;
         }
+        if (count >= 3)
+            yield return AnimateMatchClearance3D(slots.Count - count, count);
     }
 
     /// <summary>
-    /// Tüm slotları temizler.
+    /// Eşleşen öğeleri ortada birleştirip, sonra sadece bu üçlü için Destroy yapar.
+    /// Diğer hiçbir noktada objeyi yok etmiyoruz.
     /// </summary>
-    public void ClearAllSlots()
+    private IEnumerator AnimateMatchClearance3D(int startIndex, int count)
     {
-        foreach (var slot in slots)
+        var toDestroy = new List<GameObject>();
+        Vector3 center = slots[startIndex].transform.position;
+
+        for (int i = startIndex; i < startIndex + count; i++)
         {
-            slot.ClearSlot(); // Hem veriyi hem de görseli temizler
+            var slot = slots[i];
+            if (slot.IsOccupied && slot.Occupant != null)
+            {
+                var obj = slot.Occupant;
+                slot.ClearDataOnly();
+                obj.transform.SetParent(null, true);
+                toDestroy.Add(obj);
+            }
         }
-        RefreshLayout(); // Layout'u yeniler
+
+        // Tween sürelerini ve easing tipini inspector’dan al
+        foreach (var obj in toDestroy)
+        {
+            obj.transform
+               .DOMove(center, matchClearanceDuration)
+               .SetEase(shiftEase);
+            obj.transform
+               .DOScale(Vector3.zero, matchClearanceDuration)
+               .SetEase(matchEase);
+        }
+
+        yield return new WaitForSeconds(matchClearanceDuration + postMatchDelay);
+
+        foreach (var obj in toDestroy)
+        {
+            Destroy(obj); // Sadece match sonrası
+        }
     }
 
-    /// <summary>
-    /// UI Layout Group'u manuel olarak yeniden oluşturulması için işaretler.
-    /// Bu, slotların pozisyonlarının güncel veriye göre ayarlanmasını sağlar.
-    /// </summary>
-    private void RefreshLayout()
+    private IEnumerator ProcessSlotChanges()
     {
-        if (slotsLayoutGroup != null)
-        {
-            LayoutRebuilder.MarkLayoutForRebuild(slotsLayoutGroup.GetComponent<RectTransform>());
-        }
+        yield return StartCoroutine(CheckForMatchesCoroutine3D());
+        CompactSlots3D();
+        yield return StartCoroutine(CheckForMatchesCoroutine3D());
     }
+
 }
