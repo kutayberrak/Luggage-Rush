@@ -71,7 +71,7 @@ public class SpawnManager : MonoBehaviour
         if (LevelManager.Instance != null && LevelManager.Instance.CurrentLevelData != null)
         {
             allowedTypes.Clear();
-            allowedTypes = LevelManager.Instance.CurrentLevelData.LuggageTypes;
+            allowedTypes = LevelManager.Instance.CurrentLevelData.LuggageTypesToSpawn;
         }
     }
     public void RunSpawn() //second
