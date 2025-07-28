@@ -108,9 +108,22 @@ public class ObjectPoolManager : MonoBehaviour
 
 
         GameObject newObj = Instantiate(prefab, position, rotation);
-        newObj.transform.SetParent(poolParent);
+        newObj.transform.SetParent(GetParentTransformFor(prefab));
         entry.objects.Add(newObj);
         return newObj;
+    }
+    private Transform GetParentTransformFor(GameObject prefab)
+    {
+        if (luggagePrefabs.Contains(prefab))
+            return lugageParent;
+
+        if (garbagePrefabs.Contains(prefab))
+            return garbageParent;
+
+        if (collectionPrefabs.Contains(prefab))
+            return collecitonParent;
+
+        return poolParent; // fallback (kategori dýþý)
     }
 
 
