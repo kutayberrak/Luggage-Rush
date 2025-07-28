@@ -101,6 +101,11 @@ namespace GameFolders.Scripts.Managers
         private void OnLevelFailed()
         {
             Debug.Log("Level Failed");
+
+            // Play level fail sound
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.PlaySFX("LevelFail");
+
             FailPanel.SetActive(true);
             ClearLevelData();
         }
@@ -110,6 +115,10 @@ namespace GameFolders.Scripts.Managers
             WinPanel.SetActive(true);
             Debug.Log("Level Won!");
 
+            // Play level win sound
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.PlaySFX("LevelWin");
+
             ClearLevelData();
 
             // Earn money
@@ -117,6 +126,10 @@ namespace GameFolders.Scripts.Managers
             {
                 MoneyManager.Instance.EarnMoney(10);
                 Debug.Log("Earned 10 coins!");
+
+                // Play money earn sound
+                if (AudioManager.Instance != null)
+                    AudioManager.Instance.PlaySFX("MoneyEarn");
             }
             else
             {
