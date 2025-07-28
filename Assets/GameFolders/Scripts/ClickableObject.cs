@@ -1,4 +1,5 @@
 using UnityEngine;
+using DG.Tweening;
 
 [RequireComponent(typeof(Collider))]
 public class ClickableObject : MonoBehaviour
@@ -6,8 +7,17 @@ public class ClickableObject : MonoBehaviour
     public float speed = 5f;
     public float arrivalThreshold = 0.05f;
 
+    [Header("Click Animation Settings")]
+    [Tooltip("Tıklama sonrası yükselme süresi")]
+    public float riseDuration = 0.3f;
+    [Tooltip("Tıklama sonrası yükselme yüksekliği")]
+    public float riseHeight = 1f;
+    [Tooltip("Tıklama animasyonu easing tipi")]
+    public Ease riseEase = Ease.OutQuad;
+
     [HideInInspector] public int reservedSlotIndex = -1;
     private bool isMoving = false;
+    private bool isInClickAnimation = false;
 
     // **Yeni** alanlar:
     private float moveDelay = 0f;
@@ -17,6 +27,10 @@ public class ClickableObject : MonoBehaviour
     private bool isClickProcessed = false;
     private float lastClickTime = 0f;
     private const float CLICK_COOLDOWN = 0.05f; // 50ms tıklama bekleme süresi (daha hızlı)
+
+    // **YENİ**: Animasyon için orijinal pozisyon ve rotasyon
+    private Vector3 originalPosition;
+    private Vector3 originalRotation;
 
     public string UniqueID;
 
@@ -36,8 +50,42 @@ public class ClickableObject : MonoBehaviour
         isClickProcessed = false; // Hareket başladığında tıklama kilidini kaldır
     }
 
+    // **YENİ**: Tıklama animasyonunu başlat
+    private void StartClickAnimation()
+    {
+        if (isInClickAnimation) return;
+
+        isInClickAnimation = true;
+        
+        // Orijinal pozisyon ve rotasyonu kaydet
+        originalPosition = transform.position;
+        originalRotation = transform.eulerAngles;
+
+        // Yükselme animasyonu
+        Vector3 risePosition = originalPosition + Vector3.up * riseHeight;
+        
+        // Pozisyon ve rotasyon animasyonunu aynı anda başlat
+        Sequence clickSequence = DOTween.Sequence();
+        
+        clickSequence.Append(transform.DOMove(risePosition, riseDuration).SetEase(riseEase));
+        clickSequence.Join(transform.DORotate(Vector3.zero, riseDuration).SetEase(riseEase));
+        
+        // Animasyon tamamlandığında slot hareketini başlat
+        clickSequence.OnComplete(() => {
+            isInClickAnimation = false;
+            // SlotManager'dan hareketi başlat
+            SlotManager.Instance.TryPlaceObject3D(gameObject, UniqueID);
+        });
+
+        Debug.Log($"[ClickableObject] Started click animation for {UniqueID}");
+    }
+
     private void Update()
     {
+        // **YENİ**: Animasyon sırasında normal hareket çalışmasın
+        if (isInClickAnimation)
+            return;
+
         if (!isMoving || reservedSlotIndex < 0)
             return;
 
@@ -86,6 +134,13 @@ public class ClickableObject : MonoBehaviour
             return;
         }
 
+        // **YENİ**: Tıklama animasyonu sırasında tekrar tıklamayı engelle
+        if (isInClickAnimation)
+        {
+            Debug.Log($"[ClickableObject] Click animation in progress for {UniqueID}");
+            return;
+        }
+
         // **YENİ**: Tıklama işlemi zaten başlatıldıysa tekrar başlatma
         if (isClickProcessed)
         {
@@ -104,13 +159,16 @@ public class ClickableObject : MonoBehaviour
         isClickProcessed = true;
         Debug.Log($"[ClickableObject] Processing click for {UniqueID}");
 
-        // Aksi halde yerleştirme akışını başlat
-        SlotManager.Instance.TryPlaceObject3D(gameObject, UniqueID);
+        // **YENİ**: Tıklama animasyonunu başlat
+        StartClickAnimation();
     }
 
     // **YENİ**: Obje yok edildiğinde temizlik
     private void OnDestroy()
     {
+        // **YENİ**: DOTween animasyonlarını temizle
+        DOTween.Kill(transform);
+        
         if (SlotManager.Instance != null)
         {
             // Eğer bu obje hala hareket ediyorsa, SlotManager'dan kaldır
