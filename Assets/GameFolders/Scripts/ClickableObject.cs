@@ -1,5 +1,26 @@
+using GameFolders.Scripts.Enums;
 using UnityEngine;
 
+[System.Serializable]
+public class ClickableID
+{
+    public ObjectType category;
+
+    public LuggageType luggageType;
+    public JunkPieceType garbageType;
+    public CollectiblePieceType collectionType;
+
+    public string GetID()
+    {
+        return category switch
+        {
+            ObjectType.Luggage => luggageType.ToString(),
+            ObjectType.Garbage => garbageType.ToString(),
+            ObjectType.Collection => collectionType.ToString(),
+            _ => "Unknown"
+        };
+    }
+}
 [RequireComponent(typeof(Collider))]
 public class ClickableObject : MonoBehaviour
 {
@@ -18,7 +39,8 @@ public class ClickableObject : MonoBehaviour
     private float lastClickTime = 0f;
     private const float CLICK_COOLDOWN = 0.05f; // 50ms tıklama bekleme süresi (daha hızlı)
 
-    public string UniqueID;
+    public ClickableID id;
+    public string UniqueID => id.GetID();
 
     /// <summary>
     /// SlotManager tarafından atanacak gecikme süresi.
@@ -72,6 +94,7 @@ public class ClickableObject : MonoBehaviour
 
     private void OnMouseDown()
     {
+        Debug.Log("Tıklandı");
         // **YENİ**: Tıklama cooldown kontrolü
         if (Time.time - lastClickTime < CLICK_COOLDOWN)
         {
