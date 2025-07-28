@@ -96,13 +96,13 @@ public class SpawnManager : MonoBehaviour
         }
 
 
-        foreach (var garbageType in levelData.junkPieceInfo)
+        foreach (var garbageType in levelData.JunkPieceTypes)
         {
 
             foreach (GameObject prefab in garbagePrefabs)
             {
                 var garbageInfo = prefab.GetComponent<GarbageItem>();
-                if (garbageInfo != null && garbageInfo.garbageType == garbageType.JunkPieceType)
+                if (garbageInfo != null && garbageInfo.garbageType == garbageType)
                 {
                     allowedObjectsByType[ObjectType.Garbage].Add(prefab);
 
@@ -112,13 +112,13 @@ public class SpawnManager : MonoBehaviour
         }
 
 
-        foreach (var collectionType in levelData.CollectablePieceInfo)
+        foreach (var collectionType in levelData.CollectablePieceType)
         {
 
             foreach (GameObject prefab in collectionPrefabs)
             {
                 var collectionInfo = prefab.GetComponent<CollectionItem>();
-                if (collectionInfo != null && collectionInfo.collectionType == collectionType.CollectiblePieceType)
+                if (collectionInfo != null && collectionInfo.collectionType == collectionType)
                 {
                     allowedObjectsByType[ObjectType.Collection].Add(prefab);
 

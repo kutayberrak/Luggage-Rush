@@ -16,19 +16,19 @@ namespace GameFolders.Scripts.ScriptableObjects
         [Tooltip("Seconds")]
         [SerializeField] private float levelTimeInSeconds;
         [SerializeField] private List<TargetLuggageInfo> targetLuggageInfo;
-        [Tooltip("Different luggage types to spawn current level")]
-        [SerializeField] private List<LuggageType> luggageTypesToSpawn;
-
-        [Header("Collectible Configuration")]
-        [SerializeField] private List<CollectablePieceInfo> collectablePieceInfo;
         [SerializeField] private bool hasCollectiblePiece;
-
-        [Header("Junk Configuration")]
-        public List<JunkPieceInfo> junkPieceInfo;
-
+        
+        [Header("Configuration of objects to be spawned")]
+        [SerializeField] private List<LuggageType> luggageTypesToSpawn;
+        [SerializeField] private List<CollectiblePieceType> collectablePieceType;
+        [SerializeField] private List<JunkPieceType> junkPieceType;
+        [SerializeField] private SpawnWeightData spawnWeightData;
+        
+        public List<JunkPieceType> JunkPieceTypes => junkPieceType;
         public List<LuggageType> LuggageTypesToSpawn => luggageTypesToSpawn;
-        public List<CollectablePieceInfo> CollectablePieceInfo => collectablePieceInfo;
+        public List<CollectiblePieceType> CollectablePieceType => collectablePieceType;
         public List<TargetLuggageInfo> TargetLuggageInfo => targetLuggageInfo;
+        public SpawnWeightData SpawnWeightData => spawnWeightData;
         public bool HasCollectiblePiece => hasCollectiblePiece;
         public float TimeInSeconds => levelTimeInSeconds;
 
@@ -36,7 +36,7 @@ namespace GameFolders.Scripts.ScriptableObjects
         {
 #if UNITY_EDITOR
             if (targetLuggageInfo == null || luggageTypesToSpawn == null) return;
-
+            
             var targetTypes = targetLuggageInfo
                 .Select(t => t.LuggageType)
                 .Distinct()
