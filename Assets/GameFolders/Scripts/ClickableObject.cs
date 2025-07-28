@@ -33,9 +33,25 @@ public class ClickableObject : MonoBehaviour
     [Tooltip("Tıklama animasyonu easing tipi")]
     public Ease riseEase = Ease.OutQuad;
 
+    [Header("Curve Movement Settings")]
+    [Tooltip("Curve hareketi kullanılsın mı?")]
+    public bool useCurveMovement = true;
+    [Tooltip("Curve hareket süresi")]
+    public float curveMoveDuration = 1.2f;
+    [Tooltip("Curve hareket easing tipi")]
+    public Ease curveEase = Ease.InOutSine;
+    [Tooltip("Curve yüksekliği (0 = düz çizgi)")]
+    [Range(0f, 5f)]
+    public float curveHeight = 2f;
+    [Tooltip("Curve hareket sırasında rotasyon animasyonu")]
+    public bool useRotationAnimation = true;
+    [Tooltip("Rotasyon animasyon süresi")]
+    public float rotationDuration = 0.8f;
+
     [HideInInspector] public int reservedSlotIndex = -1;
     private bool isMoving = false;
     private bool isInClickAnimation = false;
+    private bool isInCurveMovement = false;
 
     // **Yeni** alanlar:
     private float moveDelay = 0f;
@@ -55,6 +71,9 @@ public class ClickableObject : MonoBehaviour
     private float startDistance;
     private Vector3 originalScale;
     public string UniqueID => GetID();
+
+    // **YENİ**: Curve hareket için
+    private Sequence curveMovementSequence;
 
     private void Awake()
     {
@@ -79,6 +98,67 @@ public class ClickableObject : MonoBehaviour
         moveTargetPos = SlotManager.Instance.slots[reservedSlotIndex].transform.position;
         startDistance = Vector3.Distance(transform.position, moveTargetPos);
         originalScale = transform.localScale;
+    }
+
+    // **YENİ**: Curve hareketi başlat
+    private void StartCurveMovement()
+    {
+        if (isInCurveMovement) return;
+
+        isInCurveMovement = true;
+        
+        // Orijinal pozisyonu kaydet
+        Vector3 startPos = transform.position;
+        Vector3 endPos = moveTargetPos;
+        
+        // Mesafeye göre curve yüksekliğini ayarla
+        float distance = Vector3.Distance(startPos, endPos);
+        float adjustedCurveHeight = Mathf.Clamp(curveHeight * (distance / 5f), 0.5f, curveHeight);
+        
+        // Curve için orta nokta hesapla
+        Vector3 midPoint = Vector3.Lerp(startPos, endPos, 0.5f);
+        midPoint.y += adjustedCurveHeight; // Ayarlanmış curve yüksekliği
+        
+        // Daha yumuşak curve için 5 noktalı path oluştur
+        Vector3[] path = new Vector3[] { 
+            startPos, 
+            Vector3.Lerp(startPos, midPoint, 0.3f), // Başlangıç eğrisi
+            midPoint, 
+            Vector3.Lerp(midPoint, endPos, 0.7f),   // Bitiş eğrisi
+            endPos 
+        };
+        
+        // DOTween sequence oluştur
+        curveMovementSequence = DOTween.Sequence();
+        
+        // Pozisyon animasyonu - daha yumuşak path
+        curveMovementSequence.Append(transform.DOPath(path, curveMoveDuration, PathType.CatmullRom)
+            .SetEase(curveEase));
+        
+        // Rotasyon animasyonu (opsiyonel)
+        if (useRotationAnimation)
+        {
+            Vector3 startRotation = transform.eulerAngles;
+            Vector3 endRotation = Vector3.zero;
+            
+            curveMovementSequence.Join(transform.DORotate(endRotation, rotationDuration)
+                .SetEase(curveEase));
+        }
+        
+        // Mevcut sistemle aynı ölçek animasyonu - 1x'den 5x'e kadar büyü
+        curveMovementSequence.Join(transform.DOScale(originalScale * 5f, curveMoveDuration)
+            .SetEase(Ease.OutQuad));
+        
+        // Animasyon tamamlandığında
+        curveMovementSequence.OnComplete(() => {
+            isInCurveMovement = false;
+            isMoving = false;
+            // Orijinal boyuta küçültme - mevcut sistemde yok, kaldırıyoruz
+            // transform.localScale = originalScale;
+            SlotManager.Instance.OnMovableArrived(this);
+        });
+        
+        Debug.Log($"[ClickableObject] Started curve movement for {UniqueID} to slot {reservedSlotIndex} with height {adjustedCurveHeight:F2}");
     }
 
     // **YENİ**: Tıklama animasyonunu başlat
@@ -114,7 +194,7 @@ public class ClickableObject : MonoBehaviour
 
     private void Update()
     {
-        if (isInClickAnimation)
+        if (isInClickAnimation || isInCurveMovement)
             return;
         if (!isMoving || reservedSlotIndex < 0)
             return;
@@ -126,7 +206,14 @@ public class ClickableObject : MonoBehaviour
             return;
         }
 
-        // —— Asıl hareket ——
+        // **YENİ**: Curve hareketi kullanılıyorsa başlat
+        if (useCurveMovement)
+        {
+            StartCurveMovement();
+            return;
+        }
+
+        // —— Asıl hareket (mevcut sistem) ——
         float step = speed * Time.deltaTime;
         transform.position = Vector3.MoveTowards(transform.position, moveTargetPos, step);
 
@@ -207,6 +294,12 @@ public class ClickableObject : MonoBehaviour
     {
         // **YENİ**: DOTween animasyonlarını temizle
         DOTween.Kill(transform);
+        
+        // **YENİ**: Curve hareket sequence'ini temizle
+        if (curveMovementSequence != null)
+        {
+            curveMovementSequence.Kill();
+        }
         
         if (SlotManager.Instance != null)
         {
