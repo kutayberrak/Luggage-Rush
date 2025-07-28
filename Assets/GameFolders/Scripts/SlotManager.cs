@@ -758,4 +758,11 @@ public class SlotManager : MonoBehaviour
         Debug.Log("[SlotManager] Emergency reset completed");
     }
 
+    public void ClearAllSlots()
+    {
+        foreach(var slot in slots)
+        {
+            slot.ClearSlot();
+        }
+    }
 }

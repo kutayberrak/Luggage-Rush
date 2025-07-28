@@ -166,6 +166,7 @@ namespace GameFolders.Scripts.Managers
         private void ClearLevelData()
         {
             SpawnManager.Instance.StopSpawning();
+            SlotManager.Instance.ClearAllSlots();
             Timer.Instance.StopTimer();
         }
 
