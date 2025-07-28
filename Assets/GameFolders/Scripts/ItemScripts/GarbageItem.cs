@@ -4,7 +4,7 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using GameFolders.Scripts.Enums;
 
-public class GarbageItem : ClickableObject
+public class GarbageItem : MonoBehaviour
 {
     public JunkPieceType garbageType;
 

@@ -4,7 +4,7 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using GameFolders.Scripts.Enums;
 
-public class CollectionItem : ClickableObject
+public class CollectionItem : MonoBehaviour
 {
     public CollectiblePieceType collectionType;
 

@@ -4,7 +4,7 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using GameFolders.Scripts.Enums;
 
-public class LuggageItem : ClickableObject
+public class LuggageItem : MonoBehaviour
 {
     public LuggageType luggageType;
 
