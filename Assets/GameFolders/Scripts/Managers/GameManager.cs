@@ -9,7 +9,7 @@ namespace GameFolders.Scripts.Managers
         [SerializeField] private LevelDataSO[] levelData;
         public static GameManager Instance { get; private set; }
         public LevelDataSO CurrentLevelData => _currentLevelData;
-        public int CurrentLevel => _currentLevelIndex + 1; // Assuming levels are 1-indexed for display purposes
+        public int CurrentLevel => _currentLevelIndex; // Assuming levels are 1-indexed for display purposes
 
         private int _currentLevelIndex = 0;
         private LevelDataSO _currentLevelData;
@@ -79,7 +79,7 @@ namespace GameFolders.Scripts.Managers
 
 
 
-            Timer.Instance.ResetTimer(_currentLevelData.TimeInSeconds);
+            Timer.Instance.SetTimer(_currentLevelData.TimeInSeconds);
             Timer.Instance.StartTimer();
         }
 

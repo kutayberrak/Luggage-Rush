@@ -15,12 +15,12 @@ MonoBehaviour:
   levelTimeInSeconds: 600
   targetLuggageInfo:
   - LuggageType: 1
-    Count: 3
-  luggageTypesToSpawn: 01000000020000000300000005000000
-  collectablePieceInfo:
-  - CollectiblePieceType: 1
-    Count: 3
+    Count: 0
   hasCollectiblePiece: 1
-  junkPieceInfo:
-  - JunkPieceType: 1
-    Count: 13
+  luggageTypesToSpawn: 01000000020000000300000005000000
+  collectablePieceType: 0100000002000000
+  junkPieceType: 01000000
+  spawnWeightData:
+    LuggageSpawnWeight: 0
+    CollectableSpawnWeight: 0
+    JunkSpawnWeight: 0
