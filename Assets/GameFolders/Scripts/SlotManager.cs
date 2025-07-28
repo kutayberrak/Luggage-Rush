@@ -428,11 +428,20 @@ public class SlotManager : MonoBehaviour
             }
         }
 
-        // 2. Eğer aynı ID'li blok varsa, onun BAŞINA yerleştir (shift gerekli)
+        // 2. Eğer aynı ID'li blok varsa, onun SONUNA yerleştir (shift gerekli)
         if (firstBlock >= 0)
         {
-            Debug.Log($"[FindInsertIndex] Same ID block found at {firstBlock}-{lastBlock}, placing at START of block (slot {firstBlock})");
-            return firstBlock; // Blokun başına yerleştir, shift işlemi yapılacak
+            int targetSlot = lastBlock + 1;
+            
+            // Eğer hedef slot array sınırları dışındaysa, son slot'u kullan
+            if (targetSlot >= slots.Count)
+            {
+                Debug.LogWarning($"[FindInsertIndex] Target slot {targetSlot} is out of bounds, using last slot {slots.Count - 1}");
+                targetSlot = slots.Count - 1;
+            }
+            
+            Debug.Log($"[FindInsertIndex] Same ID block found at {firstBlock}-{lastBlock}, placing at END of block (slot {targetSlot})");
+            return targetSlot; // Blokun sonuna yerleştir, shift işlemi yapılacak
         }
 
         // 3. Aynı ID yoksa, ilk boş slot'a yerleştir
@@ -726,6 +735,33 @@ public class SlotManager : MonoBehaviour
             Debug.Log($"Pending ID {kvp.Key}: {kvp.Value.Count} objects waiting");
         }
         Debug.Log("==================");
+    }
+
+    // **YENİ**: Aynı ID'li blokları test etmek için debug metodu
+    [System.Diagnostics.Conditional("UNITY_EDITOR")]
+    public void TestSameIdPlacement(string testId)
+    {
+        Debug.Log($"[TestSameIdPlacement] Testing placement for ID: {testId}");
+        
+        // Mevcut durumu göster
+        Debug.Log("Current slot states:");
+        for (int i = 0; i < slots.Count; i++)
+        {
+            var slot = slots[i];
+            if (slot.IsOccupied)
+            {
+                Debug.Log($"  Slot {i}: ID={slot.StoredUniqueID}");
+            }
+        }
+        
+        // FindInsertIndex'i test et
+        int insertIndex = FindInsertIndex(testId);
+        Debug.Log($"[TestSameIdPlacement] FindInsertIndex returned: {insertIndex}");
+        
+        if (insertIndex >= 0 && insertIndex < slots.Count)
+        {
+            Debug.Log($"[TestSameIdPlacement] Target slot {insertIndex} is available: {slots[insertIndex].IsAvailable()}");
+        }
     }
 
     // **YENİ**: Tüm slotları temizle (emergency reset)
