@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89b21b5d0567bef4aa52dc9b3c0f8ad4, type: 3}
   m_Name: LData_1
   m_EditorClassIdentifier: 
-  levelTimeInSeconds: 10
+  levelTimeInSeconds: 50
   targetLuggageInfo:
   - LuggageType: 1
     Count: 3
