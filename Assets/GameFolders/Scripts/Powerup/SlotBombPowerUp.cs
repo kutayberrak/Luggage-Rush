@@ -25,6 +25,7 @@ public class SlotBombPowerUp : IPowerUp
 
         slot.ClearSlot();
 
+        SlotManager.Instance.CompactSlots3D();
         ObjectPoolManager.Instance.ReturnObjectToPool(go);
 
         PowerUpInventory.Instance.DecreaseCount(PowerUpType.SlotBomb);

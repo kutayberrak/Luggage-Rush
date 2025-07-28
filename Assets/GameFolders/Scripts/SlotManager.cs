@@ -567,7 +567,7 @@ public class SlotManager : MonoBehaviour
 
         return true;
     }
-    private void CompactSlots3D()
+    public void CompactSlots3D()
     {
         var buffer = new List<(GameObject obj, string id)>();
         foreach (var s in slots)
