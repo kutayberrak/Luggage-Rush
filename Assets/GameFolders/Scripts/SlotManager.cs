@@ -311,22 +311,6 @@ public class SlotManager : MonoBehaviour
         }
     }
 
-    private IEnumerator PlaceCoroutine(GameObject item, string id, int idx, ClickableObject mv)
-    {
-        Debug.Log($"[PlaceCoroutine] Start idx={idx} IsOccupied={slots[idx].IsOccupied}");
-
-        if (slots[idx].IsOccupied)
-        {
-            Debug.Log($"[PlaceCoroutine] Slot {idx} occupied, shifting data right from {idx}");
-            bool shifted = ShiftRightFromData3D(idx);
-            Debug.Log($"[PlaceCoroutine] ShiftRightFromData3D returned {shifted}");
-        }
-
-        Debug.Log($"[PlaceCoroutine] BeginMove to slot {idx}");
-        mv.BeginMove(idx);
-        yield break;
-    }
-
     /// <summary>
     /// Artık bu tek satırlık metot yerine coroutine başlatıyoruz.
     /// </summary>
@@ -581,26 +565,6 @@ public class SlotManager : MonoBehaviour
 
         return true;
     }
-
-    // (geri kalan FindInsertIndex, PerformVisualShift3D, CompactSlots3D, 
-    //  CheckForMatchesCoroutine3D, AnimateMatchClearance3D, ProcessSlotChanges 
-    //   metotların aynısını tutacağız)
-
-    private IEnumerator PerformVisualShift3D(int startIndex, float duration)
-    {
-        for (int i = startIndex; i < slots.Count - 1; i++)
-        {
-            if (slots[i].IsOccupied)
-            {
-                slots[i].Occupant
-                    .transform
-                    .DOMove(slots[i + 1].transform.position, duration)
-                    .SetEase(shiftEase);
-            }
-        }
-        yield return new WaitForSeconds(duration);
-    }
-
     private void CompactSlots3D()
     {
         var buffer = new List<(GameObject obj, string id)>();

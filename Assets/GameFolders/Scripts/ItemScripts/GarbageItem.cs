@@ -6,8 +6,6 @@ using GameFolders.Scripts.Enums;
 
 public class GarbageItem : ClickableObject
 {
-    public JunkPieceType garbageType;
-
     [Header("Auto Return Settings")]
     private float maxLifeTime = 20f;
     private bool useColliderReturn = true;

@@ -123,7 +123,7 @@ MonoBehaviour:
   reservedSlotIndex: -1
   id:
     category: 0
-    luggageType: 0
+    luggageType: 4
     garbageType: 0
     collectionType: 0
   luggageType: 4

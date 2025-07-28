@@ -2,9 +2,8 @@ using UnityEngine;
 using DG.Tweening;
 using GameFolders.Scripts.Enums;
 
-
-[System.Serializable]
-public class ClickableID
+[RequireComponent(typeof(Collider))]
+public class ClickableObject : MonoBehaviour
 {
     public ObjectType category;
 
@@ -22,10 +21,7 @@ public class ClickableID
             _ => "Unknown"
         };
     }
-}
-[RequireComponent(typeof(Collider))]
-public class ClickableObject : MonoBehaviour
-{
+
     public float speed = 5f;
     public float arrivalThreshold = 0.05f;
 
@@ -54,9 +50,8 @@ public class ClickableObject : MonoBehaviour
     private Vector3 originalPosition;
     private Vector3 originalRotation;
 
-    public ClickableID id;
     private Rigidbody rigidBody;
-    public string UniqueID => id.GetID();
+    public string UniqueID => GetID();
 
     private void Awake()
     {

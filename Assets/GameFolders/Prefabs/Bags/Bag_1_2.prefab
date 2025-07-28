@@ -123,10 +123,9 @@ MonoBehaviour:
   reservedSlotIndex: -1
   id:
     category: 0
-    luggageType: 0
+    luggageType: 2
     garbageType: 0
     collectionType: 0
-  rigidBody: {fileID: -3333798417213133804}
   luggageType: 2
 --- !u!65 &-613479591830664808
 BoxCollider:
