@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 33237417446390406}
   - component: {fileID: 1240137592997820429}
   - component: {fileID: -6280960844817988776}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Bag_1_Garbage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -163,4 +163,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6751747ec16ccfb469ba7d4ad62a230a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: 5
+  arrivalThreshold: 0.05
+  riseDuration: 0.3
+  riseHeight: 1
+  riseEase: 6
+  reservedSlotIndex: -1
+  id:
+    category: 0
+    luggageType: 0
+    garbageType: 0
+    collectionType: 0
   garbageType: 1

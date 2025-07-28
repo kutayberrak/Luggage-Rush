@@ -369,7 +369,7 @@ public class SlotManager : MonoBehaviour
             {
                 // Uygun slot bulunamadı, objeyi yok et
                 Debug.LogError($"[OnMovableArrived] No available slot found for {id}, destroying object");
-                Destroy(mv.gameObject);
+                ObjectPoolManager.Instance.ReturnObjectToPool(mv.gameObject);
             }
         }
 
@@ -680,7 +680,7 @@ public class SlotManager : MonoBehaviour
 
         foreach (var obj in toDestroy)
         {
-            Destroy(obj); // Sadece match sonrası
+            ObjectPoolManager.Instance.ReturnObjectToPool(obj); // Sadece match sonrası
         }
         
         Debug.Log($"[AnimateMatchClearance3D] Match clearance completed, destroyed {toDestroy.Count} objects");

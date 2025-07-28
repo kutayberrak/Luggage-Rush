@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2389753278411124797}
   - component: {fileID: -613479591830664808}
   - component: {fileID: -3333798417213133804}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Bag_1_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -115,6 +115,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d0c638e55de17448a17816a9cc576d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: 5
+  arrivalThreshold: 0.05
+  riseDuration: 0.3
+  riseHeight: 1
+  riseEase: 6
+  reservedSlotIndex: -1
+  id:
+    category: 0
+    luggageType: 0
+    garbageType: 0
+    collectionType: 0
+  rigidBody: {fileID: -3333798417213133804}
   luggageType: 2
 --- !u!65 &-613479591830664808
 BoxCollider:

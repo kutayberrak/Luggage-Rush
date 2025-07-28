@@ -1,6 +1,28 @@
 using UnityEngine;
 using DG.Tweening;
+using GameFolders.Scripts.Enums;
 
+
+[System.Serializable]
+public class ClickableID
+{
+    public ObjectType category;
+
+    public LuggageType luggageType;
+    public JunkPieceType garbageType;
+    public CollectiblePieceType collectionType;
+
+    public string GetID()
+    {
+        return category switch
+        {
+            ObjectType.Luggage => luggageType.ToString(),
+            ObjectType.Garbage => garbageType.ToString(),
+            ObjectType.Collection => collectionType.ToString(),
+            _ => "Unknown"
+        };
+    }
+}
 [RequireComponent(typeof(Collider))]
 public class ClickableObject : MonoBehaviour
 {
@@ -32,8 +54,14 @@ public class ClickableObject : MonoBehaviour
     private Vector3 originalPosition;
     private Vector3 originalRotation;
 
-    public string UniqueID;
+    public ClickableID id;
+    private Rigidbody rigidBody;
+    public string UniqueID => id.GetID();
 
+    private void Awake()
+    {
+        rigidBody = GetComponent<Rigidbody>();
+    }
     /// <summary>
     /// SlotManager tarafından atanacak gecikme süresi.
     /// </summary>
@@ -118,7 +146,7 @@ public class ClickableObject : MonoBehaviour
         }
     }
 
-    private void OnMouseDown()
+    public void OnClickedByPlayer()
     {
         // **YENİ**: Tıklama cooldown kontrolü
         if (Time.time - lastClickTime < CLICK_COOLDOWN)
@@ -155,12 +183,23 @@ public class ClickableObject : MonoBehaviour
             return;
         }
 
+        HandleRigidBody();
+
         // **YENİ**: Tıklama işlemini başlat
         isClickProcessed = true;
         Debug.Log($"[ClickableObject] Processing click for {UniqueID}");
 
         // **YENİ**: Tıklama animasyonunu başlat
         StartClickAnimation();
+    }
+
+    private void HandleRigidBody()
+    {
+        rigidBody.isKinematic = true;
+        rigidBody.detectCollisions = false;
+        rigidBody.useGravity = false;
+        rigidBody.linearVelocity = Vector3.zero;
+        rigidBody.angularVelocity = Vector3.zero;
     }
 
     // **YENİ**: Obje yok edildiğinde temizlik
