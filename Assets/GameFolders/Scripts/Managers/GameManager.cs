@@ -1,5 +1,6 @@
 using GameFolders.Scripts.ScriptableObjects;
 using GameFolders.Scripts;
+using GameFolders.Scripts.Managers;
 using UnityEngine;
 
 namespace GameFolders.Scripts.Managers
@@ -10,6 +11,10 @@ namespace GameFolders.Scripts.Managers
         public static GameManager Instance { get; private set; }
         public LevelDataSO CurrentLevelData => _currentLevelData;
         public int CurrentLevel => _currentLevelIndex; // Assuming levels are 1-indexed for display purposes
+
+        [SerializeField] private GameObject WinPanel;
+        [SerializeField] private GameObject FailPanel;
+        [SerializeField] private GameObject StartPanel;
 
         private int _currentLevelIndex = 0;
         private LevelDataSO _currentLevelData;
@@ -30,14 +35,25 @@ namespace GameFolders.Scripts.Managers
 
         private void OnEnable()
         {
-            if (Timer.Instance != null)
-                Timer.Instance.OnTimerEnd += OnLevelFailed;
+            GameEvents.OnLevelFailed += OnLevelFailed;
+            GameEvents.OnLevelWin += OnLevelWin;
         }
 
         private void OnDisable()
         {
-            if (Timer.Instance != null)
-                Timer.Instance.OnTimerEnd -= OnLevelFailed;
+            GameEvents.OnLevelFailed -= OnLevelFailed;
+            GameEvents.OnLevelWin -= OnLevelWin;
+
+        }
+
+        private void Update()
+        {
+            // Check for A key press to trigger OnLevelWin
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                // Trigger level win event for all items to return to pool
+                GameEvents.TriggerLevelWin();
+            }
         }
 
         public void LevelUp()
@@ -69,7 +85,6 @@ namespace GameFolders.Scripts.Managers
             SpawnManager.Instance.LoadLevelSpawnRequirements();
 
             //... can load managers's requirements here
-
         }
 
         public void StartLevel()
@@ -86,9 +101,67 @@ namespace GameFolders.Scripts.Managers
         private void OnLevelFailed()
         {
             Debug.Log("Level Failed");
+            FailPanel.SetActive(true);
+            ClearLevelData();
+        }
 
-            // Stop spawning when level fails
+        private void OnLevelWin()
+        {
+            WinPanel.SetActive(true);
+            Debug.Log("Level Won!");
+
+            ClearLevelData();
+
+            // Earn money
+            if (MoneyManager.Instance != null)
+            {
+                MoneyManager.Instance.EarnMoney(10);
+                Debug.Log("Earned 10 coins!");
+            }
+            else
+            {
+                Debug.LogError("MoneyManager.Instance is null! Make sure MoneyManager exists in the scene.");
+            }
+        }
+        public void NextLevel()
+        {
+            Debug.Log("Moving to next level...");
+
+            // Move to next level
+            LevelUp();
+
+            // Start the new level
+            StartLevel();
+
+            WinPanel.SetActive(false);
+        }
+
+        public void RestartLevel()
+        {
+            Debug.Log("Restarting current level...");
+
+            // Clear current level data
+            ClearLevelData();
+
+            // Close panels
+            FailPanel.SetActive(false);
+
+            // Restart the same level
+            StartLevel();
+        }
+
+        private void ClearLevelData()
+        {
             SpawnManager.Instance.StopSpawning();
+            Timer.Instance.StopTimer();
+        }
+
+        public void HıdeStartPanel()
+        {
+            if (StartPanel != null && StartPanel.activeSelf)
+            {
+                StartPanel.SetActive(false);
+            }
         }
     }
 }

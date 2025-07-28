@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 1240137592997820429}
   - component: {fileID: -4741585361152752118}
   m_Layer: 10
-  m_Name: Bag_1_Collection
+  m_Name: Bag_1_C2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -68,7 +68,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 2100cd8e6088ae04b9b1bb3b847ac75c, type: 2}
+  - {fileID: 2100000, guid: eb6618dbe9a877e49a1a39d220bbeef3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -163,15 +163,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a207c80e481486428327b7de33a9328, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  category: 2
+  luggageType: 0
+  garbageType: 0
+  collectionType: 2
   speed: 5
   arrivalThreshold: 0.05
   riseDuration: 0.3
   riseHeight: 1
   riseEase: 6
   reservedSlotIndex: -1
-  id:
-    category: 0
-    luggageType: 0
-    garbageType: 0
-    collectionType: 0
-  collectionType: 1

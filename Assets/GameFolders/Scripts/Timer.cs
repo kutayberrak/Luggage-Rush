@@ -31,6 +31,14 @@ namespace GameFolders.Scripts
             }
         }
 
+        void OnEnable()
+        {
+            OnTimerEnd += GameEvents.TriggerLevelFailed;
+        }
+        private void OnDisable()
+        {
+            OnTimerEnd -= GameEvents.TriggerLevelFailed;
+        }
         private void Update()
         {
             if (_isTimerRunning)
@@ -51,7 +59,7 @@ namespace GameFolders.Scripts
             _isTimerRunning = true;
             OnTimerStart?.Invoke();
         }
-        
+
         [Button("Stop Timer")]
         public void StopTimer()
         {

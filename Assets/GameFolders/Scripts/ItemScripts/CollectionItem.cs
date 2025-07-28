@@ -15,11 +15,19 @@ public class CollectionItem : ClickableObject
     private void OnEnable()
     {
         StartMaxLifeTimeTimer().Forget();
+
+        // Subscribe to level win event
+        GameEvents.OnLevelWin += ReturnToPool;
+        GameEvents.OnLevelFailed += ReturnToPool;
     }
 
     private void OnDisable()
     {
         CancelTimer();
+
+        // Unsubscribe from level win event
+        GameEvents.OnLevelWin -= ReturnToPool;
+        GameEvents.OnLevelFailed -= ReturnToPool;
     }
 
     private async UniTaskVoid StartMaxLifeTimeTimer()

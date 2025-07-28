@@ -18,6 +18,9 @@ public class MoneyManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
     private void Start()
@@ -68,7 +71,7 @@ public class MoneyManager : MonoBehaviour
     {
         return currentMoney;
     }
-    
+
     public void ResetMoney()
     {
         currentMoney = 0;
