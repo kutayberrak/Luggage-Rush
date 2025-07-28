@@ -4,12 +4,7 @@ using DG.Tweening;
 
 public class Slot : MonoBehaviour
 {
-    [Header("Slot & Occupant Scale")]
     [Tooltip("Slot GameObject'inin başlangıç ölçeği")]
-    public Vector3 defaultSlotScale = Vector3.one;
-
-    [Tooltip("Yeni Assign edilirken Occupant'ın ölçeği")]
-    public Vector3 defaultOccupantScale = Vector3.one;
 
     public bool IsOccupied { get; private set; }
     public bool IsReserved { get; private set; }
@@ -19,11 +14,7 @@ public class Slot : MonoBehaviour
     // **YENİ**: Slot durumu takibi
     private bool isProcessing = false;
 
-    private void Awake()
-    {
-        // Slot'un kendi ölçeğini ayarla
-        transform.localScale = defaultSlotScale;
-    }
+
 
     public void ClearDataOnly()
     {
@@ -77,7 +68,6 @@ public class Slot : MonoBehaviour
         if (obj != null)
         {
             obj.transform.position = transform.position;
-            obj.transform.localScale = defaultOccupantScale;
             obj.SetActive(true);
         }
 
@@ -97,11 +87,6 @@ public class Slot : MonoBehaviour
         // }
 
         IsReserved = value;
-    }
-
-    public void ResizeSlot(Vector3 newScale)
-    {
-        transform.localScale = newScale;
     }
 
     // **YENİ**: Slot durumunu kontrol et

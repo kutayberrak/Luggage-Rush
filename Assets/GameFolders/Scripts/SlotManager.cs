@@ -633,7 +633,6 @@ public class SlotManager : MonoBehaviour
             {
                 var obj = slot.Occupant;
                 slot.ClearDataOnly();
-                obj.transform.SetParent(null, true);
                 toDestroy.Add(obj);
                 Debug.Log($"[AnimateMatchClearance3D] Added object {obj.name} to destroy list");
             }
@@ -655,6 +654,7 @@ public class SlotManager : MonoBehaviour
         foreach (var obj in toDestroy)
         {
             ObjectPoolManager.Instance.ReturnObjectToPool(obj); // Sadece match sonrası
+            obj.transform.localScale = Vector3.one;
         }
         
         Debug.Log($"[AnimateMatchClearance3D] Match clearance completed, destroyed {toDestroy.Count} objects");

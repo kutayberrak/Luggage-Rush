@@ -51,6 +51,9 @@ public class ClickableObject : MonoBehaviour
     private Vector3 originalRotation;
 
     private Rigidbody rigidBody;
+    private Vector3 moveTargetPos;
+    private float startDistance;
+    private Vector3 originalScale;
     public string UniqueID => GetID();
 
     private void Awake()
@@ -70,7 +73,12 @@ public class ClickableObject : MonoBehaviour
         reservedSlotIndex = slotIndex;
         isMoving = true;
         moveStartTime = Time.time;
-        isClickProcessed = false; // Hareket başladığında tıklama kilidini kaldır
+        isClickProcessed = false;
+
+        // — Taşıma bilgilerini kaydet —
+        moveTargetPos = SlotManager.Instance.slots[reservedSlotIndex].transform.position;
+        startDistance = Vector3.Distance(transform.position, moveTargetPos);
+        originalScale = transform.localScale;
     }
 
     // **YENİ**: Tıklama animasyonunu başlat
@@ -106,36 +114,34 @@ public class ClickableObject : MonoBehaviour
 
     private void Update()
     {
-        // **YENİ**: Animasyon sırasında normal hareket çalışmasın
         if (isInClickAnimation)
             return;
-
         if (!isMoving || reservedSlotIndex < 0)
             return;
-
-        // ————— havada bekle —————
         if (Time.time - moveStartTime < moveDelay)
             return;
-
-        // **YENİ**: Slot'un hala geçerli olduğunu kontrol et
         if (reservedSlotIndex >= SlotManager.Instance.slots.Count)
         {
             isMoving = false;
             return;
         }
 
-        // (eğer retargeting kodu varsa buraya gelmeden önce çalışır)
+        // —— Asıl hareket ——
+        float step = speed * Time.deltaTime;
+        transform.position = Vector3.MoveTowards(transform.position, moveTargetPos, step);
 
-        // ————— asıl hareket —————
-        Vector3 targetPos = SlotManager.Instance.slots[reservedSlotIndex].transform.position;
-        transform.position = Vector3.MoveTowards(
-            transform.position,
-            targetPos,
-            speed * Time.deltaTime
-        );
+        // —— Ölçek animasyonu —— 
+        float remaining = Vector3.Distance(transform.position, moveTargetPos);
+        float progress = startDistance > 0f
+            ? 1f - (remaining / startDistance)
+            : 1f;
+        // Ease‑OutQuad benzeri: f → 1 – (1 – f)²
+        float eased = 1f - Mathf.Pow(1f - Mathf.Clamp01(progress), 2f);
+        float scaleMultiplier = 1f + eased * 4f;  // 1 → 4
+        transform.localScale = originalScale * scaleMultiplier;
 
-        // varış kontrolü
-        if (Vector3.Distance(transform.position, targetPos) <= arrivalThreshold)
+        // —— Varış kontrolü ——
+        if (remaining <= arrivalThreshold)
         {
             isMoving = false;
             SlotManager.Instance.OnMovableArrived(this);
