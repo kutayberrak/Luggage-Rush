@@ -597,14 +597,22 @@ public class SlotManager : MonoBehaviour
             {
                 if (count >= 3)
                 {
-                    yield return AnimateMatchClearance3D(i - count, count);
+                    // **YENİ**: Sadece ilk 3 tanesini temizle
+                    int matchCount = Mathf.Min(count, 3);
+                    Debug.Log($"[CheckForMatchesCoroutine3D] Found {count} matching objects, clearing first {matchCount}");
+                    yield return AnimateMatchClearance3D(i - count, matchCount);
                     yield break;
                 }
                 count = 1;
             }
         }
         if (count >= 3)
-            yield return AnimateMatchClearance3D(slots.Count - count, count);
+        {
+            // **YENİ**: Son match için de sadece ilk 3 tanesini temizle
+            int matchCount = Mathf.Min(count, 3);
+            Debug.Log($"[CheckForMatchesCoroutine3D] Found {count} matching objects at end, clearing first {matchCount}");
+            yield return AnimateMatchClearance3D(slots.Count - count, matchCount);
+        }
     }
 
     /// <summary>
