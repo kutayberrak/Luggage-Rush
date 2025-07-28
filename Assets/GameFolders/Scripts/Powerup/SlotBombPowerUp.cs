@@ -1,4 +1,5 @@
 using GameFolders.Scripts.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -11,10 +12,26 @@ public class SlotBombPowerUp : IPowerUp
     public void Activate(object context = null)
     {
         List<Slot> slots = SlotManager.Instance.slots;
+        Slot slot = null;
+        foreach (var s in slots)
+        {
+            if (!s.IsOccupied)
+                continue;
 
-        var slot = SlotManager.Instance.slots
-            .FirstOrDefault(s => s.IsOccupied && s.Occupant.GetComponent<ClickableObject>().UniqueID != JunkPieceType.None.ToString());
-       
+            var clickable = s.Occupant.GetComponent<ClickableObject>();
+            if (clickable == null)
+                continue;
+
+            if (Enum.TryParse<JunkPieceType>(clickable.UniqueID, out var jpType))
+            {
+                if (jpType == JunkPieceType.None)
+                {
+                    break;
+                }
+                slot = s;
+            }
+        }
+
         if (slot == null)
         {
             Debug.Log("SlotBomb: Hiç JunkPiece bulunamadý, power-up iptal edildi.");
