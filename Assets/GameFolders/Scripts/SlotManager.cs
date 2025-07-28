@@ -116,6 +116,8 @@ public class SlotManager : MonoBehaviour
             return;
         }
 
+
+        item.GetComponent<ClickableObject>().HandleRigidBody();
         StartCoroutine(ProcessPlacement(item, id));
     }
 

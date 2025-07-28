@@ -89,7 +89,8 @@ public class ClickableObject : MonoBehaviour
         
         // Pozisyon ve rotasyon animasyonunu aynı anda başlat
         Sequence clickSequence = DOTween.Sequence();
-        
+        SlotManager.Instance.TryPlaceObject3D(gameObject, UniqueID);
+
         clickSequence.Append(transform.DOMove(risePosition, riseDuration).SetEase(riseEase));
         clickSequence.Join(transform.DORotate(Vector3.zero, riseDuration).SetEase(riseEase));
         
@@ -97,7 +98,7 @@ public class ClickableObject : MonoBehaviour
         clickSequence.OnComplete(() => {
             isInClickAnimation = false;
             // SlotManager'dan hareketi başlat
-            SlotManager.Instance.TryPlaceObject3D(gameObject, UniqueID);
+            
         });
 
         Debug.Log($"[ClickableObject] Started click animation for {UniqueID}");
@@ -178,8 +179,6 @@ public class ClickableObject : MonoBehaviour
             return;
         }
 
-        HandleRigidBody();
-
         // **YENİ**: Tıklama işlemini başlat
         isClickProcessed = true;
         Debug.Log($"[ClickableObject] Processing click for {UniqueID}");
@@ -188,7 +187,7 @@ public class ClickableObject : MonoBehaviour
         StartClickAnimation();
     }
 
-    private void HandleRigidBody()
+    public void HandleRigidBody()
     {
         rigidBody.isKinematic = true;
         rigidBody.detectCollisions = false;
