@@ -19,6 +19,8 @@ public class FreezePowerUp : IPowerUp
     {
         originalSpeed = conveyor.conveyorSpeed;
         conveyor.conveyorSpeed = freezeSpeed;
+
+        PowerUpInventory.Instance.DecreaseCount(PowerUpType.Freeze);
     }
 
     public void Deactivate()

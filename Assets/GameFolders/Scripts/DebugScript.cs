@@ -28,4 +28,17 @@ public class DebugScript : MonoBehaviour
             Debug.Log("Freeze PowerUp kalmadý.");
         }
     }
+
+    public void TestSlotBomb()
+    {
+        if (powerUpInventory.TryUse(PowerUpType.SlotBomb, out var pu))
+        {
+            PowerUpScheduler.Instance.Schedule(pu, pu.Duration);
+            Debug.Log("SlotBomb PowerUp aktifleþtirildi!");
+        }
+        else
+        {
+            Debug.Log("SlotBomb PowerUp kalmadý.");
+        }
+    }
 }

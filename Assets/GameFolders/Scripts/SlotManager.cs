@@ -654,7 +654,6 @@ public class SlotManager : MonoBehaviour
         foreach (var obj in toDestroy)
         {
             ObjectPoolManager.Instance.ReturnObjectToPool(obj); // Sadece match sonrası
-            obj.transform.localScale = Vector3.one;
         }
         
         Debug.Log($"[AnimateMatchClearance3D] Match clearance completed, destroyed {toDestroy.Count} objects");

@@ -162,6 +162,15 @@ public class ObjectPoolManager : MonoBehaviour
             rb.detectCollisions = true;
             rb.useGravity = true;
         }
+        foreach (var entry in pooledPrefabs)
+        {
+            if (entry.objects.Contains(obj))
+            {
+                obj.transform.localScale = entry.prefab.transform.localScale;
+                break;
+            }
+        }
+
         obj.SetActive(false);
     }
 }
