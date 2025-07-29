@@ -93,7 +93,7 @@ namespace GameFolders.Scripts.Managers
             SpawnManager.Instance.RunSpawn();
 
             SlotManager.Instance.ClearAllSlots();
-
+            InGameUIManager.Instance.InitializeObjectivesUI();
             Timer.Instance.SetTimer(_currentLevelData.TimeInSeconds);
             Timer.Instance.StartTimer();
         }

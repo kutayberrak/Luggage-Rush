@@ -353,6 +353,11 @@ public class SlotManager : MonoBehaviour
             }
         }
 
+        if (InGameUIManager.Instance != null)
+        {
+            InGameUIManager.Instance.OnObjectReachedSlot(mv.luggageType);
+        }
+
         movingItems.Remove(mv);
         reservedIndices.Remove(mv);
         mv.reservedSlotIndex = -1;

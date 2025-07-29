@@ -158,6 +158,7 @@ public class ClickableObject : MonoBehaviour
         curveMovementSequence.OnComplete(() => {
             isInCurveMovement = false;
             isMoving = false;
+            
             // Orijinal boyuta küçültme - mevcut sistemde yok, kaldırıyoruz
             // transform.localScale = originalScale;
             SlotManager.Instance.OnMovableArrived(this);
@@ -232,6 +233,7 @@ public class ClickableObject : MonoBehaviour
         if (remaining <= arrivalThreshold)
         {
             isMoving = false;
+
             SlotManager.Instance.OnMovableArrived(this);
         }
     }
