@@ -101,8 +101,10 @@ public class ClickableObject : MonoBehaviour
         moveStartTime = Time.time;
         isClickProcessed = false;
 
+        Slot slot = SlotManager.Instance.slots[reservedSlotIndex];
+
         // — Taşıma bilgilerini kaydet —
-        moveTargetPos = SlotManager.Instance.slots[reservedSlotIndex].transform.position;
+        moveTargetPos = slot.transform.position + slot.positionOfset;
         startDistance = Vector3.Distance(transform.position, moveTargetPos);
         originalScale = transform.localScale;
     }
@@ -117,7 +119,7 @@ public class ClickableObject : MonoBehaviour
         // Orijinal pozisyonu kaydet
         Vector3 startPos = transform.position;
         Vector3 endPos = moveTargetPos;
-        
+
         // Mesafeye göre curve yüksekliğini ayarla
         float distance = Vector3.Distance(startPos, endPos);
         float adjustedCurveHeight = Mathf.Clamp(curveHeight * (distance / 5f), 0.5f, curveHeight);
@@ -129,9 +131,9 @@ public class ClickableObject : MonoBehaviour
         // Daha yumuşak curve için 5 noktalı path oluştur
         Vector3[] path = new Vector3[] { 
             startPos, 
-            Vector3.Lerp(startPos, midPoint, 0.3f), // Başlangıç eğrisi
+            Vector3.Lerp(startPos, midPoint, 0.4f), // Başlangıç eğrisi
             midPoint, 
-            Vector3.Lerp(midPoint, endPos, 0.7f),   // Bitiş eğrisi
+            Vector3.Lerp(midPoint, endPos, 0.6f),   // Bitiş eğrisi
             endPos 
         };
         
@@ -151,10 +153,6 @@ public class ClickableObject : MonoBehaviour
             curveMovementSequence.Join(transform.DORotate(endRotation, rotationDuration)
                 .SetEase(curveEase));
         }
-        
-        // Mevcut sistemle aynı ölçek animasyonu - 1x'den 5x'e kadar büyü
-        curveMovementSequence.Join(transform.DOScale(originalScale * 5f, curveMoveDuration)
-            .SetEase(Ease.OutQuad));
         
         // Animasyon tamamlandığında
         curveMovementSequence.OnComplete(() => {
@@ -229,10 +227,6 @@ public class ClickableObject : MonoBehaviour
         float progress = startDistance > 0f
             ? 1f - (remaining / startDistance)
             : 1f;
-        // Ease‑OutQuad benzeri: f → 1 – (1 – f)²
-        float eased = 1f - Mathf.Pow(1f - Mathf.Clamp01(progress), 2f);
-        float scaleMultiplier = 1f + eased * 4f;  // 1 → 4
-        transform.localScale = originalScale * scaleMultiplier;
 
         // —— Varış kontrolü ——
         if (remaining <= arrivalThreshold)

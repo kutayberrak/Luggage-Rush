@@ -92,7 +92,7 @@ namespace GameFolders.Scripts.Managers
             LoadLevelRequirements();
             SpawnManager.Instance.RunSpawn();
 
-
+            SlotManager.Instance.ClearAllSlots();
 
             Timer.Instance.SetTimer(_currentLevelData.TimeInSeconds);
             Timer.Instance.StartTimer();

@@ -756,6 +756,11 @@ public class SlotManager : MonoBehaviour
     {
         foreach(var slot in slots)
         {
+            var occupant = slot.Occupant;
+            if (occupant != null)
+            {
+                occupant.transform.DOKill();
+            }
             slot.ClearSlot();
         }
     }

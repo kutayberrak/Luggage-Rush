@@ -101,6 +101,9 @@ public class ObjectPoolManager : MonoBehaviour
             if (!obj.activeInHierarchy)
             {
                 obj.transform.SetPositionAndRotation(position, rotation);
+                Rigidbody rb = obj.GetComponent<Rigidbody>();
+                rb.linearVelocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
                 obj.transform.localScale = entry.prefab.transform.localScale;
                 obj.SetActive(true);
                 return obj;
