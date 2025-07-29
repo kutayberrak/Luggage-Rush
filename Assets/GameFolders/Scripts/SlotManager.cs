@@ -679,7 +679,8 @@ public class SlotManager : MonoBehaviour
         yield return StartCoroutine(CheckForMatchesCoroutine3D());
         CompactSlots3D();
         yield return StartCoroutine(CheckForMatchesCoroutine3D());
-        
+        CompactSlots3D();
+
         isProcessingMatch = false;
         Debug.Log("[ProcessSlotChanges] Match processing completed");
         
