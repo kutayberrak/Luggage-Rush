@@ -49,6 +49,7 @@ namespace GameFolders.Scripts
                 {
                     _currentTime = 0f;
                     _isTimerRunning = false;
+                    timerText.text = TimerText();
                     OnTimerEnd?.Invoke();
                 }
             }
@@ -57,6 +58,7 @@ namespace GameFolders.Scripts
         public void StartTimer()
         {
             _isTimerRunning = true;
+            _currentTime = GameManager.Instance.CurrentLevelData.TimeInSeconds;
             OnTimerStart?.Invoke();
         }
 
@@ -74,7 +76,7 @@ namespace GameFolders.Scripts
         {
             int minutes = Mathf.FloorToInt(_currentTime / 60f);
             int seconds = Mathf.FloorToInt(_currentTime % 60f);
-            string timeFormatted = string.Format("{0:00}:{1:00}", minutes, seconds);
+            string timeFormatted = $"{minutes:00}:{seconds:00}";
             return timeFormatted;
         }
     }
