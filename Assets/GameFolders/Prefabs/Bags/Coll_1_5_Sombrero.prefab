@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 2607418452996557850}
   - component: {fileID: 8540521600920659890}
   - component: {fileID: 2654595806689264654}
-  - component: {fileID: 688239280250678222}
   - component: {fileID: 514146967700221423}
   - component: {fileID: 981238654106801341}
   - component: {fileID: 8842186080720943368}
+  - component: {fileID: -5599556615702046552}
   m_Layer: 10
   m_Name: Coll_1_5_Sombrero
   m_TagString: Untagged
@@ -90,28 +90,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &688239280250678222
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3386409105549074463}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -2010768288480667728, guid: ab8d819178daba641a88d266e68411a1, type: 3}
 --- !u!54 &514146967700221423
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -180,3 +158,24 @@ MonoBehaviour:
   useRotationAnimation: 1
   rotationDuration: 0.8
   reservedSlotIndex: -1
+--- !u!65 &-5599556615702046552
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3386409105549074463}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.1976125, y: 0.5196902, z: 1.1976128}
+  m_Center: {x: 0, y: 0.2598451, z: 0}

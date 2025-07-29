@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 6305257078133588774}
   - component: {fileID: 5883727799340688068}
   - component: {fileID: 5455164852907387748}
-  - component: {fileID: 1758843751867463193}
   - component: {fileID: 4269306524914218274}
   - component: {fileID: 8910929123543106241}
   - component: {fileID: 2629332299381071747}
+  - component: {fileID: 800826045754968876}
   m_Layer: 10
   m_Name: Gar_1_1_Banana
   m_TagString: Untagged
@@ -90,28 +90,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &1758843751867463193
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7154722303850059103}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 3389380596013958705, guid: ab8d819178daba641a88d266e68411a1, type: 3}
 --- !u!54 &4269306524914218274
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -180,3 +158,24 @@ MonoBehaviour:
   useRotationAnimation: 1
   rotationDuration: 0.8
   reservedSlotIndex: -1
+--- !u!65 &800826045754968876
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7154722303850059103}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.81665075, y: 0.6164713, z: 0.90816694}
+  m_Center: {x: 0.074731216, y: 0.23300153, z: 0.000044554472}

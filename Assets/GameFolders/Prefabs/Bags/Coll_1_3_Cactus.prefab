@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 6464078746177757634}
   - component: {fileID: 3161147979941442361}
   - component: {fileID: 3149153862110995333}
-  - component: {fileID: 8112677284799636369}
   - component: {fileID: 8265535096800207224}
   - component: {fileID: 8913262607225123217}
   - component: {fileID: 4584927516992179941}
+  - component: {fileID: -7629784322650786724}
   m_Layer: 10
   m_Name: Coll_1_3_Cactus
   m_TagString: Untagged
@@ -90,28 +90,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &8112677284799636369
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3130918664812934304}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 3562479298497231827, guid: ab8d819178daba641a88d266e68411a1, type: 3}
 --- !u!54 &8265535096800207224
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -180,3 +158,24 @@ MonoBehaviour:
   useRotationAnimation: 1
   rotationDuration: 0.8
   reservedSlotIndex: -1
+--- !u!65 &-7629784322650786724
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3130918664812934304}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.64529693, y: 0.9569447, z: 0.21578045}
+  m_Center: {x: 0.00000010430813, y: 0.47096747, z: 0.000000007450581}
