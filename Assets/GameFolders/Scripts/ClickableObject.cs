@@ -56,9 +56,9 @@ public class ClickableObject : MonoBehaviour
     public float rotationDuration = 0.8f;
 
     [HideInInspector] public int reservedSlotIndex = -1;
-    private bool isMoving = false;
+    protected bool isMoving = false;
     private bool isInClickAnimation = false;
-    private bool isInCurveMovement = false;
+    protected bool isInCurveMovement = false;
 
     // **Yeni** alanlar:
     private float moveDelay = 0f;
@@ -70,8 +70,8 @@ public class ClickableObject : MonoBehaviour
     private const float CLICK_COOLDOWN = 0.05f; // 50ms tıklama bekleme süresi (daha hızlı)
 
     // **YENİ**: Animasyon için orijinal pozisyon ve rotasyon
-    private Vector3 originalPosition;
-    private Vector3 originalRotation;
+    protected Vector3 originalPosition;
+    protected Vector3 originalRotation;
 
     private Rigidbody rigidBody;
     private Vector3 moveTargetPos;
@@ -110,7 +110,7 @@ public class ClickableObject : MonoBehaviour
     }
 
     // **YENİ**: Curve hareketi başlat
-    private void StartCurveMovement()
+    protected virtual void StartCurveMovement()
     {
         if (isInCurveMovement) return;
 
@@ -168,7 +168,7 @@ public class ClickableObject : MonoBehaviour
     }
 
     // **YENİ**: Tıklama animasyonunu başlat
-    private void StartClickAnimation()
+    protected virtual void StartClickAnimation()
     {
         if (isInClickAnimation) return;
 
