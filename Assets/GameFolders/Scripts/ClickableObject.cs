@@ -153,7 +153,11 @@ public class ClickableObject : MonoBehaviour
             curveMovementSequence.Join(transform.DORotate(endRotation, rotationDuration)
                 .SetEase(curveEase));
         }
-        
+
+        // Mevcut sistemle aynı ölçek animasyonu - 1x'den 5x'e kadar büyü
+        curveMovementSequence.Join(transform.DOScale(originalScale * 0.4f, curveMoveDuration)
+            .SetEase(Ease.OutQuad));
+
         // Animasyon tamamlandığında
         curveMovementSequence.OnComplete(() => {
             isInCurveMovement = false;
