@@ -4,11 +4,13 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using GameFolders.Scripts.Enums;
 
-public class LuggageItem : ClickableObject
+public class LuggageItem : ClickableObject, ISlottable
 {
     [Header("Auto Return Settings")]
     private float maxLifeTime = 20f;
     private bool useColliderReturn = true;
+
+    private bool _isSlotted;
 
     private CancellationTokenSource _cancellationTokenSource;
 
@@ -76,5 +78,18 @@ public class LuggageItem : ClickableObject
     private void OnDestroy()
     {
         CancelTimer();
+    }
+
+    public void NotifySlotted()
+    {
+        _isSlotted = true;
+        CancelTimer();
+    }
+
+    public void NotifyUnslotted()
+    {
+        _isSlotted = false;
+        // Restart timer when leaving slot
+        StartMaxLifeTimeTimer().Forget();
     }
 }

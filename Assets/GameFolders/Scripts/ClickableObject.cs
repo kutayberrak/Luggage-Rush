@@ -2,6 +2,13 @@ using UnityEngine;
 using DG.Tweening;
 using GameFolders.Scripts.Enums;
 
+public interface ISlottable
+{
+    void NotifySlotted();
+    void NotifyUnslotted();
+}
+
+
 [RequireComponent(typeof(Collider))]
 public class ClickableObject : MonoBehaviour
 {

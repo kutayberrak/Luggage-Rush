@@ -101,6 +101,7 @@ public class ObjectPoolManager : MonoBehaviour
             if (!obj.activeInHierarchy)
             {
                 obj.transform.SetPositionAndRotation(position, rotation);
+                obj.transform.localScale = entry.prefab.transform.localScale;
                 obj.SetActive(true);
                 return obj;
             }

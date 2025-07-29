@@ -11,10 +11,6 @@ public class Slot : MonoBehaviour
     public string StoredUniqueID { get; private set; }
     public GameObject Occupant { get; private set; }
 
-    // **YENİ**: Slot durumu takibi
-    private bool isProcessing = false;
-
-
 
     public void ClearDataOnly()
     {
@@ -35,6 +31,9 @@ public class Slot : MonoBehaviour
 
         if (Occupant != null)
         {
+            if (Occupant.TryGetComponent<ISlottable>(out var slottable))
+                slottable.NotifyUnslotted();
+
             Occupant.SetActive(false);
             // parent değiştirme kaldırıldı
         }
@@ -69,6 +68,10 @@ public class Slot : MonoBehaviour
         {
             obj.transform.position = transform.position;
             obj.SetActive(true);
+
+            // Notify slotted on the new occupant
+            if (obj.TryGetComponent<ISlottable>(out var slottable))
+                slottable.NotifySlotted();
         }
 
         // isProcessing = false;
@@ -98,7 +101,6 @@ public class Slot : MonoBehaviour
     // **YENİ**: Slot'u tamamen temizle (emergency)
     public void ForceClear()
     {
-        isProcessing = false;
         IsOccupied = false;
         IsReserved = false;
         StoredUniqueID = null;

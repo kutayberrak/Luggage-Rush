@@ -351,12 +351,6 @@ public class SlotManager : MonoBehaviour
                 mv.reservedSlotIndex = newIdx;
                 Debug.Log($"[OnMovableArrived] Assigned {id} to new slot {newIdx}");
             }
-            else
-            {
-                // Uygun slot bulunamadı, objeyi yok et
-                Debug.LogError($"[OnMovableArrived] No available slot found for {id}, destroying object");
-                ObjectPoolManager.Instance.ReturnObjectToPool(mv.gameObject);
-            }
         }
 
         movingItems.Remove(mv);
