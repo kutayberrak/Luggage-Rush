@@ -121,4 +121,10 @@ public class ObjectiveUIItem : MonoBehaviour
     {
         return currentCount;
     }
+    
+    // **YENİ**: Hedefin tamamlanıp tamamlanmadığını döndür
+    public bool IsCompleted()
+    {
+        return isCompleted;
+    }
 }

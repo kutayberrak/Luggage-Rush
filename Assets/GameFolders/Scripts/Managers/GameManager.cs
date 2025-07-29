@@ -110,7 +110,7 @@ namespace GameFolders.Scripts.Managers
             ClearLevelData();
         }
 
-        private void OnLevelWin()
+        public void OnLevelWin()
         {
             WinPanel.SetActive(true);
             Debug.Log("Level Won!");

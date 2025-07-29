@@ -192,10 +192,44 @@ public class InGameUIManager : MonoBehaviour
             ObjectiveUIItem objectiveItem = objectiveItems[luggageType];
             objectiveItem.IncreaseCollectCount(); // Bu zaten UI'ı güncelliyor
             Debug.Log($"[InGameUIManager] {luggageType} toplanan sayısı arttırıldı. Mevcut: {objectiveItem.GetCurrentCollected()}");
+            
+            // **YENİ**: Bütün hedeflerin tamamlanıp tamamlanmadığını kontrol et
+            CheckAllObjectivesCompleted();
         }
         else
         {
             Debug.LogWarning($"[InGameUIManager] {luggageType} için objective item bulunamadı!");
+        }
+    }
+    
+    // **YENİ**: Bütün hedeflerin tamamlanıp tamamlanmadığını kontrol et
+    private void CheckAllObjectivesCompleted()
+    {
+        bool allCompleted = true;
+        
+        foreach (var kvp in objectiveItems)
+        {
+            ObjectiveUIItem objectiveItem = kvp.Value;
+            if (!objectiveItem.IsCompleted())
+            {
+                allCompleted = false;
+                break;
+            }
+        }
+        
+        if (allCompleted)
+        {
+            OnAllObjectivesCompleted();
+        }
+    }
+    
+    // **YENİ**: Bütün hedefler tamamlandığında çağrılır
+    private void OnAllObjectivesCompleted()
+    {  
+        // GameManager'a bildir (eğer varsa)
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnLevelWin();
         }
     }
 }
