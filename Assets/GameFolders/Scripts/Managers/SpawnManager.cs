@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using GameFolders.Scripts.ScriptableObjects;
 using GameFolders.Scripts.Managers;
 using GameFolders.Scripts;
+using GameFolders.Scripts.Data;
 
 public class SpawnManager : MonoBehaviour
 {
@@ -72,9 +73,10 @@ public class SpawnManager : MonoBehaviour
 
         _hasCollectiblePiece = levelData.HasCollectiblePiece;
 
+        //load spawn weights from level data
+        LoadSpawnWeightsFromLevelData(levelData);
 
-
-
+        // Clear existing allowed objects
         foreach (var kvp in allowedObjectsByType)
         {
             kvp.Value.Clear();
@@ -128,6 +130,31 @@ public class SpawnManager : MonoBehaviour
         }
 
 
+    }
+
+    private void LoadSpawnWeightsFromLevelData(LevelDataSO levelData)
+    {
+        var weightData = levelData.SpawnWeightData;
+
+        foreach (var entry in spawnWeights)
+        {
+            switch (entry.objectType)
+            {
+                case ObjectType.Luggage:
+                    entry.spawnWeight = weightData.LuggageSpawnWeight;
+                    break;
+                case ObjectType.Garbage:
+                    entry.spawnWeight = weightData.JunkSpawnWeight;
+                    break;
+                case ObjectType.Collection:
+                    entry.spawnWeight = weightData.CollectableSpawnWeight;
+                    break;
+            }
+
+            entry.currentWeight = 0f;
+        }
+
+        Debug.Log($"Updated spawn weights - Luggage: {weightData.LuggageSpawnWeight}, Garbage: {weightData.JunkSpawnWeight}, Collection: {weightData.CollectableSpawnWeight}");
     }
 
     public void RunSpawn()

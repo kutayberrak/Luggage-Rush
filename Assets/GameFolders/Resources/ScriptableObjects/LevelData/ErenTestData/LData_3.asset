@@ -21,6 +21,6 @@ MonoBehaviour:
   collectablePieceType: 02000000
   junkPieceType: 02000000
   spawnWeightData:
-    LuggageSpawnWeight: 0
-    CollectableSpawnWeight: 0
-    JunkSpawnWeight: 0
+    LuggageSpawnWeight: 8
+    CollectableSpawnWeight: 1
+    JunkSpawnWeight: 6
