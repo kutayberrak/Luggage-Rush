@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using GameFolders.Scripts.Enums;
+using DG.Tweening;
 
 public class ObjectiveUIItem : MonoBehaviour
 {
@@ -16,6 +17,10 @@ public class ObjectiveUIItem : MonoBehaviour
     private int currentCount;
     private bool isCompleted = false;
     
+    // **YENİ**: Animasyon için
+    private Vector3 originalIconScale;
+    private Sequence pulseSequence;
+    
     public void Initialize(LuggageType type, int target, Sprite icon, string name)
     {
         luggageType = type;
@@ -27,6 +32,8 @@ public class ObjectiveUIItem : MonoBehaviour
         if (luggageIcon != null && icon != null)
         {
             luggageIcon.sprite = icon;
+            // **YENİ**: Orijinal scale'i kaydet
+            originalIconScale = luggageIcon.transform.localScale;
         }
         
         // Başlangıç durumunu ayarla
@@ -101,6 +108,9 @@ public class ObjectiveUIItem : MonoBehaviour
         Debug.Log("current count" + currentCount);
         Debug.Log("target = " + targetCount);
         UpdateProgress();
+        
+        // **YENİ**: Logo animasyonu başlat
+        PlayIconPulseAnimation();
 
         // Eğer hedef tamamlandıysa tamamlandı olarak işaretle
         if (currentCount >= targetCount && !isCompleted)
@@ -126,5 +136,43 @@ public class ObjectiveUIItem : MonoBehaviour
     public bool IsCompleted()
     {
         return isCompleted;
+    }
+    
+    // **YENİ**: Logo pulse animasyonu
+    private void PlayIconPulseAnimation()
+    {
+        if (luggageIcon == null) return;
+        
+        // Önceki animasyonu durdur
+        if (pulseSequence != null)
+        {
+            pulseSequence.Kill();
+        }
+        
+        // Pulse animasyonu oluştur
+        pulseSequence = DOTween.Sequence();
+        
+        // Büyütme animasyonu
+        pulseSequence.Append(luggageIcon.transform.DOScale(originalIconScale * 1.3f, 0.1f).SetEase(Ease.OutQuad));
+        
+        // Küçültme animasyonu
+        pulseSequence.Append(luggageIcon.transform.DOScale(originalIconScale, 0.1f).SetEase(Ease.InQuad));
+        
+        /*// Tekrar büyütme (daha hafif)
+        pulseSequence.Append(luggageIcon.transform.DOScale(originalIconScale * 1.15f, 0.15f).SetEase(Ease.OutQuad));
+        
+        // Son küçültme
+        pulseSequence.Append(luggageIcon.transform.DOScale(originalIconScale, 0.15f).SetEase(Ease.InQuad));*/
+        
+        Debug.Log($"[ObjectiveUIItem] {luggageType} logosu pulse animasyonu başlatıldı");
+    }
+    
+    // **YENİ**: Obje yok edildiğinde temizlik
+    private void OnDestroy()
+    {
+        if (pulseSequence != null)
+        {
+            pulseSequence.Kill();
+        }
     }
 }
