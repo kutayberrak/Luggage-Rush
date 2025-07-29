@@ -104,7 +104,7 @@ public class ClickableObject : MonoBehaviour
         Slot slot = SlotManager.Instance.slots[reservedSlotIndex];
 
         // — Taşıma bilgilerini kaydet —
-        moveTargetPos = slot.transform.position + slot.positionOfset;
+        moveTargetPos = slot.transform.position;
         startDistance = Vector3.Distance(transform.position, moveTargetPos);
         originalScale = transform.localScale;
     }
