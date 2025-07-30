@@ -1,79 +1,81 @@
-﻿using System.Collections;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 
-public class MoneyManager : MonoBehaviour
+namespace GameFolders.Scripts.Managers
 {
-    public static MoneyManager Instance { get; private set; }
-
-    [SerializeField] private TextMeshProUGUI moneyText;
-    private int currentMoney;
-
-    private const string MONEY_KEY = "Money";
-
-    private void Awake()
+    public class MoneyManager : MonoBehaviour
     {
-        if (Instance != null && Instance != this)
+        public static MoneyManager Instance { get; private set; }
+
+        [SerializeField] private TextMeshProUGUI moneyText;
+        private int _currentMoney;
+
+        private const string MONEY_KEY = "Money";
+
+        private void Awake()
         {
-            Destroy(gameObject);
-            return;
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
 
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
-    }
-
-    private void Start()
-    {
-        LoadMoney();
-        UpdateMoneyUI();
-    }
-
-    public void EarnMoney(int amount)
-    {
-        currentMoney += amount;
-        SaveMoney();
-        UpdateMoneyUI();
-    }
-
-    public bool TrySpendMoney(int amount)
-    {
-        if (currentMoney >= amount)
+        private void Start()
         {
-            currentMoney -= amount;
+            LoadMoney();
+            UpdateMoneyUI();
+        }
+
+        public void EarnMoney(int amount)
+        {
+            _currentMoney += amount;
             SaveMoney();
             UpdateMoneyUI();
-            return true;
         }
-        return false;
-    }
 
-    private void UpdateMoneyUI()
-    {
-        if (moneyText != null)
-            moneyText.text = currentMoney.ToString();
-    }
+        public bool TrySpendMoney(int amount)
+        {
+            if (_currentMoney >= amount)
+            {
+                _currentMoney -= amount;
+                SaveMoney();
+                UpdateMoneyUI();
+                return true;
+            }
+            return false;
+        }
 
-    private void SaveMoney()
-    {
-        PlayerPrefs.SetInt(MONEY_KEY, currentMoney);
-        PlayerPrefs.Save();
-    }
+        private void UpdateMoneyUI()
+        {
+            if (moneyText != null)
+                moneyText.text = _currentMoney.ToString();
+        }
 
-    private void LoadMoney()
-    {
-        currentMoney = PlayerPrefs.GetInt(MONEY_KEY, 0);
-    }
+        private void SaveMoney()
+        {
+            PlayerPrefs.SetInt(MONEY_KEY, _currentMoney);
+            PlayerPrefs.Save();
+        }
 
-    public int GetCurrentMoney()
-    {
-        return currentMoney;
-    }
+        private void LoadMoney()
+        {
+            _currentMoney = PlayerPrefs.GetInt(MONEY_KEY, 0);
+        }
 
-    public void ResetMoney()
-    {
-        currentMoney = 0;
-        SaveMoney();
-        UpdateMoneyUI();
+        public int GetCurrentMoney()
+        {
+            return _currentMoney;
+        }
+
+        public void ResetMoney()
+        {
+            _currentMoney = 0;
+            SaveMoney();
+            UpdateMoneyUI();
+        }
     }
 }
