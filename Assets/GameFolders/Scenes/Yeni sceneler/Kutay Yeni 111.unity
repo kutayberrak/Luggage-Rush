@@ -491,7 +491,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad11ca51ee491644e85784d3dfe3625a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  conveyorSpeed: 3
+  conveyorSpeed: 2
   conveyorRigidbody: {fileID: 24122129}
 --- !u!65 &24122131
 BoxCollider:
@@ -576,8 +576,8 @@ Transform:
   m_GameObject: {fileID: 24122128}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3, y: 0.5, z: 0}
-  m_LocalScale: {x: 28.35, y: 0.67622197, z: 1.7987505}
+  m_LocalPosition: {x: 3, y: 0.5, z: -1}
+  m_LocalScale: {x: 28.35, y: 0.67622197, z: 3.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 760487385}
