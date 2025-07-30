@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89b21b5d0567bef4aa52dc9b3c0f8ad4, type: 3}
   m_Name: LData_4
   m_EditorClassIdentifier: 
-  levelTimeInSeconds: 20
+  levelTimeInSeconds: 50
   targetLuggageInfo:
   - LuggageType: 3
-    Count: 3
+    Count: 9
   hasCollectiblePiece: 1
   collectablePieceType: 01000000
   luggageTypesToSpawn: 050000000400000003000000
