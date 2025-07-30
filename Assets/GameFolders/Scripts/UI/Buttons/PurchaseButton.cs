@@ -9,6 +9,8 @@ namespace GameFolders.Scripts.UI.Buttons
         {
             if (MoneyManager.Instance.TrySpendMoney(amount))
             {
+                if (AudioManager.Instance != null)
+                    AudioManager.Instance.PlaySFX("CoinSFX");
                 Debug.Log("Purchased");
             }
         }

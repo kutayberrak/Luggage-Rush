@@ -86,6 +86,9 @@ public class PowerUpInventory : MonoBehaviour
             if (MoneyManager.Instance.TrySpendMoney(powerUpCost))  //
             {
                 IncreaseCount(PowerUpType.Freeze);
+
+                if (AudioManager.Instance != null)
+                    AudioManager.Instance.PlaySFX("CoinSFX");
                 //LoadPowerUpsCount();
             }
             else
@@ -111,6 +114,9 @@ public class PowerUpInventory : MonoBehaviour
             if (MoneyManager.Instance.TrySpendMoney(powerUpCost))
             {
                 IncreaseCount(PowerUpType.SlotBomb);
+
+                if (AudioManager.Instance != null)
+                    AudioManager.Instance.PlaySFX("CoinSFX");
                 //LoadPowerUpsCount();
             }
             else
