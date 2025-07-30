@@ -50,6 +50,23 @@ public class PowerUpInventory : MonoBehaviour
 
         return powerUp != null;
     }
+
+    public void UseFreeze()
+    {
+        if (TryUse(PowerUpType.Freeze, out var pu))
+        {
+            PowerUpScheduler.Instance.Schedule(pu, pu.Duration);
+        }
+
+    }
+
+    public void UseSlotBomb()
+    {
+        if (TryUse(PowerUpType.SlotBomb, out var pu))
+        {
+            PowerUpScheduler.Instance.Schedule(pu, pu.Duration);
+        }
+    }
     public void DecreaseCount(PowerUpType type)
     {
         if (powerUpCounts.TryGetValue(type, out var c) && c > 0)
