@@ -11,7 +11,8 @@ namespace GameFolders.Scripts.UI
         private float _screenWidth;
         private void Start()
         {
-            _screenWidth = Screen.width;
+            _screenWidth = screenParent.parent.GetComponent<RectTransform>().rect.width;
+            Debug.Log(_screenWidth);
         }
 
         public void SetScreenPos(int screenWidthOffsetMultiplier)
