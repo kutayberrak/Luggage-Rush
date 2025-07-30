@@ -69,6 +69,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 849ecc13e0e0d8e4eb884892f19bbe7b, type: 2}
+  - {fileID: 2100000, guid: 85626273408043849b0e098e96ed5153, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -115,18 +116,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d0c638e55de17448a17816a9cc576d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  category: 0
+  luggageType: 3
+  garbageType: 0
+  collectionType: 0
   speed: 5
   arrivalThreshold: 0.05
   riseDuration: 0.3
   riseHeight: 1
   riseEase: 6
+  useCurveMovement: 1
+  curveMoveDuration: 1.2
+  curveEase: 4
+  curveHeight: 2
+  useRotationAnimation: 1
+  rotationDuration: 0.8
   reservedSlotIndex: -1
-  id:
-    category: 0
-    luggageType: 3
-    garbageType: 0
-    collectionType: 0
-  luggageType: 3
 --- !u!65 &116589422474899359
 BoxCollider:
   m_ObjectHideFlags: 0

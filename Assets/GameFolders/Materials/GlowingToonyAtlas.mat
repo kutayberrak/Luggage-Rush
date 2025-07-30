@@ -110,9 +110,9 @@ Material:
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _GlowLineThickness: 0.05
-    - _GlowRepeatTime: 1
+    - _GlowRepeatTime: 3
     - _GlowRotation: 0
-    - _GlowSpeed: 0
+    - _GlowSpeed: 1
     - _HighlightPower: 1
     - _Lightness: 0
     - _Metallic: 0
