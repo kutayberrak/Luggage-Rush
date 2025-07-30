@@ -115,6 +115,13 @@ namespace GameFolders.Scripts.Managers
             WinPanel.SetActive(true);
             Debug.Log("Level Won!");
 
+
+            //burada o leveldaki collectionları toplamış oluyoruz.
+            foreach (var collection in _currentLevelData.CollectablePieceType)
+            {
+                CollectionManager.Instance.UnlockCollection(collection);
+            }
+
             // Play level win sound
             if (AudioManager.Instance != null)
                 AudioManager.Instance.PlaySFX("LevelWin");
