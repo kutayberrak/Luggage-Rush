@@ -1,5 +1,7 @@
 using GameFolders.Scripts.ScriptableObjects;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 namespace GameFolders.Scripts.Managers
 {
@@ -12,6 +14,8 @@ namespace GameFolders.Scripts.Managers
 
         [SerializeField] private GameObject WinPanel;
         [SerializeField] private GameObject FailPanel;
+
+        [SerializeField] private TextMeshProUGUI levelText;
 
         private int _currentLevelIndex = 0;
         private LevelDataSO _currentLevelData;
@@ -85,7 +89,9 @@ namespace GameFolders.Scripts.Managers
         public void StartLevel()
         {
             GameEvents.TriggerGameStart();
+            ShowLevelText();
             LoadLevelRequirements();
+
             SpawnManager.Instance.RunSpawn();
 
             SlotManager.Instance.ClearAllSlots();
@@ -94,6 +100,17 @@ namespace GameFolders.Scripts.Managers
             Timer.Instance.StartTimer();
         }
 
+        private void ShowLevelText()
+        {
+            if (levelText != null)
+            {
+                levelText.text = $"Level {_currentLevelIndex + 1}";
+            }
+            else
+            {
+                Debug.LogWarning("Level Text is not assigned in GameManager.");
+            }
+        }
         private void OnLevelFailed()
         {
             Debug.Log("Level Failed");

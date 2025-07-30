@@ -209,7 +209,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -7688,6 +7688,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9056fcc836e70614cbef4c8f940778e5, type: 2}
   WinPanel: {fileID: 396653097}
   FailPanel: {fileID: 2059065615}
+  levelText: {fileID: 9739572}
 --- !u!4 &1268513128
 Transform:
   m_ObjectHideFlags: 0
