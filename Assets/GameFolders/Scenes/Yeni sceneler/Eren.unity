@@ -3358,7 +3358,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 824566524}
         m_TargetAssemblyTypeName: MoneyManager, Assembly-CSharp
-        m_MethodName: SpendMoney
+        m_MethodName: TrySpendMoney
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

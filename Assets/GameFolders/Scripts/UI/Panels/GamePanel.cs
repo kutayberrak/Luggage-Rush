@@ -1,4 +1,5 @@
-﻿using DG.Tweening;
+﻿using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using GameFolders.Scripts.Interfaces;
 using UnityEngine;
 

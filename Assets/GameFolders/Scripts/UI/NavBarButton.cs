@@ -12,7 +12,7 @@ namespace GameFolders.Scripts.UI
         private void Start()
         {
             _screenWidth = screenParent.parent.GetComponent<RectTransform>().rect.width;
-            Debug.Log(_screenWidth);
+            screenParent.DOAnchorPos(Vector2.zero,moveSpeed).SetEase(moveEase);
         }
 
         public void SetScreenPos(int screenWidthOffsetMultiplier)

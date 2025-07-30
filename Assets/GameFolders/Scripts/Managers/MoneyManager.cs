@@ -36,18 +36,16 @@ public class MoneyManager : MonoBehaviour
         UpdateMoneyUI();
     }
 
-    public void SpendMoney(int amount)
+    public bool TrySpendMoney(int amount)
     {
         if (currentMoney >= amount)
         {
             currentMoney -= amount;
             SaveMoney();
             UpdateMoneyUI();
+            return true;
         }
-        else
-        {
-            Debug.LogWarning("Yetersiz para.");
-        }
+        return false;
     }
 
     private void UpdateMoneyUI()
