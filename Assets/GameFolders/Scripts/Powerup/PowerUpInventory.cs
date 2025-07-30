@@ -11,7 +11,7 @@ public class PowerUpInventory : MonoBehaviour
     {
         { PowerUpType.Freeze, 3 },
         { PowerUpType.SlotBomb,  3 },
-        // ileride diðerleri için de ekle
+        // ileride diï¿½erleri iï¿½in de ekle
     };
     private void Awake()
     {
@@ -72,7 +72,14 @@ public class PowerUpInventory : MonoBehaviour
         if (powerUpCounts.TryGetValue(type, out var c) && c > 0)
             powerUpCounts[type] = c - 1;
     }
-    // UI binding için:
+    public void IncreaseCount(PowerUpType type)
+    {
+        if (powerUpCounts.TryGetValue(type, out var c))
+            powerUpCounts[type] = c + 1;
+        else
+            powerUpCounts[type] = 1; // eÄŸer yoksa, 1 olarak ekle
+    }
+    // UI binding iï¿½in:
     public int GetCount(PowerUpType type)
         => powerUpCounts.TryGetValue(type, out var c) ? c : 0;
 }
