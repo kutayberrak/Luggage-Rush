@@ -7,16 +7,15 @@ public class CollectionManager : MonoBehaviour
 {
     [Header("Collection Settings")]
     [SerializeField] private List<CollectionData> allCollections = new List<CollectionData>();
-    
+
+    public CollectionPanel collectionPanel;
+
     // Singleton pattern
     public static CollectionManager Instance { get; private set; }
-    
 
-    
     // Properties
     public List<CollectionData> AllCollections => allCollections;
     public List<CollectionData> UnlockedCollections => allCollections.Where(c => c.IsUnlocked).ToList();
-    public List<CollectionData> LockedCollections => allCollections.Where(c => !c.IsUnlocked).ToList();
     
     private void Awake()
     {
@@ -33,8 +32,6 @@ public class CollectionManager : MonoBehaviour
         }
     }
     
-
-    
     /// <summary>
     /// Load all collections from Resources or ScriptableObjects
     /// </summary>
@@ -49,10 +46,6 @@ public class CollectionManager : MonoBehaviour
             // Load saved progress from PlayerPrefs
             LoadCollectionProgress();
         }
-
-        PrintAllCollections();
-        PrintUnlockedCollections();
-
     }
     
     /// <summary>
@@ -105,6 +98,9 @@ public class CollectionManager : MonoBehaviour
             collection.UnlockCollection();
             // Save progress
             SaveCollectionProgress();
+            
+            // Update UI if collection panel exists
+            UpdateCollectionPanel(type);
         }
     }
     
@@ -118,6 +114,9 @@ public class CollectionManager : MonoBehaviour
             collection.UnlockCollection();
             // Save progress
             SaveCollectionProgress();
+            
+            // Update UI if collection panel exists
+            UpdateCollectionPanel(collection.CollectionType);
         }
     }
     
@@ -203,6 +202,28 @@ public class CollectionManager : MonoBehaviour
     public void OnLevelCompleted(List<CollectiblePieceType> collectedTypes)
     {
         UnlockCollections(collectedTypes);
+    }
+    
+    /// <summary>
+    /// Update collection panel UI
+    /// </summary>
+    private void UpdateCollectionPanel(CollectiblePieceType type)
+    {
+        if (collectionPanel != null)
+        {
+            collectionPanel.UpdateCollection(type);
+        }
+    }
+    
+    /// <summary>
+    /// Update all collection panels
+    /// </summary>
+    public void UpdateAllCollectionPanels()
+    {
+        if (collectionPanel != null)
+        {
+            collectionPanel.UpdateAllCollections();
+        }
     }
     
     // Debug methods
