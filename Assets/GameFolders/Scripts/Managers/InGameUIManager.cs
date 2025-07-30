@@ -251,10 +251,7 @@ public class InGameUIManager : MonoBehaviour
         
         Debug.Log("[InGameUIManager] Match animations completed, triggering level win!");
         
-        // GameManager'a bildir
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.OnLevelWin();
-        }
+        // GameEvents üzerinden level win tetikle
+        GameEvents.TriggerLevelWin();
     }
 }
