@@ -17,10 +17,10 @@ MonoBehaviour:
   - LuggageType: 3
     Count: 3
   hasCollectiblePiece: 1
-  luggageTypesToSpawn: 050000000400000003000000
   collectablePieceType: 0100000002000000
+  luggageTypesToSpawn: 050000000400000003000000
   junkPieceType: 0100000002000000
   spawnWeightData:
-    LuggageSpawnWeight: 0
-    CollectableSpawnWeight: 0
-    JunkSpawnWeight: 0
+    LuggageSpawnWeight: 9
+    CollectableSpawnWeight: 1
+    JunkSpawnWeight: 7
