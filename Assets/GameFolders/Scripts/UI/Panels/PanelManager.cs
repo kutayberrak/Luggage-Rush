@@ -18,11 +18,13 @@ namespace GameFolders.Scripts.UI.Panels
         private void ActivateMainPanel()
         {
             mainPanel.SetActive(true);
+            gamePanel.SetActive(false);
         }
 
         private void ActivateGamePanel()
         {
             gamePanel.SetActive(true);
+            mainPanel.SetActive(false);
         }
 
         private void OnDisable()
