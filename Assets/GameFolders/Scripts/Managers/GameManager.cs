@@ -1,6 +1,4 @@
 using GameFolders.Scripts.ScriptableObjects;
-using GameFolders.Scripts;
-using GameFolders.Scripts.Managers;
 using UnityEngine;
 
 namespace GameFolders.Scripts.Managers
@@ -14,7 +12,6 @@ namespace GameFolders.Scripts.Managers
 
         [SerializeField] private GameObject WinPanel;
         [SerializeField] private GameObject FailPanel;
-        [SerializeField] private GameObject StartPanel;
 
         private int _currentLevelIndex = 0;
         private LevelDataSO _currentLevelData;
@@ -74,8 +71,6 @@ namespace GameFolders.Scripts.Managers
             PlayerPrefs.Save();
         }
 
-
-
         private void LoadLevelRequirements()
         {
             //load level data...
@@ -89,6 +84,7 @@ namespace GameFolders.Scripts.Managers
 
         public void StartLevel()
         {
+            GameEvents.TriggerGameStart();
             LoadLevelRequirements();
             SpawnManager.Instance.RunSpawn();
 
@@ -175,14 +171,6 @@ namespace GameFolders.Scripts.Managers
             SpawnManager.Instance.StopSpawning();
             SlotManager.Instance.ClearAllSlots();
             Timer.Instance.StopTimer();
-        }
-
-        public void HıdeStartPanel()
-        {
-            if (StartPanel != null && StartPanel.activeSelf)
-            {
-                StartPanel.SetActive(false);
-            }
         }
     }
 }

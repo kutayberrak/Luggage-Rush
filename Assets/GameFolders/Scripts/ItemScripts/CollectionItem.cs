@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using GameFolders.Scripts.Enums;
 using DG.Tweening;
+using GameFolders.Scripts;
 
 public class CollectionItem : ClickableObject
 {

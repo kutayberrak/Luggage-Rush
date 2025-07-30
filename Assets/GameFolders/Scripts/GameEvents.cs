@@ -1,17 +1,25 @@
 using System;
 
-public static class GameEvents
+namespace GameFolders.Scripts
 {
-    public static event Action OnLevelWin;
-    public static event Action OnLevelFailed;
-
-    public static void TriggerLevelWin()
+    public static class GameEvents
     {
-        OnLevelWin?.Invoke();
-    }
+        public static event Action OnLevelWin;
+        public static event Action OnLevelFailed;
+        public static event Action OnGameStart;
+        public static void TriggerGameStart()
+        {
+            OnGameStart?.Invoke();
+        }
 
-    public static void TriggerLevelFailed()
-    {
-        OnLevelFailed?.Invoke();
+        public static void TriggerLevelWin()
+        {
+            OnLevelWin?.Invoke();
+        }
+
+        public static void TriggerLevelFailed()
+        {
+            OnLevelFailed?.Invoke();
+        }
     }
 }

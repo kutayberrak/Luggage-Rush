@@ -7,6 +7,7 @@ using GameFolders.Scripts.Data;
 using GameFolders.Scripts.Enums;
 using GameFolders.Scripts.Managers;
 using System.Collections;
+using GameFolders.Scripts;
 
 public class InGameUIManager : MonoBehaviour
 {
