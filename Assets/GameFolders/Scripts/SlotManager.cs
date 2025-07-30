@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-using System.Collections; // Coroutine'ler için gerekli
-using UnityEngine.UI;
-using DG.Tweening; // DOTween kütüphanesini dahil et!
-using UnityEngine.EventSystems;
-using System.Linq; // LayoutRebuilder için gerekli
+using System.Collections;
+using DG.Tweening;
+using GameFolders.Scripts.Enums;
+using System;
 
 public class SlotManager : MonoBehaviour
 {
@@ -586,9 +585,15 @@ public class SlotManager : MonoBehaviour
         int count = 1;
         for (int i = 1; i < slots.Count; i++)
         {
+            var currID = slots[i].StoredUniqueID;
+            var prevID = slots[i - 1].StoredUniqueID;
+
+            bool isNonGarbage =
+                !Enum.TryParse<JunkPieceType>(currID, out _);
+
             if (slots[i].IsOccupied &&
                 slots[i - 1].IsOccupied &&
-                slots[i].StoredUniqueID == slots[i - 1].StoredUniqueID)
+                currID == prevID && isNonGarbage)
             {
                 count++;
             }

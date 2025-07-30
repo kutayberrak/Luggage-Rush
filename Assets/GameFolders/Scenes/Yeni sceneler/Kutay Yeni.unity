@@ -8776,6 +8776,8 @@ MonoBehaviour:
   clickableLayer:
     serializedVersion: 2
     m_Bits: 1024
+  maxDistance: 100
+  mainCam: {fileID: 713802193}
 --- !u!4 &2124378176
 Transform:
   m_ObjectHideFlags: 0
