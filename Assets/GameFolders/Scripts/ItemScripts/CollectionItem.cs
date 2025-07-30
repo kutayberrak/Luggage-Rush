@@ -25,10 +25,10 @@ public class CollectionItem : ClickableObject
         originalPosition = transform.position;
         originalRotation = transform.eulerAngles;
 
-        // Yükselme animasyonu
+        // Yï¿½kselme animasyonu
         Vector3 risePosition = originalPosition + Vector3.up * riseHeight;
 
-        // Pozisyon ve rotasyon animasyonunu ayný anda baþlat
+        // Pozisyon ve rotasyon animasyonunu aynï¿½ anda baï¿½lat
         Sequence clickSequence = DOTween.Sequence();
         HandleRigidBody();
         CollectionInventory.Instance.TryCollect(this.gameObject);
@@ -36,7 +36,7 @@ public class CollectionItem : ClickableObject
         clickSequence.Append(transform.DOMove(risePosition, riseDuration).SetEase(riseEase));
         clickSequence.Join(transform.DORotate(Vector3.zero, riseDuration).SetEase(riseEase));
 
-        // Animasyon tamamlandýðýnda slot hareketini baþlat
+        // Animasyon tamamlandï¿½ï¿½ï¿½nda slot hareketini baï¿½lat
         clickSequence.OnComplete(() => {
             isMoving = false;
         });
@@ -66,9 +66,9 @@ public class CollectionItem : ClickableObject
 
         Vector3[] path = new Vector3[] {
             startPos,
-            Vector3.Lerp(startPos, midPoint, 0.4f), // Baþlangýç eðrisi
+            Vector3.Lerp(startPos, midPoint, 0.4f), // Baï¿½langï¿½ï¿½ eï¿½risi
             midPoint,
-            Vector3.Lerp(midPoint, endPos, 0.6f),   // Bitiþ eðrisi
+            Vector3.Lerp(midPoint, endPos, 0.6f),   // Bitiï¿½ eï¿½risi
             endPos
         };
 
@@ -79,8 +79,10 @@ public class CollectionItem : ClickableObject
         curveMovementSequence.OnComplete(() => {
             isInCurveMovement = false;
             ObjectPoolManager.Instance.ReturnObjectToPool(gameObject);
-            
-            // Koleksiyon Metodlarý
+            if (InGameUIManager.Instance != null)
+            {
+                InGameUIManager.Instance.OnCollectionCollected(collectionType);
+            }
         });
     }
     private void OnEnable()

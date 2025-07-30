@@ -13,9 +13,11 @@ public class ObjectiveUIItem : MonoBehaviour
     [SerializeField] private Image checkmarkImage;
     
     private LuggageType luggageType;
+    private CollectiblePieceType collectionType;
     private int targetCount;
     private int currentCount;
     private bool isCompleted = false;
+    private bool isCollectionObjective = false;
     
     // **YENİ**: Animasyon için
     private Vector3 originalIconScale;
@@ -24,9 +26,33 @@ public class ObjectiveUIItem : MonoBehaviour
     public void Initialize(LuggageType type, int target, Sprite icon, string name)
     {
         luggageType = type;
+        collectionType = CollectiblePieceType.None;
         targetCount = target;
         currentCount = 0;
         isCompleted = false;
+        isCollectionObjective = false;
+        
+        // UI elementlerini ayarla
+        if (luggageIcon != null && icon != null)
+        {
+            luggageIcon.sprite = icon;
+            // **YENİ**: Orijinal scale'i kaydet
+            originalIconScale = luggageIcon.transform.localScale;
+        }
+        
+        // Başlangıç durumunu ayarla
+        UpdateVisuals();
+        UpdateCountText();
+    }
+    
+    public void InitializeCollection(CollectiblePieceType type, int target, Sprite icon, string name)
+    {
+        collectionType = type;
+        luggageType = LuggageType.None;
+        targetCount = target;
+        currentCount = 0;
+        isCompleted = false;
+        isCollectionObjective = true;
         
         // UI elementlerini ayarla
         if (luggageIcon != null && icon != null)
@@ -88,7 +114,14 @@ public class ObjectiveUIItem : MonoBehaviour
     
     private void OnObjectiveCompleted()
     {
-        Debug.Log($"[ObjectiveUIItem] {luggageType} hedefi tamamlandı! ({currentCount}/{targetCount})");
+        if (isCollectionObjective)
+        {
+            Debug.Log($"[ObjectiveUIItem] {collectionType} collection hedefi tamamlandı! ({currentCount}/{targetCount})");
+        }
+        else
+        {
+            Debug.Log($"[ObjectiveUIItem] {luggageType} hedefi tamamlandı! ({currentCount}/{targetCount})");
+        }
         
         // Burada tamamlama animasyonu veya ses efekti eklenebilir
         // Örnek: DOTween animasyonu, particle effect, ses efekti vs.
@@ -117,6 +150,12 @@ public class ObjectiveUIItem : MonoBehaviour
         {
             isCompleted = true;
             OnObjectiveCompleted();
+        }
+        
+        // Collection objective ise CollectionManager'a bildir
+        if (isCollectionObjective && isCompleted)
+        {
+            CollectionManager.Instance.UnlockCollection(collectionType);
         }
     }
     
@@ -164,7 +203,14 @@ public class ObjectiveUIItem : MonoBehaviour
         // Son küçültme
         pulseSequence.Append(luggageIcon.transform.DOScale(originalIconScale, 0.15f).SetEase(Ease.InQuad));*/
         
-        Debug.Log($"[ObjectiveUIItem] {luggageType} logosu pulse animasyonu başlatıldı");
+        if (isCollectionObjective)
+        {
+            Debug.Log($"[ObjectiveUIItem] {collectionType} collection logosu pulse animasyonu başlatıldı");
+        }
+        else
+        {
+            Debug.Log($"[ObjectiveUIItem] {luggageType} logosu pulse animasyonu başlatıldı");
+        }
     }
     
     // **YENİ**: Obje yok edildiğinde temizlik

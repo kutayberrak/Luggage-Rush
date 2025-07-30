@@ -22,6 +22,7 @@ public class InGameUIManager : MonoBehaviour
     [SerializeField] private string[] luggageTypeNames; // Inspector'da atanacak
     
     private Dictionary<LuggageType, ObjectiveUIItem> objectiveItems = new Dictionary<LuggageType, ObjectiveUIItem>();
+    private Dictionary<CollectiblePieceType, ObjectiveUIItem> collectionObjectiveItems = new Dictionary<CollectiblePieceType, ObjectiveUIItem>();
     private LevelDataSO currentLevelData;
     
     // **YENİ**: UI başlatıldıktan sonra manuel sisteme geç
@@ -30,17 +31,6 @@ public class InGameUIManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-    }
-
-    void Start()
-    {
-        // Start'ta hemen başlatma, level başladığında başlatılacak
-    }
-    
-    void Update()
-    {
-        // **YENİ**: UpdateObjectivesProgress'i tamamen kaldırdık çünkü manuel sistem kullanıyoruz
-        // Slot'lardaki objeleri saymak yerine, sadece IncreaseCollectCount() ile toplanan sayısını arttırıyoruz
     }
     
     public void InitializeObjectivesUI()
@@ -67,11 +57,20 @@ public class InGameUIManager : MonoBehaviour
     {
         if (currentLevelData == null || objectivesContainer == null) return;
         
+        // Luggage hedeflerini göster
         foreach (var targetInfo in currentLevelData.TargetLuggageInfo)
         {
             if (targetInfo.Count <= 0) continue; // 0 count olanları gösterme
             
             CreateObjectiveItem(targetInfo);
+        }
+        
+        // Collection hedeflerini göster
+        foreach (var collectionType in currentLevelData.CollectablePieceType)
+        {
+            if (collectionType == CollectiblePieceType.None) continue; // None olanları gösterme
+            
+            CreateCollectionObjectiveItem(collectionType);
         }
         
         // Panel'i göster
@@ -80,7 +79,7 @@ public class InGameUIManager : MonoBehaviour
             objectivesPanel.SetActive(true);
         }
         
-        Debug.Log($"[InGameUIManager] {currentLevelData.TargetLuggageInfo.Count} hedef gösterildi");
+        Debug.Log($"[InGameUIManager] {currentLevelData.TargetLuggageInfo.Count} luggage hedefi ve {currentLevelData.CollectablePieceType.Count} collection hedefi gösterildi");
     }
     
     private void CreateObjectiveItem(TargetLuggageInfo targetInfo)
@@ -107,6 +106,30 @@ public class InGameUIManager : MonoBehaviour
         objectiveItems[targetInfo.LuggageType] = objectiveItem;
     }
     
+    private void CreateCollectionObjectiveItem(CollectiblePieceType collectionType)
+    {
+        if (objectiveItemPrefab == null)
+        {
+            Debug.LogError("Objective Item Prefab atanmamış!");
+            return;
+        }
+        
+        GameObject itemGO = Instantiate(objectiveItemPrefab, objectivesContainer);
+        ObjectiveUIItem objectiveItem = itemGO.GetComponent<ObjectiveUIItem>();
+        
+        if (objectiveItem == null)
+        {
+            Debug.LogError("ObjectiveUIItem component bulunamadı!");
+            return;
+        }
+        
+        // Collection objective item'ı yapılandır (1 adet toplanacak)
+        objectiveItem.InitializeCollection(collectionType, 1, GetCollectionSprite(collectionType), GetCollectionName(collectionType));
+        
+        // Dictionary'e ekle
+        collectionObjectiveItems[collectionType] = objectiveItem;
+    }
+    
     // **YENİ**: UpdateObjectivesProgress metodunu kaldırdık çünkü artık manuel sistem kullanıyoruz
     // Slot'lardaki objeleri saymak yerine, sadece IncreaseCollectCount() ile toplanan sayısını arttırıyoruz
     
@@ -121,6 +144,7 @@ public class InGameUIManager : MonoBehaviour
         }
         
         objectiveItems.Clear();
+        collectionObjectiveItems.Clear();
     }
     
     private Sprite GetLuggageSprite(LuggageType luggageType)
@@ -141,6 +165,34 @@ public class InGameUIManager : MonoBehaviour
             return luggageTypeNames[index];
         }
         return luggageType.ToString();
+    }
+    
+    private Sprite GetCollectionSprite(CollectiblePieceType collectionType)
+    {
+        // CollectionManager'dan collection data'sını al
+        if (CollectionManager.Instance != null)
+        {
+            var collectionData = CollectionManager.Instance.GetCollectionByType(collectionType);
+            if (collectionData != null)
+            {
+                return collectionData.CollectionImage;
+            }
+        }
+        return null;
+    }
+    
+    private string GetCollectionName(CollectiblePieceType collectionType)
+    {
+        // CollectionManager'dan collection data'sını al
+        if (CollectionManager.Instance != null)
+        {
+            var collectionData = CollectionManager.Instance.GetCollectionByType(collectionType);
+            if (collectionData != null)
+            {
+                return collectionData.CollectionName;
+            }
+        }
+        return collectionType.ToString();
     }
     
     // **YENİ**: Level başladığında çağrılacak metod
@@ -166,23 +218,6 @@ public class InGameUIManager : MonoBehaviour
         ClearObjectivesUI();
     }
     
-    // **YENİ**: Debug için hedefleri yazdır
-    [ContextMenu("Debug Objectives")]
-    public void DebugObjectives()
-    {
-        if (currentLevelData == null)
-        {
-            Debug.Log("CurrentLevelData null!");
-            return;
-        }
-        
-        Debug.Log("=== Level Objectives ===");
-        foreach (var target in currentLevelData.TargetLuggageInfo)
-        {
-            Debug.Log($"Hedef: {target.LuggageType} - {target.Count} adet");
-        }
-        Debug.Log("=======================");
-    }
     
     // **YENİ**: Obje slot'a ulaştığında toplanan sayısını arttır
     public void OnObjectReachedSlot(LuggageType luggageType)
@@ -202,11 +237,30 @@ public class InGameUIManager : MonoBehaviour
         }
     }
     
+    // **YENİ**: Collection toplandığında çağrılacak method
+    public void OnCollectionCollected(CollectiblePieceType collectionType)
+    {
+        if (collectionObjectiveItems.ContainsKey(collectionType))
+        {
+            ObjectiveUIItem objectiveItem = collectionObjectiveItems[collectionType];
+            objectiveItem.IncreaseCollectCount(); // Bu zaten UI'ı güncelliyor
+            Debug.Log($"[InGameUIManager] {collectionType} collection'ı toplandı. Mevcut: {objectiveItem.GetCurrentCollected()}");
+            
+            // **YENİ**: Bütün hedeflerin tamamlanıp tamamlanmadığını kontrol et
+            CheckAllObjectivesCompleted();
+        }
+        else
+        {
+            Debug.LogWarning($"[InGameUIManager] {collectionType} için collection objective item bulunamadı!");
+        }
+    }
+    
     // **YENİ**: Bütün hedeflerin tamamlanıp tamamlanmadığını kontrol et
     private void CheckAllObjectivesCompleted()
     {
         bool allCompleted = true;
         
+        // Luggage hedeflerini kontrol et
         foreach (var kvp in objectiveItems)
         {
             ObjectiveUIItem objectiveItem = kvp.Value;
@@ -214,6 +268,20 @@ public class InGameUIManager : MonoBehaviour
             {
                 allCompleted = false;
                 break;
+            }
+        }
+        
+        // Collection hedeflerini kontrol et
+        if (allCompleted)
+        {
+            foreach (var kvp in collectionObjectiveItems)
+            {
+                ObjectiveUIItem objectiveItem = kvp.Value;
+                if (!objectiveItem.IsCompleted())
+                {
+                    allCompleted = false;
+                    break;
+                }
             }
         }
         
@@ -233,23 +301,16 @@ public class InGameUIManager : MonoBehaviour
     // **YENİ**: Match animasyonlarının bitmesini bekleyip oyunu kazandır
     private IEnumerator WaitForMatchAnimationsAndWin()
     {
-        Debug.Log("[InGameUIManager] Waiting for match animations to complete...");
-        
         // SlotManager'dan match animasyonlarının bitmesini bekle
         if (SlotManager.Instance != null)
         {
             // Match işlemi devam ediyorsa bekle
             while (SlotManager.Instance.IsProcessingMatch())
             {
-                Debug.Log("[InGameUIManager] Match animations still in progress, waiting...");
                 yield return new WaitForSeconds(0.1f);
             }
-            
-            // Ek güvenlik için kısa bir süre daha bekle
             yield return new WaitForSeconds(.9f);
         }
-        
-        Debug.Log("[InGameUIManager] Match animations completed, triggering level win!");
         
         // GameEvents üzerinden level win tetikle
         GameEvents.TriggerLevelWin();
