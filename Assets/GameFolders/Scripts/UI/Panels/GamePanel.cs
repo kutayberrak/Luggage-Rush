@@ -22,16 +22,16 @@ namespace GameFolders.Scripts.UI.Panels
         
         private void OnEnable()
         {
-            GameEvents.OnGameStart += ActivatePanel;
+            //GameEvents.OnGameStart += ActivatePanel;
             GameEvents.OnLevelFailed += DeactivatePanel;
-            GameEvents.OnLevelWin += DeactivatePanel;
+            //GameEvents.OnLevelWin += DeactivatePanel;
         }
         
         private void OnDisable()
         {
-            GameEvents.OnGameStart -= ActivatePanel;
+            //GameEvents.OnGameStart -= ActivatePanel;
             GameEvents.OnLevelFailed -= DeactivatePanel;
-            GameEvents.OnLevelWin -= DeactivatePanel;
+            //GameEvents.OnLevelWin -= DeactivatePanel;
         }
 
         public void DeactivatePanel()

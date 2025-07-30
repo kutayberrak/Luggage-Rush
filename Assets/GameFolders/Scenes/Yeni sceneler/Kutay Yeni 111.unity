@@ -3112,9 +3112,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 482379379}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1aa461018566c9f42a817211674edb71, type: 3}
+  m_Script: {fileID: 11500000, guid: fc6c7844fc372934c88ce5c3bf05ba4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  navBarButtons: {fileID: 1195957773}
+  startButton: {fileID: 332670564}
+  buttonsClosedPosition: -2000
+  buttonsOpenPosition: 0
+  startButtonClosedPos: -150
+  startButtonOpenPos: 477
 --- !u!1 &485966469
 GameObject:
   m_ObjectHideFlags: 0

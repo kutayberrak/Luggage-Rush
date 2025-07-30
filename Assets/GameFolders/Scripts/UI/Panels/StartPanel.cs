@@ -17,11 +17,11 @@ namespace GameFolders.Scripts.UI.Panels
         
         private void OnEnable()
         {
-            GameEvents.OnGameStart += DeactivatePanel;
+            //GameEvents.OnGameStart += DeactivatePanel;
         }
         private void OnDisable()
         {
-            GameEvents.OnGameStart -= DeactivatePanel;
+            //GameEvents.OnGameStart -= DeactivatePanel;
         }
         public void DeactivatePanel()
         {
