@@ -19,8 +19,8 @@ namespace GameFolders.Scripts.ScriptableObjects
         [SerializeField] private bool hasCollectiblePiece;
         
         [Header("Configuration of objects to be spawned")]
-        [SerializeField] private List<LuggageType> luggageTypesToSpawn;
         [SerializeField] private List<CollectiblePieceType> collectablePieceType;
+        [SerializeField] private List<LuggageType> luggageTypesToSpawn;
         [SerializeField] private List<JunkPieceType> junkPieceType;
         [SerializeField] private SpawnWeightData spawnWeightData;
         
