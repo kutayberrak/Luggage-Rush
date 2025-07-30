@@ -770,4 +770,12 @@ public class SlotManager : MonoBehaviour
             slot.ClearSlot();
         }
     }
+    
+    /// <summary>
+    /// Match işleminin devam edip etmediğini kontrol eder
+    /// </summary>
+    public bool IsProcessingMatch()
+    {
+        return isProcessingMatch;
+    }
 }

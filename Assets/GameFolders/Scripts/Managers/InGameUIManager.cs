@@ -226,7 +226,32 @@ public class InGameUIManager : MonoBehaviour
     // **YENİ**: Bütün hedefler tamamlandığında çağrılır
     private void OnAllObjectivesCompleted()
     {  
-        // GameManager'a bildir (eğer varsa)
+        // Match animasyonlarının bitmesini bekle
+        StartCoroutine(WaitForMatchAnimationsAndWin());
+    }
+    
+    // **YENİ**: Match animasyonlarının bitmesini bekleyip oyunu kazandır
+    private IEnumerator WaitForMatchAnimationsAndWin()
+    {
+        Debug.Log("[InGameUIManager] Waiting for match animations to complete...");
+        
+        // SlotManager'dan match animasyonlarının bitmesini bekle
+        if (SlotManager.Instance != null)
+        {
+            // Match işlemi devam ediyorsa bekle
+            while (SlotManager.Instance.IsProcessingMatch())
+            {
+                Debug.Log("[InGameUIManager] Match animations still in progress, waiting...");
+                yield return new WaitForSeconds(0.1f);
+            }
+            
+            // Ek güvenlik için kısa bir süre daha bekle
+            yield return new WaitForSeconds(.9f);
+        }
+        
+        Debug.Log("[InGameUIManager] Match animations completed, triggering level win!");
+        
+        // GameManager'a bildir
         if (GameManager.Instance != null)
         {
             GameManager.Instance.OnLevelWin();
