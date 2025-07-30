@@ -1,11 +1,24 @@
 using GameFolders.Scripts;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
+using GameFolders.Scripts.Managers;
 
 public class PowerUpInventory : MonoBehaviour
 {
     public static PowerUpInventory Instance { get; private set; }
+    [SerializeField] private int powerUpCost = 5;
 
+    [SerializeField] private TextMeshProUGUI freezeCountText;
+    [SerializeField] private TextMeshProUGUI slotBombCountText;
+    [SerializeField] private Sprite emptyPowerUpIcon;
+    [SerializeField] private Sprite nonEmptyPowerUpIcon;
+    [SerializeField] private Image freezeButton;
+    [SerializeField] private Image slotBombButton;
+
+    [SerializeField] private GameObject freezeBuyImage;
+    [SerializeField] private GameObject slotBombBuyImage;
     public ConveyorBeltController conveyor;
     private Dictionary<PowerUpType, int> powerUpCounts = new()
     {
@@ -21,6 +34,15 @@ public class PowerUpInventory : MonoBehaviour
             Destroy(gameObject);
     }
 
+
+    private void OnEnable()
+    {
+        GameEvents.OnGameStart += LoadPowerUpsCount;
+    }
+    private void OnDisable()
+    {
+        GameEvents.OnGameStart -= LoadPowerUpsCount;
+    }
     public bool TryUse(PowerUpType type, out IPowerUp powerUp)
     {
         if (GetCount(type) <= 0)
@@ -53,20 +75,86 @@ public class PowerUpInventory : MonoBehaviour
 
     public void UseFreeze()
     {
+
         if (TryUse(PowerUpType.Freeze, out var pu))
         {
             PowerUpScheduler.Instance.Schedule(pu, pu.Duration);
         }
+        else
+        {
 
+            if (MoneyManager.Instance.TrySpendMoney(powerUpCost))  //
+            {
+                IncreaseCount(PowerUpType.Freeze);
+                //LoadPowerUpsCount();
+            }
+            else
+            {
+                Debug.Log("Freeze PowerUp and money is not enough.");
+                return;
+            }
+
+        }
     }
 
     public void UseSlotBomb()
     {
+
+
+
         if (TryUse(PowerUpType.SlotBomb, out var pu))
         {
             PowerUpScheduler.Instance.Schedule(pu, pu.Duration);
         }
+        else
+        {
+            if (MoneyManager.Instance.TrySpendMoney(powerUpCost))
+            {
+                IncreaseCount(PowerUpType.SlotBomb);
+                //LoadPowerUpsCount();
+            }
+            else
+            {
+                Debug.Log("SlotBomb PowerUp and money is not enough.");
+                return;
+            }
+        }
     }
+
+
+    public void LoadPowerUpsCount() //method calls when game starts and clicks on the button
+    {
+        int freezeCount = GetCount(PowerUpType.Freeze);
+        int slotBombCount = GetCount(PowerUpType.SlotBomb);
+
+        if (freezeCount <= 0)
+        {
+            freezeBuyImage.SetActive(true);
+            freezeButton.sprite = emptyPowerUpIcon;
+        }
+        else
+        {
+            freezeBuyImage.SetActive(false);
+            freezeButton.sprite = nonEmptyPowerUpIcon;
+        }
+
+        if (slotBombCount <= 0)
+        {
+            slotBombBuyImage.SetActive(true);
+            slotBombButton.sprite = emptyPowerUpIcon;
+        }
+        else
+        {
+            slotBombBuyImage.SetActive(false);
+            slotBombButton.sprite = nonEmptyPowerUpIcon;
+        }
+
+        freezeCountText.text = freezeCount.ToString();
+
+        slotBombCountText.text = slotBombCount.ToString();
+    }
+
+
     public void DecreaseCount(PowerUpType type)
     {
         if (powerUpCounts.TryGetValue(type, out var c) && c > 0)
