@@ -3,9 +3,9 @@
     public enum JunkPieceType
     {
         None,
-        JunkPieceType1,
-        JunkPieceType2,
-        JunkPieceType3,
-        JunkPieceType4
+        Gar_1_1,
+        Gar_1_2,
+        Gar_1_3,
+        Gar_2_1_TrashBox
     }
 }
