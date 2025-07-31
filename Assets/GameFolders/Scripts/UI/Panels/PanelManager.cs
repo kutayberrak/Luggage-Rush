@@ -43,7 +43,7 @@ namespace GameFolders.Scripts.UI.Panels
         }
         private void OnLevelWin()
         {
-            EnablePanel(mainPanel);
+            EnablePanel(winPanel);
             _gamePanel.DeactivatePanel();
         }
         private void OnReturnToMainMenu()
