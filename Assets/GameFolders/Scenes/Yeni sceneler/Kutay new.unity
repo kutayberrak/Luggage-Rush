@@ -3752,7 +3752,6 @@ GameObject:
   m_Component:
   - component: {fileID: 485966470}
   - component: {fileID: 485966471}
-  - component: {fileID: 485966472}
   m_Layer: 5
   m_Name: PurchaseButtons
   m_TagString: Untagged
@@ -3807,18 +3806,6 @@ MonoBehaviour:
   m_Spacing: {x: 10, y: 10}
   m_Constraint: 0
   m_ConstraintCount: 2
---- !u!114 &485966472
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 485966469}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae39d4c53e1989e45a36060880fcf6de, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &521654863
 GameObject:
   m_ObjectHideFlags: 0
@@ -4925,7 +4912,7 @@ MonoBehaviour:
   slotBombButton: {fileID: 1176207849}
   freezeBuyImage: {fileID: 786026912}
   slotBombBuyImage: {fileID: 697914728}
-  conveyor: {fileID: 0}
+  conveyor: {fileID: 941887474}
 --- !u!114 &682368893
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6923,15 +6910,26 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 485966472}
-        m_TargetAssemblyTypeName: GameFolders.Scripts.UI.Buttons.PurchaseButton,
-          Assembly-CSharp
-        m_MethodName: Purchase
-        m_Mode: 3
+      - m_Target: {fileID: 682368892}
+        m_TargetAssemblyTypeName: PowerUpInventory, Assembly-CSharp
+        m_MethodName: BuyFreeze
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 682368892}
+        m_TargetAssemblyTypeName: PowerUpInventory, Assembly-CSharp
+        m_MethodName: LoadPowerUpsCount
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -8160,15 +8158,26 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 485966472}
-        m_TargetAssemblyTypeName: GameFolders.Scripts.UI.Buttons.PurchaseButton,
-          Assembly-CSharp
-        m_MethodName: Purchase
-        m_Mode: 3
+      - m_Target: {fileID: 682368892}
+        m_TargetAssemblyTypeName: PowerUpInventory, Assembly-CSharp
+        m_MethodName: BuySlotBomb
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 682368892}
+        m_TargetAssemblyTypeName: PowerUpInventory, Assembly-CSharp
+        m_MethodName: LoadPowerUpsCount
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -8727,15 +8736,26 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 485966472}
-        m_TargetAssemblyTypeName: GameFolders.Scripts.UI.Buttons.PurchaseButton,
-          Assembly-CSharp
-        m_MethodName: Purchase
-        m_Mode: 3
+      - m_Target: {fileID: 682368892}
+        m_TargetAssemblyTypeName: PowerUpInventory, Assembly-CSharp
+        m_MethodName: BuyFreeze
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 682368892}
+        m_TargetAssemblyTypeName: PowerUpInventory, Assembly-CSharp
+        m_MethodName: LoadPowerUpsCount
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -12174,15 +12194,26 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 485966472}
-        m_TargetAssemblyTypeName: GameFolders.Scripts.UI.Buttons.PurchaseButton,
-          Assembly-CSharp
-        m_MethodName: Purchase
-        m_Mode: 3
+      - m_Target: {fileID: 682368892}
+        m_TargetAssemblyTypeName: PowerUpInventory, Assembly-CSharp
+        m_MethodName: BuySlotBomb
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 682368892}
+        m_TargetAssemblyTypeName: PowerUpInventory, Assembly-CSharp
+        m_MethodName: LoadPowerUpsCount
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0

@@ -8,6 +8,7 @@ using GameFolders.Scripts.Managers;
 public class PowerUpInventory : MonoBehaviour
 {
     public static PowerUpInventory Instance { get; private set; }
+
     [SerializeField] private int powerUpCost = 5;
 
     [SerializeField] private TextMeshProUGUI freezeCountText;
@@ -20,32 +21,40 @@ public class PowerUpInventory : MonoBehaviour
     [SerializeField] private GameObject freezeBuyImage;
     [SerializeField] private GameObject slotBombBuyImage;
     public ConveyorBeltController conveyor;
-    private Dictionary<PowerUpType, int> powerUpCounts = new()
-    {
-        { PowerUpType.Freeze, 3 },
-        { PowerUpType.SlotBomb,  3 },
-        // ileride di�erleri i�in de ekle
-    };
+
+    private const int DefaultCount = 3;
+    private const string PrefKeyPrefix = "PowerUpCount_";
+
+    // Holds current counts in memory
+    private Dictionary<PowerUpType, int> powerUpCounts = new();
+
     private void Awake()
     {
         if (Instance == null)
+        {
             Instance = this;
+            LoadCountsFromPrefs();
+        }
         else
+        {
             Destroy(gameObject);
+        }
     }
-
 
     private void OnEnable()
     {
         GameEvents.OnGameStart += LoadPowerUpsCount;
     }
+
     private void OnDisable()
     {
         GameEvents.OnGameStart -= LoadPowerUpsCount;
     }
+
     public bool TryUse(PowerUpType type, out IPowerUp powerUp)
     {
-        if (GetCount(type) <= 0)
+        int count = GetCount(type);
+        if (count <= 0)
         {
             powerUp = null;
             return false;
@@ -54,17 +63,11 @@ public class PowerUpInventory : MonoBehaviour
         switch (type)
         {
             case PowerUpType.Freeze:
-                powerUp = new FreezePowerUp(
-                    duration: 3f,
-                    conveyor: conveyor
-                );
+                powerUp = new FreezePowerUp(duration: 3f, conveyor: conveyor);
                 break;
             case PowerUpType.SlotBomb:
                 powerUp = new SlotBombPowerUp();
                 break;
-
-            // ileride eklenecekler:
-
             default:
                 powerUp = null;
                 break;
@@ -75,105 +78,103 @@ public class PowerUpInventory : MonoBehaviour
 
     public void UseFreeze()
     {
-
         if (TryUse(PowerUpType.Freeze, out var pu))
         {
             PowerUpScheduler.Instance.Schedule(pu, pu.Duration);
+            LoadPowerUpsCount();
         }
         else
         {
-
-            if (MoneyManager.Instance.TrySpendMoney(powerUpCost))  //
-            {
-                IncreaseCount(PowerUpType.Freeze);
-
-                if (AudioManager.Instance != null)
-                    AudioManager.Instance.PlaySFX("CoinSFX");
-                //LoadPowerUpsCount();
-            }
-            else
-            {
-                Debug.Log("Freeze PowerUp and money is not enough.");
-                return;
-            }
-
+            PurchasePowerUp(PowerUpType.SlotBomb);
         }
     }
 
     public void UseSlotBomb()
     {
-
-
-
         if (TryUse(PowerUpType.SlotBomb, out var pu))
         {
             PowerUpScheduler.Instance.Schedule(pu, pu.Duration);
+            LoadPowerUpsCount();
         }
         else
         {
-            if (MoneyManager.Instance.TrySpendMoney(powerUpCost))
-            {
-                IncreaseCount(PowerUpType.SlotBomb);
-
-                if (AudioManager.Instance != null)
-                    AudioManager.Instance.PlaySFX("CoinSFX");
-                //LoadPowerUpsCount();
-            }
-            else
-            {
-                Debug.Log("SlotBomb PowerUp and money is not enough.");
-                return;
-            }
+            PurchasePowerUp(PowerUpType.SlotBomb);
         }
     }
+    private bool PurchasePowerUp(PowerUpType type)
+    {
+        if (MoneyManager.Instance.TrySpendMoney(powerUpCost))
+        {
+            IncreaseCount(type);
+            AudioManager.Instance?.PlaySFX("CoinSFX");
+            LoadPowerUpsCount();
+            return true;
+        }
+        Debug.Log($"{type} purchase failed: not enough money.");
+        return false;
+    }
+    public void BuyFreeze()
+    {
+        PurchasePowerUp(PowerUpType.Freeze);
+    }
+    public void BuySlotBomb()
+    {
+        PurchasePowerUp(PowerUpType.SlotBomb);
+    }
 
-
-    public void LoadPowerUpsCount() //method calls when game starts and clicks on the button
+    public void LoadPowerUpsCount()
     {
         int freezeCount = GetCount(PowerUpType.Freeze);
         int slotBombCount = GetCount(PowerUpType.SlotBomb);
 
-        if (freezeCount <= 0)
-        {
-            freezeBuyImage.SetActive(true);
-            freezeButton.sprite = emptyPowerUpIcon;
-        }
-        else
-        {
-            freezeBuyImage.SetActive(false);
-            freezeButton.sprite = nonEmptyPowerUpIcon;
-        }
+        freezeBuyImage.SetActive(freezeCount <= 0);
+        freezeButton.sprite = freezeCount > 0 ? nonEmptyPowerUpIcon : emptyPowerUpIcon;
 
-        if (slotBombCount <= 0)
-        {
-            slotBombBuyImage.SetActive(true);
-            slotBombButton.sprite = emptyPowerUpIcon;
-        }
-        else
-        {
-            slotBombBuyImage.SetActive(false);
-            slotBombButton.sprite = nonEmptyPowerUpIcon;
-        }
+        slotBombBuyImage.SetActive(slotBombCount <= 0);
+        slotBombButton.sprite = slotBombCount > 0 ? nonEmptyPowerUpIcon : emptyPowerUpIcon;
 
         freezeCountText.text = freezeCount.ToString();
-
         slotBombCountText.text = slotBombCount.ToString();
     }
 
+    private void LoadCountsFromPrefs()
+    {
+        foreach (PowerUpType type in System.Enum.GetValues(typeof(PowerUpType)))
+        {
+            int count = PlayerPrefs.GetInt(PrefKeyPrefix + type.ToString(), DefaultCount);
+            powerUpCounts[type] = count;
+        }
+    }
 
     public void DecreaseCount(PowerUpType type)
     {
         if (powerUpCounts.TryGetValue(type, out var c) && c > 0)
+        {
             powerUpCounts[type] = c - 1;
+            SaveCountToPrefs(type);
+        }
     }
+
     public void IncreaseCount(PowerUpType type)
     {
         if (powerUpCounts.TryGetValue(type, out var c))
+        {
             powerUpCounts[type] = c + 1;
+        }
         else
-            powerUpCounts[type] = 1; // eğer yoksa, 1 olarak ekle
+        {
+            powerUpCounts[type] = DefaultCount + 1;
+        }
+        SaveCountToPrefs(type);
     }
-    // UI binding i�in:
+
+    private void SaveCountToPrefs(PowerUpType type)
+    {
+        PlayerPrefs.SetInt(PrefKeyPrefix + type.ToString(), GetCount(type));
+        PlayerPrefs.Save();
+    }
+
+    // UI binding
     public int GetCount(PowerUpType type)
         => powerUpCounts.TryGetValue(type, out var c) ? c : 0;
 }
