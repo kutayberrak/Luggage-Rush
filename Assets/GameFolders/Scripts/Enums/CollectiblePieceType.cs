@@ -3,11 +3,11 @@
     public enum CollectiblePieceType
     {
         None,
-        CollectiblePieceType1,
-        CollectiblePieceType2,
-        CollectiblePieceType3,
-        CollectiblePieceType4,
-        CollectiblePieceType5,
+        Coll_1_1_Pepper,
+        Coll_1_2_ElCastillo,
+        Coll_1_3_Cactus,
+        Coll_1_4_Marakas,
+        Coll_1_5_Sombrero,
         CollectiblePieceType6,
         CollectiblePieceType7,
         CollectiblePieceType8,

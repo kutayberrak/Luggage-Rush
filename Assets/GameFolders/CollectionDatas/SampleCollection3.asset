@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SampleCollection3
   m_EditorClassIdentifier: 
   collectionType: 3
-  collectionImage: {fileID: 21300000, guid: a9eb9ac6ec58d6644b1f44d9d3e3a5d0, type: 3}
-  collectionName: Deneme3
+  collectionImage: {fileID: 21300000, guid: 86debd955987bb94cb78db2da1e73387, type: 3}
+  collectionName: Cactus
   description: 
   isUnlocked: 0

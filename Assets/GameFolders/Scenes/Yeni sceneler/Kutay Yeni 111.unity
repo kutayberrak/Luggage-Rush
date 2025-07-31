@@ -5793,6 +5793,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3ee8fd60043dbb745b9092d0a4decb72, type: 2}
   - {fileID: 11400000, guid: 53b31dbd6c785b04ba7e947fb556e5ed, type: 2}
   - {fileID: 11400000, guid: 4f4bb7dc1b039c447ab287e594fa3b3e, type: 2}
+  - {fileID: 11400000, guid: 99e45ce80c2ce1b4bb1c7c9ef90af22f, type: 2}
+  - {fileID: 11400000, guid: cccc6a9f5df5aa6468dbd62744d9893b, type: 2}
   collectionPanel: {fileID: 1235411361}
 --- !u!4 &958617323
 Transform:
@@ -7683,6 +7685,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelData:
+  - {fileID: 11400000, guid: ca6b6990fefca564b80ab0ab5148dd35, type: 2}
   - {fileID: 11400000, guid: 58c44add72ad443459d7909e05c085c7, type: 2}
   - {fileID: 11400000, guid: 4d0e06accd8aa914aaccdf34e57aa45a, type: 2}
   - {fileID: 11400000, guid: bbb39cd9315837143969760e8f10e14e, type: 2}

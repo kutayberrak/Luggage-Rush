@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SampleCollection2
   m_EditorClassIdentifier: 
   collectionType: 2
-  collectionImage: {fileID: 21300000, guid: a9eb9ac6ec58d6644b1f44d9d3e3a5d0, type: 3}
-  collectionName: Deneme2
+  collectionImage: {fileID: 21300000, guid: 112b2ffcb5607604fa35a40db5b47f34, type: 3}
+  collectionName: El Castillo
   description: 
   isUnlocked: 1
