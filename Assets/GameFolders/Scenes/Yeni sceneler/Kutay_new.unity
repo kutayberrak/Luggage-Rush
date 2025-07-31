@@ -9091,8 +9091,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gamePanel: {fileID: 1445721583}
   mainPanel: {fileID: 482379379}
-  winPanel: {fileID: 0}
-  failPanel: {fileID: 0}
+  winPanel: {fileID: 396653097}
+  failPanel: {fileID: 2059065615}
 --- !u!1 &1654700952
 GameObject:
   m_ObjectHideFlags: 0
