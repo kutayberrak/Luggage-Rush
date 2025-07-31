@@ -7,7 +7,7 @@ public class FreezePowerUp : IPowerUp
 
     private readonly ConveyorBeltController conveyor;
     private float originalSpeed;
-    private float freezeSpeed = 1.5f;
+    private float freezeSpeed = 0.5f;
 
     public FreezePowerUp(float duration, ConveyorBeltController conveyor)
     {
