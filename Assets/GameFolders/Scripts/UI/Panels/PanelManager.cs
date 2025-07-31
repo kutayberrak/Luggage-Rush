@@ -1,4 +1,3 @@
-using System;
 using GameFolders.Scripts.Interfaces;
 using UnityEngine;
 
@@ -9,47 +8,95 @@ namespace GameFolders.Scripts.UI.Panels
         [Header("Panels")] 
         [SerializeField] private GameObject gamePanel;
         [SerializeField] private GameObject mainPanel;
+        [SerializeField] private GameObject winPanel;
+        [SerializeField] private GameObject failPanel;
 
-        private IAnimatedUI _gamePanel;
         private IAnimatedUI _mainPanel;
+        private IAnimatedUI _gamePanel;
 
         private void Awake()
         {
-            _gamePanel = gamePanel.GetComponent<IAnimatedUI>();
             _mainPanel = mainPanel.GetComponent<IAnimatedUI>();
+            _gamePanel = gamePanel.GetComponent<IAnimatedUI>();
         }
 
         private void OnEnable()
         {
-            GameEvents.OnGameStart += EnableGamePanel;
-            GameEvents.OnGameStart += DisableMainPanel;
+            GameEvents.OnGameStart += OnGameStart;
+            GameEvents.OnReturnToMainMenu += OnReturnToMainMenu;
+            GameEvents.OnLevelWin += OnLevelWin;
+            GameEvents.OnLevelFailed += OnLevelFailed;
         }
-
         private void OnDisable()
         {
-            GameEvents.OnGameStart -= EnableGamePanel;
-            GameEvents.OnGameStart -= DisableMainPanel;
+            GameEvents.OnGameStart -= OnGameStart;
+            GameEvents.OnReturnToMainMenu -= OnReturnToMainMenu;
+            GameEvents.OnLevelWin -= OnLevelWin;
+            GameEvents.OnLevelFailed -= OnLevelFailed;
         }
 
-        private void EnableGamePanel()
+        #region Event Handlers
+        private void OnLevelFailed()
         {
-            if (!gamePanel.activeSelf)
+            EnablePanel(failPanel);
+            _gamePanel.DeactivatePanel();
+        }
+        private void OnLevelWin()
+        {
+            EnablePanel(mainPanel);
+            _gamePanel.DeactivatePanel();
+        }
+        private void OnReturnToMainMenu()
+        {
+            DisablePanel(winPanel);
+            DisablePanel(failPanel);
+            _gamePanel.DeactivatePanel();
+            DisablePanel(gamePanel);
+            EnablePanel(mainPanel);
+            _mainPanel.ActivatePanel();
+        }
+        private void OnGameStart()
+        {
+            DisablePanel(winPanel);
+            DisablePanel(failPanel);
+            _mainPanel.DeactivatePanel();
+            DisablePanel(mainPanel);
+            EnablePanel(gamePanel);
+            _gamePanel.ActivatePanel();
+        }
+        #endregion
+        #region Helper Methods
+
+        private void EnablePanel(GameObject panel)
+        {
+            if (!panel.activeSelf)
             {
-                gamePanel.SetActive(true);
+                panel.SetActive(true);
             }
         }
-        private void DisableGamePanel()
+        private void DisablePanel(GameObject panel)
         {
-        }
-        private void EnableMainPanel()
-        {
-        }
-        private void DisableMainPanel()
-        {
-            if (mainPanel.activeSelf)
+            if (panel.activeSelf)
             {
-                mainPanel.SetActive(false);
+                panel.SetActive(false);
             }
         }
+
+        #endregion
+
+        #region Button Functions
+        public void ContinueButton()
+        {
+            GameEvents.TriggerReturnToMainMenu();
+        }
+        public void MainMenuButton()
+        {
+            GameEvents.TriggerReturnToMainMenu();
+        }
+        public void RestartLevelButton()
+        {
+            GameEvents.TriggerLevelRestarted();
+        }
+        #endregion
     }
 }

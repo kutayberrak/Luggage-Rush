@@ -1,21 +1,17 @@
 using GameFolders.Scripts.ScriptableObjects;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 namespace GameFolders.Scripts.Managers
 {
     public class GameManager : MonoBehaviour
     {
-        [SerializeField] private LevelDataSO[] levelData;
         public static GameManager Instance { get; private set; }
+
+        [SerializeField] private LevelDataSO[] levelData;
+        [SerializeField] private TextMeshProUGUI levelText;
         public LevelDataSO CurrentLevelData => _currentLevelData;
         public int CurrentLevel => _currentLevelIndex; // Assuming levels are 1-indexed for display purposes
-
-        [SerializeField] private GameObject WinPanel;
-        [SerializeField] private GameObject FailPanel;
-
-        [SerializeField] private TextMeshProUGUI levelText;
 
         private int _currentLevelIndex = 0;
         private LevelDataSO _currentLevelData;
@@ -30,33 +26,27 @@ namespace GameFolders.Scripts.Managers
                 Destroy(gameObject);
 
             LoadLevelIndex();
-
-
         }
-
         private void OnEnable()
         {
             GameEvents.OnLevelFailed += OnLevelFailed;
             GameEvents.OnLevelWin += OnLevelWin;
+            GameEvents.OnLevelRestarted += OnRestartLevel;
         }
-
         private void OnDisable()
         {
             GameEvents.OnLevelFailed -= OnLevelFailed;
             GameEvents.OnLevelWin -= OnLevelWin;
-
+            GameEvents.OnLevelRestarted -= OnRestartLevel;
         }
-
         private void Update()
         {
-            // Check for A key press to trigger OnLevelWin
             if (Input.GetKeyDown(KeyCode.A))
             {
-                // Trigger level win event for all items to return to pool
                 GameEvents.TriggerLevelWin();
             }
         }
-
+        
         public void LevelUp()
         {
             _currentLevelIndex++;
@@ -66,7 +56,6 @@ namespace GameFolders.Scripts.Managers
         private void LoadLevelIndex()
         {
             _currentLevelIndex = PlayerPrefs.GetInt(LEVEL_INDEX_KEY, 0);
-
         }
 
         private void SaveLevelIndex()
@@ -77,13 +66,8 @@ namespace GameFolders.Scripts.Managers
 
         private void LoadLevelRequirements()
         {
-            //load level data...
             _currentLevelData = levelData[_currentLevelIndex];
-
-
             SpawnManager.Instance.LoadLevelSpawnRequirements();
-
-            //... can load managers's requirements here
         }
 
         public void StartLevel()
@@ -113,21 +97,15 @@ namespace GameFolders.Scripts.Managers
         }
         private void OnLevelFailed()
         {
-            Debug.Log("Level Failed");
-
             // Play level fail sound
             if (AudioManager.Instance != null)
                 AudioManager.Instance.PlaySFX("LevelFail");
-
-            FailPanel.SetActive(true);
             ClearLevelData();
         }
 
         public void OnLevelWin()
         {
-            WinPanel.SetActive(true);
-            Debug.Log("Level Won!");
-
+            LevelUp();
 
             //burada o leveldaki collectionları toplamış oluyoruz.
             foreach (var collection in _currentLevelData.CollectablePieceType)
@@ -145,8 +123,6 @@ namespace GameFolders.Scripts.Managers
             if (MoneyManager.Instance != null)
             {
                 MoneyManager.Instance.EarnMoney(10);
-                Debug.Log("Earned 10 coins!");
-
                 // Play money earn sound
                 if (AudioManager.Instance != null)
                     AudioManager.Instance.PlaySFX("MoneyEarn");
@@ -156,33 +132,11 @@ namespace GameFolders.Scripts.Managers
                 Debug.LogError("MoneyManager.Instance is null! Make sure MoneyManager exists in the scene.");
             }
         }
-        public void NextLevel()
+        private void OnRestartLevel()
         {
-            Debug.Log("Moving to next level...");
-
-            // Move to next level
-            LevelUp();
-
-            // Start the new level
-            StartLevel();
-
-            WinPanel.SetActive(false);
-        }
-
-        public void RestartLevel()
-        {
-            Debug.Log("Restarting current level...");
-
-            // Clear current level data
             ClearLevelData();
-
-            // Close panels
-            FailPanel.SetActive(false);
-
-            // Restart the same level
             StartLevel();
         }
-
         private void ClearLevelData()
         {
             SpawnManager.Instance.StopSpawning();

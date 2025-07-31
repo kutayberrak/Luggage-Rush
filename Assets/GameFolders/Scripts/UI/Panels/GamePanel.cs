@@ -18,21 +18,7 @@ namespace GameFolders.Scripts.UI.Panels
         [SerializeField] private RectTransform upperPanel;
         [SerializeField] private RectTransform lowerPanel;
         [SerializeField] private RectTransform slots;
-
-        private void OnEnable()
-        {
-            GameEvents.OnLevelFailed += DeactivatePanel;
-            GameEvents.OnLevelWin += DeactivatePanel;
-            GameEvents.OnGameStart += ActivatePanel;
-        }
         
-        private void OnDisable()
-        {
-            GameEvents.OnLevelFailed -= DeactivatePanel;
-            GameEvents.OnLevelWin -= DeactivatePanel;
-            GameEvents.OnGameStart -= ActivatePanel;
-        }
-
         public void DeactivatePanel()
         {
             upperPanel.DOAnchorPos(new Vector2(upperPanel.anchoredPosition.x, upperPanelClosedPosition), 0.5f);
