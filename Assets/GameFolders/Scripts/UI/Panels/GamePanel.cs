@@ -1,5 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
-using DG.Tweening;
+﻿using DG.Tweening;
 using GameFolders.Scripts.Interfaces;
 using UnityEngine;
 
@@ -19,19 +18,19 @@ namespace GameFolders.Scripts.UI.Panels
         [SerializeField] private RectTransform upperPanel;
         [SerializeField] private RectTransform lowerPanel;
         [SerializeField] private RectTransform slots;
-        
+
         private void OnEnable()
         {
-            //GameEvents.OnGameStart += ActivatePanel;
             GameEvents.OnLevelFailed += DeactivatePanel;
-            //GameEvents.OnLevelWin += DeactivatePanel;
+            GameEvents.OnLevelWin += DeactivatePanel;
+            GameEvents.OnGameStart += ActivatePanel;
         }
         
         private void OnDisable()
         {
-            //GameEvents.OnGameStart -= ActivatePanel;
             GameEvents.OnLevelFailed -= DeactivatePanel;
-            //GameEvents.OnLevelWin -= DeactivatePanel;
+            GameEvents.OnLevelWin -= DeactivatePanel;
+            GameEvents.OnGameStart -= ActivatePanel;
         }
 
         public void DeactivatePanel()
