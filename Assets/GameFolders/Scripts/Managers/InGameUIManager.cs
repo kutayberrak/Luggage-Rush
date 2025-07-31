@@ -168,7 +168,7 @@ public class InGameUIManager : MonoBehaviour
         return luggageType.ToString();
     }
     
-    private Sprite GetCollectionSprite(CollectiblePieceType collectionType)
+    public Sprite GetCollectionSprite(CollectiblePieceType collectionType)
     {
         // CollectionManager'dan collection data'sını al
         if (CollectionManager.Instance != null)
