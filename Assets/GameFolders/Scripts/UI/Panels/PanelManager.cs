@@ -45,6 +45,13 @@ namespace GameFolders.Scripts.UI.Panels
         {
             EnablePanel(winPanel);
             _gamePanel.DeactivatePanel();
+            
+            // Start win panel animation
+            var winPanelAnimator = winPanel.GetComponent<WinPanelAnimator>();
+            if (winPanelAnimator != null)
+            {
+                winPanelAnimator.PlayWinAnimation();
+            }
         }
         private void OnReturnToMainMenu()
         {
