@@ -158,6 +158,8 @@ MonoBehaviour:
   curveHeight: 2
   useRotationAnimation: 1
   rotationDuration: 0.8
+  minScale: 0.7
+  targetScale: 0.5
   reservedSlotIndex: -1
 --- !u!65 &3521993440449948649
 BoxCollider:

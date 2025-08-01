@@ -44,16 +44,22 @@ public class ClickableObject : MonoBehaviour
     [Tooltip("Curve hareketi kullanılsın mı?")]
     public bool useCurveMovement = true;
     [Tooltip("Curve hareket süresi")]
-    public float curveMoveDuration = 1.2f;
+    public float curveMoveDuration = 0.8f;
     [Tooltip("Curve hareket easing tipi")]
-    public Ease curveEase = Ease.InOutSine;
+    public Ease curveEase = Ease.OutQuart;
     [Tooltip("Curve yüksekliği (0 = düz çizgi)")]
     [Range(0f, 5f)]
-    public float curveHeight = 2f;
+    public float curveHeight = 1.5f;
     [Tooltip("Curve hareket sırasında rotasyon animasyonu")]
     public bool useRotationAnimation = true;
     [Tooltip("Rotasyon animasyon süresi")]
-    public float rotationDuration = 0.8f;
+    public float rotationDuration = 0.6f;
+    [Tooltip("Scale animasyonu için minimum boyut")]
+    [Range(0.1f, 1f)]
+    public float minScale = 0.7f;
+    [Tooltip("Slota ulaştığında hedef boyut")]
+    [Range(0.1f, 2f)]
+    public float targetScale = 1f;
 
     [HideInInspector] public int reservedSlotIndex = -1;
     protected bool isMoving = false;
@@ -116,55 +122,51 @@ public class ClickableObject : MonoBehaviour
 
         isInCurveMovement = true;
         
-        // Orijinal pozisyonu kaydet
         Vector3 startPos = transform.position;
         Vector3 endPos = moveTargetPos;
 
-        // Mesafeye göre curve yüksekliğini ayarla
         float distance = Vector3.Distance(startPos, endPos);
-        float adjustedCurveHeight = Mathf.Clamp(curveHeight * (distance / 5f), 0.5f, curveHeight);
+        float adjustedCurveHeight = Mathf.Clamp(curveHeight * (distance / 3f), 0.8f, curveHeight * 1.2f);
         
-        // Curve için orta nokta hesapla
         Vector3 midPoint = Vector3.Lerp(startPos, endPos, 0.5f);
-        midPoint.y += adjustedCurveHeight; // Ayarlanmış curve yüksekliği
+        midPoint.y += adjustedCurveHeight;
         
-        // Daha yumuşak curve için 5 noktalı path oluştur
         Vector3[] path = new Vector3[] { 
             startPos, 
-            Vector3.Lerp(startPos, midPoint, 0.4f), // Başlangıç eğrisi
             midPoint, 
-            Vector3.Lerp(midPoint, endPos, 0.6f),   // Bitiş eğrisi
             endPos 
         };
         
-        // DOTween sequence oluştur
         curveMovementSequence = DOTween.Sequence();
         
-        // Pozisyon animasyonu - daha yumuşak path
         curveMovementSequence.Append(transform.DOPath(path, curveMoveDuration, PathType.CatmullRom)
             .SetEase(curveEase));
         
-        // Rotasyon animasyonu (opsiyonel)
         if (useRotationAnimation)
         {
             Vector3 startRotation = transform.eulerAngles;
             Vector3 endRotation = Vector3.zero;
             
             curveMovementSequence.Join(transform.DORotate(endRotation, rotationDuration)
-                .SetEase(curveEase));
+                .SetEase(Ease.OutBack));
         }
 
-        // Mevcut sistemle aynı ölçek animasyonu - 1x'den 5x'e kadar büyü
-        curveMovementSequence.Join(transform.DOScale(originalScale * 0.4f, curveMoveDuration)
+        // Hareket sırasında küçültme
+        curveMovementSequence.Join(transform.DOScale(originalScale * minScale, curveMoveDuration * 0.7f)
             .SetEase(Ease.OutQuad));
 
-        // Animasyon tamamlandığında
+        // Tam yaklaşırken hedef boyuta geçiş
+        curveMovementSequence.Join(transform.DOScale(originalScale * targetScale, curveMoveDuration * 0.3f)
+            .SetDelay(curveMoveDuration * 0.7f)
+            .SetEase(Ease.OutBack));
+
         curveMovementSequence.OnComplete(() => {
             isInCurveMovement = false;
             isMoving = false;
             
-            // Orijinal boyuta küçültme - mevcut sistemde yok, kaldırıyoruz
-            // transform.localScale = originalScale;
+            // Hedef boyuta tam olarak ayarla
+            transform.localScale = originalScale * targetScale;
+            
             SlotManager.Instance.OnMovableArrived(this);
         });
         
