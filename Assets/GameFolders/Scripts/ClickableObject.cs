@@ -300,41 +300,7 @@ public class ClickableObject : MonoBehaviour
         rigidBody.angularVelocity = Vector3.zero;
     }
 
-    // **YENİ**: Pool'a geri dönerken tüm state'leri sıfırla
-    public void ResetForPool()
-    {
-        // // Movement ve animation state'lerini sıfırla
-        // isMoving = false;
-        // isInClickAnimation = false;
-        // isInCurveMovement = false;
-        // isClickProcessed = false;
-        // reservedSlotIndex = -1;
 
-        // // Time tracking'i sıfırla
-        // moveStartTime = 0f;
-        // moveDelay = 0f;
-        // lastClickTime = 0f;
-
-        // // DOTween animasyonlarını durdur
-        // DOTween.Kill(transform);
-        // if (curveMovementSequence != null)
-        // {
-        //     curveMovementSequence.Kill();
-        //     curveMovementSequence = null;
-        // }
-
-        // Rigidbody'yi normal haline döndür
-        // if (rigidBody != null)
-        // {
-        //     rigidBody.constraints = RigidbodyConstraints.None;
-        //     rigidBody.linearVelocity = Vector3.zero;
-        //     rigidBody.angularVelocity = Vector3.zero;
-        // }
-
-
-    }
-
-    // PlayerController'a bu objenin pool'a döndüğünü bildir
 
     // **YENİ**: Obje yok edildiğinde temizlik
     private void OnDestroy()

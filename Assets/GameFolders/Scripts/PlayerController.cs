@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using GameFolders.Scripts;
 
 public class PlayerController : MonoBehaviour
 {
@@ -26,6 +27,14 @@ public class PlayerController : MonoBehaviour
         mpb = new MaterialPropertyBlock();
     }
 
+    private void OnEnable()
+    {
+        GameEvents.OnGameStart += ClearDicts;
+    }
+    private void OnDisable()
+    {
+        GameEvents.OnGameStart -= ClearDicts;
+    }
     private void Start()
     {
         gravityY = Mathf.Abs(Physics.gravity.y);
@@ -109,12 +118,6 @@ public class PlayerController : MonoBehaviour
         // Start with lifting phase
         isLifting[obj] = true;
 
-        // Freeze Y position but keep X and Z free for conveyor movement
-        Rigidbody rb = obj.GetComponent<Rigidbody>();
-        if (rb != null)
-        {
-            //   rb.constraints = RigidbodyConstraints.FreezePositionY;
-        }
     }
 
     private void SetOutline(ClickableObject obj, float value)
@@ -128,14 +131,6 @@ public class PlayerController : MonoBehaviour
     private void ClearOutline(ClickableObject obj)
     {
         SetOutline(obj, 0f);
-
-        // Restore all physics movement when releasing object
-        Rigidbody rb = obj.GetComponent<Rigidbody>();
-        if (rb != null)
-        {
-            rb.constraints = RigidbodyConstraints.None;
-        }
-
         // Clear target height when releasing object
         if (targetHeights.ContainsKey(obj))
         {
@@ -159,22 +154,19 @@ public class PlayerController : MonoBehaviour
         Rigidbody rb = obj.GetComponent<Rigidbody>();
         if (rb == null) return;
 
-        // Check if object is falling or moving vertically (more strict threshold)
         bool isObjectMoving = Mathf.Abs(rb.linearVelocity.y) > 0.05f;
 
-        // If object already has an original height recorded and is still moving, don't update it
         if (originalHeights.ContainsKey(obj) && isObjectMoving)
         {
-            // Keep the existing original height, don't change it
-            Debug.Log($"Object {obj.name} is moving (velocity: {rb.linearVelocity.y:F3}), keeping original height: {originalHeights[obj]:F2}");
+
             return;
         }
 
-        // If object is stationary (y velocity near zero) or this is the first time, record/update original height
+
         if (!isObjectMoving || !originalHeights.ContainsKey(obj))
         {
             float newOriginalHeight = obj.transform.position.y;
-            Debug.Log($"Recording original height for {obj.name}: {newOriginalHeight:F2} (velocity: {rb.linearVelocity.y:F3})");
+
             originalHeights[obj] = newOriginalHeight;
         }
     }
@@ -243,5 +235,12 @@ public class PlayerController : MonoBehaviour
             //  rb.AddForce(Vector3.up * gravityForce, ForceMode.Force);
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, gravityForce, rb.linearVelocity.z);
         }
+    }
+
+    private void ClearDicts()
+    {
+        originalHeights.Clear();
+        targetHeights.Clear();
+        isLifting.Clear();
     }
 }
