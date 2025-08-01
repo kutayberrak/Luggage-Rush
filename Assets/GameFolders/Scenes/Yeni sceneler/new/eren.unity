@@ -2233,11 +2233,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!4 &318438663 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5706110946219203291, guid: 65f7eab8c7bb9944fa024a055b228440, type: 3}
-  m_PrefabInstance: {fileID: 1972045811}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &331506511
 GameObject:
   m_ObjectHideFlags: 0
@@ -10139,7 +10134,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa7381ea824b2e944a2003d459a7712d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collectionBoxTransform: {fileID: 318438663}
 --- !u!4 &1365749670
 Transform:
   m_ObjectHideFlags: 0
@@ -15101,7 +15095,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 0cfd853bb797616468a651a7dfa80d76, type: 3}
   - {fileID: 8300000, guid: 5f4633121113da84bbeedf6ef4fca94a, type: 3}
   masterVolume: 1
-  musicVolume: 0.029
+  musicVolume: 0
   sfxVolume: 1
 --- !u!4 &2112976333
 Transform:
@@ -15196,7 +15190,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   mainCam: {fileID: 713802193}
-  liftOffset: 0.5
+  liftOffset: 0.2
+  liftForce: 2
+  hoverForce: 1
 --- !u!4 &2124378176
 Transform:
   m_ObjectHideFlags: 0

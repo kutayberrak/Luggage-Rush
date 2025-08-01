@@ -7,11 +7,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Camera mainCam;
     private float maxDistance = 100f;
     [SerializeField] private float liftOffset = 0.5f;    // Height to lift on hold
+    [SerializeField] private float liftForce = 15f;     // Force to lift object up
+    [SerializeField] private float hoverForce = 5f;     // Force to maintain hover
     private float holdThreshold = 0.1f;  // Time to distinguish hold vs click
 
     private ClickableObject currentClickable;
     private MaterialPropertyBlock mpb;
     private Dictionary<ClickableObject, float> originalHeights = new Dictionary<ClickableObject, float>();
+    private Dictionary<ClickableObject, float> targetHeights = new Dictionary<ClickableObject, float>();
+    private Dictionary<ClickableObject, bool> isLifting = new Dictionary<ClickableObject, bool>();
     private float hoverStartTime;
     private bool isHolding;
 
@@ -39,6 +43,12 @@ public class PlayerController : MonoBehaviour
                 currentClickable = null;
                 isHolding = false;
             }
+        }
+
+        // Apply lift or hover force to held object
+        if (isHolding && currentClickable != null)
+        {
+            ApplyLiftOrHover(currentClickable);
         }
     }
 
@@ -69,7 +79,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                LiftObject(currentClickable);
+                // Object is being held - ApplyHover will handle the physics
             }
         }
         else if (isDown || isHolding)
@@ -88,7 +98,10 @@ public class PlayerController : MonoBehaviour
         if (obj == null) return;
         isHolding = true;
         RecordOriginalHeight(obj);
-        LiftObject(obj);
+        SetTargetHeight(obj);
+
+        // Start with lifting phase
+        isLifting[obj] = true;
     }
 
     private void SetOutline(ClickableObject obj, float value)
@@ -102,30 +115,115 @@ public class PlayerController : MonoBehaviour
     private void ClearOutline(ClickableObject obj)
     {
         SetOutline(obj, 0f);
-        ResetObjectPosition(obj);
+
+        // Clear target height when releasing object
+        if (targetHeights.ContainsKey(obj))
+        {
+            targetHeights.Remove(obj);
+        }
+
+        // Clear lifting state
+        if (isLifting.ContainsKey(obj))
+        {
+            isLifting.Remove(obj);
+        }
+
+        // DON'T clear original height here - let it persist until object settles
+        // Original height will only be updated when object is stationary in RecordOriginalHeight
     }
 
     private void RecordOriginalHeight(ClickableObject obj)
     {
-        if (obj != null && !originalHeights.ContainsKey(obj))
-            originalHeights[obj] = obj.transform.position.y;
+        if (obj == null) return;
+
+        Rigidbody rb = obj.GetComponent<Rigidbody>();
+        if (rb == null) return;
+
+        // Check if object is falling or moving vertically (more strict threshold)
+        bool isObjectMoving = Mathf.Abs(rb.linearVelocity.y) > 0.05f;
+
+        // If object already has an original height recorded and is still moving, don't update it
+        if (originalHeights.ContainsKey(obj) && isObjectMoving)
+        {
+            // Keep the existing original height, don't change it
+            Debug.Log($"Object {obj.name} is moving (velocity: {rb.linearVelocity.y:F3}), keeping original height: {originalHeights[obj]:F2}");
+            return;
+        }
+
+        // If object is stationary (y velocity near zero) or this is the first time, record/update original height
+        if (!isObjectMoving || !originalHeights.ContainsKey(obj))
+        {
+            float newOriginalHeight = obj.transform.position.y;
+            Debug.Log($"Recording original height for {obj.name}: {newOriginalHeight:F2} (velocity: {rb.linearVelocity.y:F3})");
+            originalHeights[obj] = newOriginalHeight;
+        }
     }
 
-    private void LiftObject(ClickableObject obj)
+    private void SetTargetHeight(ClickableObject obj)
+    {
+        if (obj != null && originalHeights.ContainsKey(obj))
+        {
+            float baseY = originalHeights[obj];
+            targetHeights[obj] = baseY + liftOffset;
+        }
+    }
+
+    private void ApplyLiftOrHover(ClickableObject obj)
     {
         if (obj == null) return;
-        Vector3 pos = obj.transform.position;
-        float baseY = originalHeights[obj];
-        obj.transform.position = new Vector3(pos.x, baseY + liftOffset, pos.z);
+
+        // Check if object is in lifting phase or hover phase
+        if (isLifting.ContainsKey(obj) && isLifting[obj])
+        {
+            ApplyLift(obj);
+        }
+        else
+        {
+            ApplyHover(obj);
+        }
     }
 
-    private void ResetObjectPosition(ClickableObject obj)
+    private void ApplyLift(ClickableObject obj)
     {
-        if (obj != null && originalHeights.TryGetValue(obj, out float baseY))
+        if (obj == null) return;
+
+        Rigidbody rb = obj.GetComponent<Rigidbody>();
+        if (rb == null) return;
+
+        if (!targetHeights.ContainsKey(obj)) return;
+
+        float targetY = targetHeights[obj];
+        float currentY = obj.transform.position.y;
+        float heightDifference = targetY - currentY;
+
+        // Apply strong upward force to lift the object
+        if (heightDifference > 0.05f)
         {
-            Vector3 pos = obj.transform.position;
-            obj.transform.position = new Vector3(pos.x, baseY, pos.z);
-            originalHeights.Remove(obj);
+            float gravityForce = rb.mass * Mathf.Abs(Physics.gravity.y);
+            float totalLiftForce = gravityForce + (liftForce * rb.mass);
+
+            rb.AddForce(Vector3.up * totalLiftForce, ForceMode.Force);
+        }
+        else
+        {
+            // Object reached target height, switch to hover mode
+            isLifting[obj] = false;
+        }
+    }
+
+    private void ApplyHover(ClickableObject obj)
+    {
+        if (obj == null) return;
+
+        Rigidbody rb = obj.GetComponent<Rigidbody>();
+        if (rb == null) return;
+
+        // Apply hover force like your example - simple and direct
+        if ((Mathf.Abs(rb.linearVelocity.y) < 0.1f) || rb.linearVelocity.y < 0)
+        {
+
+            float gravityForce = rb.mass * Mathf.Abs(Physics.gravity.y);
+            rb.AddForce(Vector3.up * gravityForce, ForceMode.Force);
         }
     }
 }
