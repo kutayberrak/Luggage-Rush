@@ -10,9 +10,6 @@ public class CollectionInventory : MonoBehaviour
 {
     public static CollectionInventory Instance { get; private set; }
 
-
-    [SerializeField] private Transform collectionBoxTransform;
-
     // Ana veri: LevelDataSO -> O levelde toplanan collectible tipleri
     private Dictionary<LevelDataSO, HashSet<CollectiblePieceType>> collectedByLevel
         = new Dictionary<LevelDataSO, HashSet<CollectiblePieceType>>();
@@ -47,7 +44,7 @@ public class CollectionInventory : MonoBehaviour
 
 
         CollectionItem collectionItem = collection.GetComponent<CollectionItem>();
-        collectionItem.StartCurve(collectionBoxTransform.position);
+        collectionItem.StartCurve();
         return true;
     }
     

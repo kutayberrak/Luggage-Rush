@@ -5,6 +5,7 @@ using System.Threading;
 using GameFolders.Scripts.Enums;
 using DG.Tweening;
 using GameFolders.Scripts;
+using static UnityEngine.GraphicsBuffer;
 
 public class CollectionItem : ClickableObject
 {
@@ -44,10 +45,15 @@ public class CollectionItem : ClickableObject
 
         Debug.Log($"[ClickableObject] Started click animation for {UniqueID}");
     }
-    public void StartCurve(Vector3 endPos)
+    public void StartCurve()
     {
-        this.endPos  = endPos;
-        StartCurveMovement();
+        var type = this.collectionType;
+        var rt = InGameUIManager.Instance.GetCollectionObjectiveTransform(type);
+        if (rt != null)
+        {
+            endPos = rt.position;
+        }
+            StartCurveMovement();
     }
 
     protected override void StartCurveMovement()

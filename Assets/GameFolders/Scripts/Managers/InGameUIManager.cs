@@ -291,7 +291,13 @@ public class InGameUIManager : MonoBehaviour
             OnAllObjectivesCompleted();
         }
     }
-    
+    public Transform GetCollectionObjectiveTransform(CollectiblePieceType type)
+    {
+        if (collectionObjectiveItems.TryGetValue(type, out var uiItem))
+            return uiItem.IconRectTransform;
+        return null;
+    }
+
     // **YENİ**: Bütün hedefler tamamlandığında çağrılır
     private void OnAllObjectivesCompleted()
     {  

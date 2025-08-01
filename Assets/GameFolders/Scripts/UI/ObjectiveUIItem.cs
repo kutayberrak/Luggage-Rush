@@ -22,7 +22,9 @@ public class ObjectiveUIItem : MonoBehaviour
     // **YENİ**: Animasyon için
     private Vector3 originalIconScale;
     private Sequence pulseSequence;
-    
+
+    public RectTransform IconRectTransform => luggageIcon?.rectTransform;
+
     public void Initialize(LuggageType type, int target, Sprite icon, string name)
     {
         luggageType = type;
