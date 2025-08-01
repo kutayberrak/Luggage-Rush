@@ -8458,13 +8458,19 @@ MonoBehaviour:
   - {fileID: 197118219}
   - {fileID: 537243986}
   directMoveDuration: 0.4
-  visualShiftDuration: 0.2
-  matchClearanceDuration: 0.25
+  visualShiftDuration: 0.5
+  matchClearanceDuration: 0.35
   postMatchDelay: 0.1
   moveEase: 4
   shiftEase: 7
   matchEase: 5
   directMoveSpeed: 100
+  individualParticlePrefab: {fileID: 4745346331004483855, guid: 917ed20532cf951429419c39c0c7e81d, type: 3}
+  matchParticlePrefab: {fileID: 750130007581751903, guid: 686bfa36cb825a245b380e5f745ac2d8, type: 3}
+  individualParticleDuration: 1
+  matchParticleDuration: 2
+  individualParticleOffset: {x: 0, y: 0.3, z: 0}
+  matchParticleOffset: {x: 0.08, y: 0.5, z: 0}
   rapidClickThreshold: 0.25
   baseMoveDelay: 0.1
   maxMoveDelay: 0.5

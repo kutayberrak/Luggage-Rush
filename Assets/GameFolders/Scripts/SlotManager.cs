@@ -667,18 +667,25 @@ public class SlotManager : MonoBehaviour
             }
         }
 
-        // Tween sürelerini ve easing tipini inspector'dan al
+        // **YENİ**: Objeler merkeze çekilirken boyutları değişmez
         foreach (var obj in toDestroy)
         {
             obj.transform
                .DOMove(center, matchClearanceDuration)
                .SetEase(shiftEase);
+        }
+
+        yield return new WaitForSeconds(matchClearanceDuration);
+
+        // **YENİ**: Birleştikleri anda boyutları küçülür
+        foreach (var obj in toDestroy)
+        {
             obj.transform
-               .DOScale(Vector3.zero, matchClearanceDuration)
+               .DOScale(Vector3.zero, postMatchDelay)
                .SetEase(matchEase);
         }
 
-        yield return new WaitForSeconds(matchClearanceDuration + postMatchDelay);
+        // **YENİ**: Birleşme sonrası merkezde match particle efekti oynat
 
         // **YENİ**: Birleşme sonrası merkezde match particle efekti oynat
         if (matchParticlePrefab != null)
