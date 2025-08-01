@@ -592,6 +592,8 @@ public class SlotManager : MonoBehaviour
 
         for (int i = 0; i < buffer.Count; i++)
             slots[i].AssignOccupant(buffer[i].obj, buffer[i].id);
+
+        CheckSlotsAndHandleFail();
     }
 
     private IEnumerator CheckForMatchesCoroutine3D()
