@@ -83,7 +83,6 @@ public class PowerUpInventory : MonoBehaviour
             PowerUpScheduler.Instance.Schedule(pu, pu.Duration);
             LoadPowerUpsCount();
 
-            AudioManager.Instance?.PlaySFX("FreezeSFX");
         }
         else
         {
@@ -98,7 +97,6 @@ public class PowerUpInventory : MonoBehaviour
             PowerUpScheduler.Instance.Schedule(pu, pu.Duration);
             LoadPowerUpsCount();
 
-            AudioManager.Instance?.PlaySFX("BombSFX");
         }
         else
         {

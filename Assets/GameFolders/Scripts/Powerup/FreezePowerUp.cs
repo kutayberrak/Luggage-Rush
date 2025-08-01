@@ -21,6 +21,8 @@ public class FreezePowerUp : IPowerUp
         conveyor.conveyorSpeed = freezeSpeed;
 
         PowerUpInventory.Instance.DecreaseCount(PowerUpType.Freeze);
+
+        AudioManager.Instance?.PlaySFX("FreezeSFX");
     }
 
     public void Deactivate()
