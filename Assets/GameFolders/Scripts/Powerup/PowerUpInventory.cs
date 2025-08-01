@@ -82,6 +82,7 @@ public class PowerUpInventory : MonoBehaviour
         {
             PowerUpScheduler.Instance.Schedule(pu, pu.Duration);
             LoadPowerUpsCount();
+
         }
         else
         {
@@ -95,6 +96,7 @@ public class PowerUpInventory : MonoBehaviour
         {
             PowerUpScheduler.Instance.Schedule(pu, pu.Duration);
             LoadPowerUpsCount();
+
         }
         else
         {

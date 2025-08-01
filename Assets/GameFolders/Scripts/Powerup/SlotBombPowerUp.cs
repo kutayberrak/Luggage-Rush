@@ -34,7 +34,7 @@ public class SlotBombPowerUp : IPowerUp
 
         if (slot == null)
         {
-            Debug.Log("SlotBomb: Hiç JunkPiece bulunamadý, power-up iptal edildi.");
+            Debug.Log("SlotBomb: Hiï¿½ JunkPiece bulunamadï¿½, power-up iptal edildi.");
             return;
         }
 
@@ -46,6 +46,8 @@ public class SlotBombPowerUp : IPowerUp
         ObjectPoolManager.Instance.ReturnObjectToPool(go);
 
         PowerUpInventory.Instance.DecreaseCount(PowerUpType.SlotBomb);
+
+        AudioManager.Instance?.PlaySFX("BombSFX");
     }
 
     public void Deactivate() { }
