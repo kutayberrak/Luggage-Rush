@@ -1364,6 +1364,7 @@ GameObject:
   m_Component:
   - component: {fileID: 161601584}
   - component: {fileID: 161601583}
+  - component: {fileID: 161601585}
   m_Layer: 0
   m_Name: FailPanel
   m_TagString: Untagged
@@ -1405,6 +1406,27 @@ RectTransform:
   m_AnchoredPosition: {x: 0.000061035156, y: 0.00024414062}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &161601585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 161601582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce82033a5d0c81b4d8f7df5b2efd3134, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  failText: {fileID: 1310125569}
+  closeButton: {fileID: 1694298196}
+  failImage: {fileID: 2064750988}
+  playon100Button: {fileID: 1121172743}
+  playon60secButton: {fileID: 1479529668}
+  animationDuration: 0.8
+  staggerDelay: 0.25
+  animationEase: 12
+  bounceEase: 30
 --- !u!1 &201536862
 GameObject:
   m_ObjectHideFlags: 0
