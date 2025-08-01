@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
     private float maxDistance = 100f;
     [SerializeField] private float liftOffset = 0.5f;    // Height to lift on hold
     [SerializeField] private float liftForce = 15f;     // Force to lift object up
-    [SerializeField] private float hoverForce = 5f;     // Force to maintain hover
+    [SerializeField] private float hoverForce = 1f;     // Force to maintain hover
     private float holdThreshold = 0.1f;  // Time to distinguish hold vs click
 
     private ClickableObject currentClickable;
@@ -19,11 +19,17 @@ public class PlayerController : MonoBehaviour
     private float hoverStartTime;
     private bool isHolding;
 
+    private float gravityY;
+
     private void Awake()
     {
         mpb = new MaterialPropertyBlock();
     }
 
+    private void Start()
+    {
+        gravityY = Mathf.Abs(Physics.gravity.y);
+    }
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -222,7 +228,7 @@ public class PlayerController : MonoBehaviour
         if ((Mathf.Abs(rb.linearVelocity.y) < 0.1f) || rb.linearVelocity.y < 0)
         {
 
-            float gravityForce = rb.mass * Mathf.Abs(Physics.gravity.y);
+            float gravityForce = (rb.mass * gravityY) / hoverForce;
             rb.AddForce(Vector3.up * gravityForce, ForceMode.Force);
         }
     }
