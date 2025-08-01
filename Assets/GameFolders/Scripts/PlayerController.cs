@@ -108,6 +108,13 @@ public class PlayerController : MonoBehaviour
 
         // Start with lifting phase
         isLifting[obj] = true;
+
+        // Freeze Y position but keep X and Z free for conveyor movement
+        Rigidbody rb = obj.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.constraints = RigidbodyConstraints.FreezePositionY;
+        }
     }
 
     private void SetOutline(ClickableObject obj, float value)
@@ -121,6 +128,13 @@ public class PlayerController : MonoBehaviour
     private void ClearOutline(ClickableObject obj)
     {
         SetOutline(obj, 0f);
+
+        // Restore all physics movement when releasing object
+        Rigidbody rb = obj.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.constraints = RigidbodyConstraints.None;
+        }
 
         // Clear target height when releasing object
         if (targetHeights.ContainsKey(obj))
@@ -193,22 +207,19 @@ public class PlayerController : MonoBehaviour
     {
         if (obj == null) return;
 
-        Rigidbody rb = obj.GetComponent<Rigidbody>();
-        if (rb == null) return;
-
         if (!targetHeights.ContainsKey(obj)) return;
 
         float targetY = targetHeights[obj];
         float currentY = obj.transform.position.y;
         float heightDifference = targetY - currentY;
 
-        // Apply constant velocity upward movement
+        // Move with constant speed using Transform (since object is kinematic)
         if (heightDifference > 0.05f)
         {
-            // Set constant upward velocity instead of force
             float constantLiftSpeed = 2f; // Constant speed in units per second
-            Vector3 currentVelocity = rb.linearVelocity;
-            rb.linearVelocity = new Vector3(currentVelocity.x, constantLiftSpeed, currentVelocity.z);
+            Vector3 currentPos = obj.transform.position;
+            Vector3 newPos = new Vector3(currentPos.x, currentPos.y + (constantLiftSpeed * Time.deltaTime), currentPos.z);
+            obj.transform.position = newPos;
         }
         else
         {
