@@ -4550,7 +4550,7 @@ MonoBehaviour:
   - {fileID: 2119297635}
   - {fileID: 103882779}
   - {fileID: 754215295}
-  spawnInterval: 0.2
+  spawnInterval: 0.02
   autoSpawn: 1
   spawnWeights:
   - objectType: 0
@@ -15190,9 +15190,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   mainCam: {fileID: 713802193}
-  liftOffset: 0.2
-  liftForce: 2
-  hoverForce: 3
+  liftOffset: 0.5
+  liftForce: 10
+  hoverForce: 2
 --- !u!4 &2124378176
 Transform:
   m_ObjectHideFlags: 0

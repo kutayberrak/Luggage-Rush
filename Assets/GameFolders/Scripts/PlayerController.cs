@@ -202,13 +202,13 @@ public class PlayerController : MonoBehaviour
         float currentY = obj.transform.position.y;
         float heightDifference = targetY - currentY;
 
-        // Apply strong upward force to lift the object
+        // Apply constant velocity upward movement
         if (heightDifference > 0.05f)
         {
-            float gravityForce = rb.mass * Mathf.Abs(Physics.gravity.y);
-            float totalLiftForce = gravityForce + (liftForce * rb.mass);
-
-            rb.AddForce(Vector3.up * totalLiftForce, ForceMode.Force);
+            // Set constant upward velocity instead of force
+            float constantLiftSpeed = 2f; // Constant speed in units per second
+            Vector3 currentVelocity = rb.linearVelocity;
+            rb.linearVelocity = new Vector3(currentVelocity.x, constantLiftSpeed, currentVelocity.z);
         }
         else
         {
