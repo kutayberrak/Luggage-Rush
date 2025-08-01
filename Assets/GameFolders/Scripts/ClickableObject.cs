@@ -121,32 +121,32 @@ public class ClickableObject : MonoBehaviour
         if (isInCurveMovement) return;
 
         isInCurveMovement = true;
-        
+
         Vector3 startPos = transform.position;
         Vector3 endPos = moveTargetPos;
 
         float distance = Vector3.Distance(startPos, endPos);
         float adjustedCurveHeight = Mathf.Clamp(curveHeight * (distance / 3f), 0.8f, curveHeight * 1.2f);
-        
+
         Vector3 midPoint = Vector3.Lerp(startPos, endPos, 0.5f);
         midPoint.y += adjustedCurveHeight;
-        
-        Vector3[] path = new Vector3[] { 
-            startPos, 
-            midPoint, 
-            endPos 
+
+        Vector3[] path = new Vector3[] {
+            startPos,
+            midPoint,
+            endPos
         };
-        
+
         curveMovementSequence = DOTween.Sequence();
-        
+
         curveMovementSequence.Append(transform.DOPath(path, curveMoveDuration, PathType.CatmullRom)
             .SetEase(curveEase));
-        
+
         if (useRotationAnimation)
         {
             Vector3 startRotation = transform.eulerAngles;
             Vector3 endRotation = Vector3.zero;
-            
+
             curveMovementSequence.Join(transform.DORotate(endRotation, rotationDuration)
                 .SetEase(Ease.OutBack));
         }
@@ -160,16 +160,17 @@ public class ClickableObject : MonoBehaviour
             .SetDelay(curveMoveDuration * 0.7f)
             .SetEase(Ease.OutBack));
 
-        curveMovementSequence.OnComplete(() => {
+        curveMovementSequence.OnComplete(() =>
+        {
             isInCurveMovement = false;
             isMoving = false;
-            
+
             // Hedef boyuta tam olarak ayarla
             transform.localScale = originalScale * targetScale;
-            
+
             SlotManager.Instance.OnMovableArrived(this);
         });
-        
+
         Debug.Log($"[ClickableObject] Started curve movement for {UniqueID} to slot {reservedSlotIndex} with height {adjustedCurveHeight:F2}");
     }
 
@@ -179,26 +180,27 @@ public class ClickableObject : MonoBehaviour
         if (isInClickAnimation) return;
 
         isInClickAnimation = true;
-        
+
         // Orijinal pozisyon ve rotasyonu kaydet
         originalPosition = transform.position;
         originalRotation = transform.eulerAngles;
 
         // Yükselme animasyonu
         Vector3 risePosition = originalPosition + Vector3.up * riseHeight;
-        
+
         // Pozisyon ve rotasyon animasyonunu aynı anda başlat
         Sequence clickSequence = DOTween.Sequence();
         SlotManager.Instance.TryPlaceObject3D(gameObject, UniqueID);
 
         clickSequence.Append(transform.DOMove(risePosition, riseDuration).SetEase(riseEase));
         clickSequence.Join(transform.DORotate(Vector3.zero, riseDuration).SetEase(riseEase));
-        
+
         // Animasyon tamamlandığında slot hareketini başlat
-        clickSequence.OnComplete(() => {
+        clickSequence.OnComplete(() =>
+        {
             isInClickAnimation = false;
             // SlotManager'dan hareketi başlat
-            
+
         });
 
         Debug.Log($"[ClickableObject] Started click animation for {UniqueID}");
@@ -298,18 +300,54 @@ public class ClickableObject : MonoBehaviour
         rigidBody.angularVelocity = Vector3.zero;
     }
 
+    // **YENİ**: Pool'a geri dönerken tüm state'leri sıfırla
+    public void ResetForPool()
+    {
+        // // Movement ve animation state'lerini sıfırla
+        // isMoving = false;
+        // isInClickAnimation = false;
+        // isInCurveMovement = false;
+        // isClickProcessed = false;
+        // reservedSlotIndex = -1;
+
+        // // Time tracking'i sıfırla
+        // moveStartTime = 0f;
+        // moveDelay = 0f;
+        // lastClickTime = 0f;
+
+        // // DOTween animasyonlarını durdur
+        // DOTween.Kill(transform);
+        // if (curveMovementSequence != null)
+        // {
+        //     curveMovementSequence.Kill();
+        //     curveMovementSequence = null;
+        // }
+
+        // Rigidbody'yi normal haline döndür
+        // if (rigidBody != null)
+        // {
+        //     rigidBody.constraints = RigidbodyConstraints.None;
+        //     rigidBody.linearVelocity = Vector3.zero;
+        //     rigidBody.angularVelocity = Vector3.zero;
+        // }
+
+
+    }
+
+    // PlayerController'a bu objenin pool'a döndüğünü bildir
+
     // **YENİ**: Obje yok edildiğinde temizlik
     private void OnDestroy()
     {
         // **YENİ**: DOTween animasyonlarını temizle
         DOTween.Kill(transform);
-        
+
         // **YENİ**: Curve hareket sequence'ini temizle
         if (curveMovementSequence != null)
         {
             curveMovementSequence.Kill();
         }
-        
+
         if (SlotManager.Instance != null)
         {
             // Eğer bu obje hala hareket ediyorsa, SlotManager'dan kaldır

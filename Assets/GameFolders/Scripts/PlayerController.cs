@@ -113,7 +113,7 @@ public class PlayerController : MonoBehaviour
         Rigidbody rb = obj.GetComponent<Rigidbody>();
         if (rb != null)
         {
-            rb.constraints = RigidbodyConstraints.FreezePositionY;
+            //   rb.constraints = RigidbodyConstraints.FreezePositionY;
         }
     }
 
