@@ -7,9 +7,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask clickableLayer;
     [SerializeField] private Camera mainCam;
     private float maxDistance = 100f;
-    [SerializeField] private float liftOffset = 0.5f;    // Height to lift on hold
-    [SerializeField] private float liftForce = 15f;     // Force to lift object up
-    [SerializeField] private float hoverForce = 1f;     // Force to maintain hover
+    private float liftOffset = 0.5f;    // Height to lift on hold
+    private float liftForce = 5f;     // Force to lift object up
+    private float hoverForce = 30f;     // Force to maintain hover
     private float holdThreshold = 0.02f;  // Time to distinguish hold vs click (reduced for faster response)
 
     private ClickableObject currentClickable;
