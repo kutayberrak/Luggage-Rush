@@ -5442,6 +5442,7 @@ MonoBehaviour:
   freezeBuyImage: {fileID: 1897175627}
   slotBombBuyImage: {fileID: 550748387}
   conveyor: {fileID: 941887474}
+  explosionEffect: {fileID: 418765829752813581, guid: f3d87f265c2f67d41af51e4aa548a171, type: 3}
 --- !u!114 &682368893
 MonoBehaviour:
   m_ObjectHideFlags: 0

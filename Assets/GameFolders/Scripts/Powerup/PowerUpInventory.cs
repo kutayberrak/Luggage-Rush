@@ -22,6 +22,9 @@ public class PowerUpInventory : MonoBehaviour
     [SerializeField] private GameObject slotBombBuyImage;
     public ConveyorBeltController conveyor;
 
+    public GameObject explosionEffect;
+    private Vector3 explosionParticleOffset = Vector3.up * 0.3f;
+
     private const int DefaultCount = 3;
     private const string PrefKeyPrefix = "PowerUpCount_";
 
@@ -174,6 +177,15 @@ public class PowerUpInventory : MonoBehaviour
     {
         PlayerPrefs.SetInt(PrefKeyPrefix + type.ToString(), GetCount(type));
         PlayerPrefs.Save();
+    }
+    public void PlayExplosionAtPosition(Vector3 position)
+    {
+        if (explosionEffect == null) return;
+
+        Vector3 newPos = position + explosionParticleOffset;
+
+        GameObject effect = Instantiate(explosionEffect, newPos, Quaternion.identity);
+        Destroy(effect, 2f); 
     }
 
     // UI binding

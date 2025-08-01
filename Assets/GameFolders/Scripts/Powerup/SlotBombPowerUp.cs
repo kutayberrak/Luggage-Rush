@@ -40,6 +40,8 @@ public class SlotBombPowerUp : IPowerUp
 
         var go = slot.Occupant;
 
+        PowerUpInventory.Instance.PlayExplosionAtPosition(go.transform.position);
+
         slot.ClearSlot();
 
         SlotManager.Instance.CompactSlots3D();
