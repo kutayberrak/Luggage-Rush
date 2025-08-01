@@ -6352,7 +6352,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 89.70001, y: -118.41998}
+  m_AnchoredPosition: {x: 89.700195, y: -118.41998}
   m_SizeDelta: {x: -748.8, y: -300.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &863249453
@@ -8465,6 +8465,9 @@ MonoBehaviour:
   shiftEase: 7
   matchEase: 5
   directMoveSpeed: 100
+  matchParticlePrefab: {fileID: 750130007581751903, guid: 686bfa36cb825a245b380e5f745ac2d8, type: 3}
+  particleDuration: 99999
+  particleOffset: {x: 0, y: 0, z: 0}
   rapidClickThreshold: 0.25
   baseMoveDelay: 0.1
   maxMoveDelay: 0.5

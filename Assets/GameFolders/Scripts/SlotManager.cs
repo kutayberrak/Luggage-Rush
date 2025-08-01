@@ -17,24 +17,23 @@ public class SlotManager : MonoBehaviour
     public float postMatchDelay = 0.1f;
 
     [Header("Easing Settings")]
-    [Tooltip("Slot'a yürüyüşte kullanılacak Ease tipi")]
     public Ease moveEase = Ease.InOutSine;
 
-    [Tooltip("Pre‑shift animasyonunda kullanılacak Ease tipi")]
     public Ease shiftEase = Ease.InOutQuad;
 
-    [Tooltip("Match ölçek animasyonunda kullanılacak Ease tipi")]
     public Ease matchEase = Ease.InQuad;
 
     [Header("Movement")]
     public float directMoveSpeed = 5f;
 
+    [Header("Match Particle Effects")]
+    public GameObject matchParticlePrefab;
+    public float particleDuration = 2f;
+    public Vector3 particleOffset = Vector3.up * 0.5f;
+
     [Header("Click Timing")]
-    [Tooltip("Bu süreden kısa aralıklarla gelen tıklamalar rapidClickCount'i artırır")]
     public float rapidClickThreshold = 0.25f;
-    [Tooltip("Rapid tıklama başına eklenecek temel gecikme")]
     public float baseMoveDelay = 0.1f;
-    [Tooltip("Maksimum gecikme sınırı")]
     public float maxMoveDelay = 0.5f;
 
     private float lastClickTime = -Mathf.Infinity;
@@ -654,6 +653,17 @@ public class SlotManager : MonoBehaviour
         }
 
         yield return new WaitForSeconds(matchClearanceDuration + postMatchDelay);
+
+        if (matchParticlePrefab != null)
+        {
+            Vector3 particlePosition = center + particleOffset;
+            GameObject particleInstance = Instantiate(matchParticlePrefab, particlePosition, Quaternion.identity);
+            
+            // Particle'ı belirli süre sonra yok et
+            Destroy(particleInstance, particleDuration);
+            
+            Debug.Log($"[AnimateMatchClearance3D] Playing match particle effect at position {particlePosition} after animation completed");
+        }
 
         foreach (var obj in toDestroy)
         {
