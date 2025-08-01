@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SampleCollection
   m_EditorClassIdentifier: 
   collectionType: 1
-  collectionImage: {fileID: 21300000, guid: 949b41ba2dc33a04f80d7f6d2779eb73, type: 3}
+  collectionImage: {fileID: 21300000, guid: b262ba80bbc34d845943a889ad7b6d51, type: 3}
   collectionName: Pepper
   description: 
-  isUnlocked: 0
+  isUnlocked: 1

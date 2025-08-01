@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SampleCollection3 1
   m_EditorClassIdentifier: 
   collectionType: 4
-  collectionImage: {fileID: 21300000, guid: fc1d974baa046c04fa6c53743fb20687, type: 3}
+  collectionImage: {fileID: 21300000, guid: 15d02b53fcc6fe2408c1bca2e957f027, type: 3}
   collectionName: Marakas
   description: 
   isUnlocked: 0
