@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float liftOffset = 0.5f;    // Height to lift on hold
     [SerializeField] private float liftForce = 15f;     // Force to lift object up
     [SerializeField] private float hoverForce = 1f;     // Force to maintain hover
-    private float holdThreshold = 0.1f;  // Time to distinguish hold vs click
+    private float holdThreshold = 0.02f;  // Time to distinguish hold vs click (reduced for faster response)
 
     private ClickableObject currentClickable;
     private MaterialPropertyBlock mpb;
@@ -216,7 +216,7 @@ public class PlayerController : MonoBehaviour
         // Move with constant speed using Transform (since object is kinematic)
         if (heightDifference > 0.05f)
         {
-            float constantLiftSpeed = 2f; // Constant speed in units per second
+            float constantLiftSpeed = liftForce; // Constant speed in units per second
             Vector3 currentPos = obj.transform.position;
             Vector3 newPos = new Vector3(currentPos.x, currentPos.y + (constantLiftSpeed * Time.deltaTime), currentPos.z);
             obj.transform.position = newPos;
@@ -240,7 +240,8 @@ public class PlayerController : MonoBehaviour
         {
 
             float gravityForce = (rb.mass * gravityY) / hoverForce;
-            rb.AddForce(Vector3.up * gravityForce, ForceMode.Force);
+            //  rb.AddForce(Vector3.up * gravityForce, ForceMode.Force);
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, gravityForce, rb.linearVelocity.z);
         }
     }
 }

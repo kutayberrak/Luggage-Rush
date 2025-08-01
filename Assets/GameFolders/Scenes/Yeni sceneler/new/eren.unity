@@ -5357,6 +5357,7 @@ MonoBehaviour:
   freezeBuyImage: {fileID: 1897175627}
   slotBombBuyImage: {fileID: 550748387}
   conveyor: {fileID: 941887474}
+  explosionEffect: {fileID: 0}
 --- !u!114 &682368893
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15191,8 +15192,8 @@ MonoBehaviour:
     m_Bits: 1024
   mainCam: {fileID: 713802193}
   liftOffset: 0.5
-  liftForce: 10
-  hoverForce: 2
+  liftForce: 5
+  hoverForce: 30
 --- !u!4 &2124378176
 Transform:
   m_ObjectHideFlags: 0
