@@ -211,8 +211,8 @@ public class AudioManager : MonoBehaviour
     {
         isMusicEnabled = PlayerPrefs.GetInt(MUSIC_ENABLED_KEY, 1) == 1;
         isSFXEnabled = PlayerPrefs.GetInt(SFX_ENABLED_KEY, 1) == 1;
-        musicVolume = PlayerPrefs.GetFloat(MUSIC_VOLUME_KEY, 0.7f);
-        sfxVolume = PlayerPrefs.GetFloat(SFX_VOLUME_KEY, 1f);
+        musicVolume = PlayerPrefs.GetFloat(MUSIC_VOLUME_KEY, musicVolume);
+        sfxVolume = PlayerPrefs.GetFloat(SFX_VOLUME_KEY, sfxVolume);
 
         UpdateAudioSources();
     }

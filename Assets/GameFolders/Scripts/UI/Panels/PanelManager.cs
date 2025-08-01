@@ -5,7 +5,7 @@ namespace GameFolders.Scripts.UI.Panels
 {
     public class PanelManager : MonoBehaviour
     {
-        [Header("Panels")] 
+        [Header("Panels")]
         [SerializeField] private GameObject gamePanel;
         [SerializeField] private GameObject mainPanel;
         [SerializeField] private GameObject winPanel;
@@ -40,7 +40,8 @@ namespace GameFolders.Scripts.UI.Panels
         {
             EnablePanel(failPanel);
             _gamePanel.DeactivatePanel();
-            
+
+            AudioManager.Instance.PlaySFX("FailSFX_1");
             // Start fail panel animation
             var failPanelAnimator = failPanel.GetComponent<FailPanelAnimator>();
             if (failPanelAnimator != null)
@@ -52,7 +53,8 @@ namespace GameFolders.Scripts.UI.Panels
         {
             EnablePanel(winPanel);
             _gamePanel.DeactivatePanel();
-            
+
+            AudioManager.Instance.PlaySFX("WinSFX_1");
             // Start win panel animation
             var winPanelAnimator = winPanel.GetComponent<WinPanelAnimator>();
             if (winPanelAnimator != null)

@@ -2227,6 +2227,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 2112976334}
+        m_TargetAssemblyTypeName: ButtonAudio, Assembly-CSharp
+        m_MethodName: ClickSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &332670566
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11871,6 +11883,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2112976333}
   - component: {fileID: 2112976332}
+  - component: {fileID: 2112976334}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Untagged
@@ -11895,6 +11908,7 @@ MonoBehaviour:
   backgroundMusic: {fileID: 8300000, guid: 2693fd248bac84e458bf6754026b595d, type: 3}
   sfxClips:
   - {fileID: 8300000, guid: 01e2eb00e7c86254e83964d9737cd73c, type: 3}
+  - {fileID: 8300000, guid: 2f10cb7c76acc9f45bbcd5b0ed2dd18f, type: 3}
   masterVolume: 1
   musicVolume: 0.7
   sfxVolume: 1
@@ -11915,6 +11929,18 @@ Transform:
   - {fileID: 1863480207}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2112976334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2112976331}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28e7ff3127f9b4e4d8ddaabea8813175, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2115420834
 GameObject:
   m_ObjectHideFlags: 0
