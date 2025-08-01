@@ -8465,9 +8465,12 @@ MonoBehaviour:
   shiftEase: 7
   matchEase: 5
   directMoveSpeed: 100
+  individualParticlePrefab: {fileID: 4745346331004483855, guid: 917ed20532cf951429419c39c0c7e81d, type: 3}
   matchParticlePrefab: {fileID: 750130007581751903, guid: 686bfa36cb825a245b380e5f745ac2d8, type: 3}
-  particleDuration: 99999
-  particleOffset: {x: 0, y: 0, z: 0}
+  individualParticleDuration: 2
+  matchParticleDuration: 5
+  individualParticleOffset: {x: 0, y: 0.5, z: 0}
+  matchParticleOffset: {x: 0, y: 0, z: 0}
   rapidClickThreshold: 0.25
   baseMoveDelay: 0.1
   maxMoveDelay: 0.5

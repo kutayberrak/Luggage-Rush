@@ -27,9 +27,18 @@ public class SlotManager : MonoBehaviour
     public float directMoveSpeed = 5f;
 
     [Header("Match Particle Effects")]
+    [Tooltip("Her obje üstünde çıkacak particle efekti")]
+    public GameObject individualParticlePrefab;
+    [Tooltip("Birleşme sonrası merkezde çıkacak particle efekti")]
     public GameObject matchParticlePrefab;
-    public float particleDuration = 2f;
-    public Vector3 particleOffset = Vector3.up * 0.5f;
+    [Tooltip("Individual particle efekti süresi")]
+    public float individualParticleDuration = 1f;
+    [Tooltip("Match particle efekti süresi")]
+    public float matchParticleDuration = 2f;
+    [Tooltip("Individual particle pozisyon offset'i")]
+    public Vector3 individualParticleOffset = Vector3.up * 0.3f;
+    [Tooltip("Match particle pozisyon offset'i")]
+    public Vector3 matchParticleOffset = Vector3.up * 0.5f;
 
     [Header("Click Timing")]
     public float rapidClickThreshold = 0.25f;
@@ -641,6 +650,23 @@ public class SlotManager : MonoBehaviour
             }
         }
 
+        // **YENİ**: Her obje üstünde individual particle efekti oynat
+        List<GameObject> individualParticles = new List<GameObject>();
+        foreach (var obj in toDestroy)
+        {
+            if (individualParticlePrefab != null)
+            {
+                Vector3 particlePosition = obj.transform.position + individualParticleOffset;
+                GameObject particleInstance = Instantiate(individualParticlePrefab, particlePosition, Quaternion.identity);
+                individualParticles.Add(particleInstance);
+                
+                // Individual particle'ı belirli süre sonra yok et
+                Destroy(particleInstance, individualParticleDuration);
+                
+                Debug.Log($"[AnimateMatchClearance3D] Playing individual particle effect for {obj.name} at position {particlePosition}");
+            }
+        }
+
         // Tween sürelerini ve easing tipini inspector'dan al
         foreach (var obj in toDestroy)
         {
@@ -654,13 +680,14 @@ public class SlotManager : MonoBehaviour
 
         yield return new WaitForSeconds(matchClearanceDuration + postMatchDelay);
 
+        // **YENİ**: Birleşme sonrası merkezde match particle efekti oynat
         if (matchParticlePrefab != null)
         {
-            Vector3 particlePosition = center + particleOffset;
+            Vector3 particlePosition = center + matchParticleOffset;
             GameObject particleInstance = Instantiate(matchParticlePrefab, particlePosition, Quaternion.identity);
             
-            // Particle'ı belirli süre sonra yok et
-            Destroy(particleInstance, particleDuration);
+            // Match particle'ı belirli süre sonra yok et
+            Destroy(particleInstance, matchParticleDuration);
             
             Debug.Log($"[AnimateMatchClearance3D] Playing match particle effect at position {particlePosition} after animation completed");
         }
