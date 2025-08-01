@@ -62,7 +62,7 @@ public class CollectionItem : ClickableObject
 
         isInCurveMovement = true;
 
-        Transform objTransform = transform.transform;
+        Transform objTransform = transform;
         Vector3 startPos = objTransform.position;
 
         float distance = Vector3.Distance(startPos, endPos);
@@ -72,17 +72,21 @@ public class CollectionItem : ClickableObject
         midPoint.y += adjustedCurveHeight;
 
         Vector3[] path = new Vector3[] {
-            startPos,
-            Vector3.Lerp(startPos, midPoint, 0.4f), // Ba�lang�� e�risi
-            midPoint,
-            Vector3.Lerp(midPoint, endPos, 0.6f),   // Biti� e�risi
-            endPos
-        };
+        startPos,
+        Vector3.Lerp(startPos, midPoint, 0.4f),
+        midPoint,
+        Vector3.Lerp(midPoint, endPos, 0.6f),
+        endPos
+    };
 
         curveMovementSequence = DOTween.Sequence();
 
         curveMovementSequence.Append(transform.DOPath(path, 1f, PathType.CatmullRom)
             .SetEase(Ease.InOutSine));
+
+        curveMovementSequence.Insert(0.5f, transform.DOScale(Vector3.zero, 0.5f)
+            .SetEase(Ease.InQuad));
+
         curveMovementSequence.OnComplete(() => {
             isInCurveMovement = false;
             ObjectPoolManager.Instance.ReturnObjectToPool(gameObject);
@@ -92,6 +96,7 @@ public class CollectionItem : ClickableObject
             }
         });
     }
+
     private void OnEnable()
     {
         StartMaxLifeTimeTimer().Forget();
