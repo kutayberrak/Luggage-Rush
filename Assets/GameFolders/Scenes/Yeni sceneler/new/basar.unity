@@ -574,7 +574,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 96.39996, y: -64.5}
+  m_AnchoredPosition: {x: 118.1, y: -92.4}
   m_SizeDelta: {x: 60, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &50163210
@@ -5345,7 +5345,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 682368892}
         m_TargetAssemblyTypeName: PowerUpInventory, Assembly-CSharp
         m_MethodName: UseSlotBomb
         m_Mode: 1
@@ -5357,7 +5357,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 682368892}
         m_TargetAssemblyTypeName: PowerUpInventory, Assembly-CSharp
         m_MethodName: LoadPowerUpsCount
         m_Mode: 1
@@ -5445,7 +5445,7 @@ MonoBehaviour:
   freezeButton: {fileID: 1264084567}
   slotBombButton: {fileID: 682335721}
   freezeBuyImage: {fileID: 1897175627}
-  slotBombBuyImage: {fileID: 1836633396}
+  slotBombBuyImage: {fileID: 550748387}
   conveyor: {fileID: 941887474}
 --- !u!114 &682368893
 MonoBehaviour:
@@ -5957,7 +5957,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 96.39996, y: -64.5}
+  m_AnchoredPosition: {x: 120.8, y: -90.3}
   m_SizeDelta: {x: 60, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &785518212
@@ -8174,7 +8174,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1129166229}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8182,7 +8182,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 96.39996, y: -64.5}
+  m_AnchoredPosition: {x: 123.2, y: -89.2}
   m_SizeDelta: {x: 60, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1129166231
@@ -9665,7 +9665,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 682368892}
         m_TargetAssemblyTypeName: PowerUpInventory, Assembly-CSharp
         m_MethodName: UseFreeze
         m_Mode: 1
@@ -9677,7 +9677,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 682368892}
         m_TargetAssemblyTypeName: PowerUpInventory, Assembly-CSharp
         m_MethodName: LoadPowerUpsCount
         m_Mode: 1
@@ -11992,7 +11992,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1696230661}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -12000,7 +12000,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 260.59998, y: -196.1}
+  m_AnchoredPosition: {x: 315.7, y: -280.1}
   m_SizeDelta: {x: 60, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1696230663
@@ -13752,8 +13752,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 200
-  m_fontSizeBase: 200
+  m_fontSize: 180
+  m_fontSizeBase: 180
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
