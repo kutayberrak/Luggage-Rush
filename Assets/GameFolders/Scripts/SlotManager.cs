@@ -58,12 +58,12 @@ public class SlotManager : MonoBehaviour
     private bool isProcessingPlacement = false;
     private Queue<(GameObject item, string id)> placementQueue = new Queue<(GameObject item, string id)>();
     private HashSet<string> processingIds = new HashSet<string>();
-    
+
     // **YENİ**: Aynı anda tıklanan objeleri handle etmek için
     private Dictionary<string, List<GameObject>> pendingObjects = new Dictionary<string, List<GameObject>>();
     private Dictionary<string, float> lastProcessTime = new Dictionary<string, float>();
     private const float SAME_ID_PROCESS_DELAY = 0.1f; // Aynı ID'li objeler arası minimum süre
-    
+
     // **YENİ**: Match işlemi sırasında gelen objeleri handle etmek için
     private bool isProcessingMatch = false;
     private Queue<(GameObject item, string id)> matchQueue = new Queue<(GameObject item, string id)>();
@@ -146,14 +146,14 @@ public class SlotManager : MonoBehaviour
 
         // 1) Hedef slotu bul
         int insertIdx = FindInsertIndex(id);
-        
+
         // **YENİ**: Eğer bu ID için pending objeler varsa, normal slot bulma mantığını kullan
         // Alternatif slot kullanmıyoruz çünkü aynı ID'li objeler yan yana olmalı
         if (pendingObjects.ContainsKey(id) && pendingObjects[id].Count > 0)
         {
             Debug.Log($"[ProcessPlacement] Pending objects exist for ID {id}, using normal slot finding logic");
         }
-        
+
         if (insertIdx < 0)
         {
             item.SetActive(false);
@@ -172,7 +172,7 @@ public class SlotManager : MonoBehaviour
 
         // **YENİ**: Aynı ID'li blok varsa shift işlemi yap (hem yerleşmiş hem hareket halindeki)
         bool hasSameIdBlock = false;
-        
+
         // Yerleşmiş objeleri kontrol et
         for (int i = 0; i < slots.Count; i++)
         {
@@ -182,7 +182,7 @@ public class SlotManager : MonoBehaviour
                 break;
             }
         }
-        
+
         // Hareket halindeki objeleri kontrol et
         if (!hasSameIdBlock)
         {
@@ -195,7 +195,7 @@ public class SlotManager : MonoBehaviour
                 }
             }
         }
-        
+
         if (hasSameIdBlock)
         {
             Debug.Log($"[ProcessPlacement] Performing shift from slot {insertIdx} for ID {id}");
@@ -209,7 +209,7 @@ public class SlotManager : MonoBehaviour
                 ProcessNextInQueue();
                 yield break;
             }
-            
+
             // Shift sonrası slot durumunu kontrol et
             if (!slots[insertIdx].IsAvailable())
             {
@@ -244,7 +244,7 @@ public class SlotManager : MonoBehaviour
         processingIds.Remove(id);
         lastProcessTime[id] = Time.time; // İşlem zamanını kaydet
         isProcessingPlacement = false;
-        
+
         // **YENİ**: Pending objeleri kontrol et
         ProcessPendingObjects(id);
         ProcessNextInQueue();
@@ -267,15 +267,15 @@ public class SlotManager : MonoBehaviour
             // Pending listesinden bir obje al ve işle
             var pendingItem = pendingObjects[id][0];
             pendingObjects[id].RemoveAt(0);
-            
+
             Debug.Log($"[ProcessPendingObjects] Processing pending object for ID {id}. Remaining pending: {pendingObjects[id].Count}");
-            
+
             // Eğer pending listesi boşsa, listeyi temizle
             if (pendingObjects[id].Count == 0)
             {
                 pendingObjects.Remove(id);
             }
-            
+
             // Objeyi işle
             TryPlaceObject3D(pendingItem, id);
         }
@@ -285,7 +285,7 @@ public class SlotManager : MonoBehaviour
     private void ProcessMatchQueue()
     {
         Debug.Log($"[ProcessMatchQueue] Processing {matchQueue.Count} items from match queue");
-        
+
         while (matchQueue.Count > 0)
         {
             var next = matchQueue.Dequeue();
@@ -304,7 +304,7 @@ public class SlotManager : MonoBehaviour
         if (!reservedIndices.ContainsKey(mv)) return;
 
         int oldIdx = reservedIndices[mv];
-        
+
         // **YENİ**: Eski slot'un gerçekten bu obje için rezerve edildiğini kontrol et
         if (slots[oldIdx].IsReserved)
         {
@@ -378,7 +378,7 @@ public class SlotManager : MonoBehaviour
     {
         // 1. Aynı ID'li objelerin bloğunu bul (hem yerleşmiş hem hareket halindeki)
         int firstBlock = -1, lastBlock = -1;
-        
+
         // Önce yerleşmiş objeleri kontrol et
         for (int i = 0; i < slots.Count; i++)
         {
@@ -392,7 +392,7 @@ public class SlotManager : MonoBehaviour
                 break;
             }
         }
-        
+
         // Sonra hareket halindeki objeleri kontrol et
         foreach (var kvp in movingItems)
         {
@@ -424,14 +424,14 @@ public class SlotManager : MonoBehaviour
         if (firstBlock >= 0)
         {
             int targetSlot = lastBlock + 1;
-            
+
             // Eğer hedef slot array sınırları dışındaysa, son slot'u kullan
             if (targetSlot >= slots.Count)
             {
                 Debug.LogWarning($"[FindInsertIndex] Target slot {targetSlot} is out of bounds, using last slot {slots.Count - 1}");
                 targetSlot = slots.Count - 1;
             }
-            
+
             Debug.Log($"[FindInsertIndex] Same ID block found at {firstBlock}-{lastBlock}, placing at END of block (slot {targetSlot})");
             return targetSlot; // Blokun sonuna yerleştir, shift işlemi yapılacak
         }
@@ -659,10 +659,10 @@ public class SlotManager : MonoBehaviour
                 Vector3 particlePosition = obj.transform.position + individualParticleOffset;
                 GameObject particleInstance = Instantiate(individualParticlePrefab, particlePosition, Quaternion.identity);
                 individualParticles.Add(particleInstance);
-                
+
                 // Individual particle'ı belirli süre sonra yok et
                 Destroy(particleInstance, individualParticleDuration);
-                
+
                 Debug.Log($"[AnimateMatchClearance3D] Playing individual particle effect for {obj.name} at position {particlePosition}");
             }
         }
@@ -692,10 +692,10 @@ public class SlotManager : MonoBehaviour
         {
             Vector3 particlePosition = center + matchParticleOffset;
             GameObject particleInstance = Instantiate(matchParticlePrefab, particlePosition, Quaternion.identity);
-            
+            AudioManager.Instance.PlaySFX("MergingSFX");
             // Match particle'ı belirli süre sonra yok et
             Destroy(particleInstance, matchParticleDuration);
-            
+
             Debug.Log($"[AnimateMatchClearance3D] Playing match particle effect at position {particlePosition} after animation completed");
         }
 
@@ -703,7 +703,7 @@ public class SlotManager : MonoBehaviour
         {
             ObjectPoolManager.Instance.ReturnObjectToPool(obj); // Sadece match sonrası
         }
-        
+
         Debug.Log($"[AnimateMatchClearance3D] Match clearance completed, destroyed {toDestroy.Count} objects");
     }
 
@@ -719,12 +719,12 @@ public class SlotManager : MonoBehaviour
                 return true;
         return false;
     }
-    
+
     private IEnumerator ProcessSlotChanges()
     {
         isProcessingMatch = true;
         Debug.Log("[ProcessSlotChanges] Starting match processing");
-        
+
         yield return StartCoroutine(CheckForMatchesCoroutine3D());
         CompactSlots3D();
         yield return StartCoroutine(CheckForMatchesCoroutine3D());
@@ -732,7 +732,7 @@ public class SlotManager : MonoBehaviour
 
         isProcessingMatch = false;
         Debug.Log("[ProcessSlotChanges] Match processing completed");
-        
+
         // **YENİ**: Match kuyruğundaki objeleri işle
         ProcessMatchQueue();
     }
@@ -750,7 +750,7 @@ public class SlotManager : MonoBehaviour
         Debug.Log($"Moving Items: {movingItems.Count}, Reserved Indices: {reservedIndices.Count}");
         Debug.Log($"Pending Objects: {pendingObjects.Count} IDs, Processing IDs: {processingIds.Count}");
         Debug.Log($"Match Queue: {matchQueue.Count} items, Processing Match: {isProcessingMatch}");
-        
+
         // Pending objeleri detaylı göster
         foreach (var kvp in pendingObjects)
         {
@@ -764,7 +764,7 @@ public class SlotManager : MonoBehaviour
     public void TestSameIdPlacement(string testId)
     {
         Debug.Log($"[TestSameIdPlacement] Testing placement for ID: {testId}");
-        
+
         // Mevcut durumu göster
         Debug.Log("Current slot states:");
         for (int i = 0; i < slots.Count; i++)
@@ -775,11 +775,11 @@ public class SlotManager : MonoBehaviour
                 Debug.Log($"  Slot {i}: ID={slot.StoredUniqueID}");
             }
         }
-        
+
         // FindInsertIndex'i test et
         int insertIndex = FindInsertIndex(testId);
         Debug.Log($"[TestSameIdPlacement] FindInsertIndex returned: {insertIndex}");
-        
+
         if (insertIndex >= 0 && insertIndex < slots.Count)
         {
             Debug.Log($"[TestSameIdPlacement] Target slot {insertIndex} is available: {slots[insertIndex].IsAvailable()}");
@@ -793,7 +793,7 @@ public class SlotManager : MonoBehaviour
         {
             slot.ForceClear();
         }
-        
+
         movingItems.Clear();
         reservedIndices.Clear();
         placementQueue.Clear();
@@ -803,13 +803,13 @@ public class SlotManager : MonoBehaviour
         lastProcessTime.Clear();
         isProcessingPlacement = false;
         isProcessingMatch = false;
-        
+
         Debug.Log("[SlotManager] Emergency reset completed");
     }
 
     public void ClearAllSlots()
     {
-        foreach(var slot in slots)
+        foreach (var slot in slots)
         {
             var occupant = slot.Occupant;
             if (occupant != null)
@@ -819,7 +819,7 @@ public class SlotManager : MonoBehaviour
             slot.ClearSlot();
         }
     }
-    
+
     /// <summary>
     /// Match işleminin devam edip etmediğini kontrol eder
     /// </summary>
