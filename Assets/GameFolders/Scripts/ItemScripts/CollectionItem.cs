@@ -89,6 +89,9 @@ public class CollectionItem : ClickableObject
 
         curveMovementSequence.OnComplete(() => {
             isInCurveMovement = false;
+
+            SlotManager.Instance.PlayCollectionParticle(endPos);
+
             ObjectPoolManager.Instance.ReturnObjectToPool(gameObject);
             if (InGameUIManager.Instance != null)
             {

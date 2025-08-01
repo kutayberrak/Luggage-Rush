@@ -716,6 +716,13 @@ public class SlotManager : MonoBehaviour
         Debug.Log($"[AnimateMatchClearance3D] Match clearance completed, destroyed {toDestroy.Count} objects");
     }
 
+    public void PlayCollectionParticle(Vector3 worldPos)
+    {
+        if (matchParticlePrefab == null) return;
+        GameObject fx = Instantiate(matchParticlePrefab, worldPos, Quaternion.identity);
+        Destroy(fx, 2f);
+    }
+
     /// <summary>
     /// Şu anda ne kadar boş (veya rezerve edilmemiş) slot varsa
     /// en az bir tane kalmış mı kontrol eder.
