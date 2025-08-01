@@ -3172,11 +3172,11 @@ MonoBehaviour:
   objectivesContainer: {fileID: 806002518}
   objectiveItemPrefab: {fileID: 9037766900599353129, guid: a13ae40763e4ab14585daa416ad04a06, type: 3}
   luggageTypeSprites:
-  - {fileID: 21300000, guid: 42c3dd715c62b8b4d93fe7babf5a9d1c, type: 3}
-  - {fileID: 21300000, guid: 5e8bea18b740b4c4aa580616b815853f, type: 3}
+  - {fileID: 21300000, guid: 75527901481da14479c10dd01f6aca70, type: 3}
+  - {fileID: 21300000, guid: b7030468887cdaf48b0864e863c06e5d, type: 3}
   - {fileID: 21300000, guid: 4fa739f23b1da30459052a6dd4cbfa2a, type: 3}
-  - {fileID: 21300000, guid: 39d8b8c130a4c6248a9b1c701a211bbd, type: 3}
-  - {fileID: 21300000, guid: b92fc51724f29c0429c5cc352beb2240, type: 3}
+  - {fileID: 21300000, guid: a8cdf3fb3c9a47c499c5b4cc25784590, type: 3}
+  - {fileID: 21300000, guid: e86f6090759881e44bc56a196e64cb9f, type: 3}
   luggageTypeNames: []
 --- !u!4 &462526796
 Transform:
@@ -6110,12 +6110,12 @@ MonoBehaviour:
   m_Padding:
     m_Left: 0
     m_Right: 0
-    m_Top: 0
+    m_Top: 80
     m_Bottom: 0
   m_ChildAlignment: 4
   m_Spacing: 0
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
+  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
