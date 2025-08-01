@@ -4,6 +4,7 @@ using System.Collections;
 using DG.Tweening;
 using GameFolders.Scripts.Enums;
 using System;
+using GameFolders.Scripts;
 
 public class SlotManager : MonoBehaviour
 {
@@ -67,6 +68,8 @@ public class SlotManager : MonoBehaviour
     // **YENİ**: Match işlemi sırasında gelen objeleri handle etmek için
     private bool isProcessingMatch = false;
     private Queue<(GameObject item, string id)> matchQueue = new Queue<(GameObject item, string id)>();
+
+    private Coroutine failCoroutine;
 
     private void Awake()
     {
@@ -369,6 +372,8 @@ public class SlotManager : MonoBehaviour
         reservedIndices.Remove(mv);
         mv.reservedSlotIndex = -1;
 
+        CheckSlotsAndHandleFail();
+
         if (movingItems.Count == 0)
             StartCoroutine(ProcessSlotChanges());
     }
@@ -571,6 +576,8 @@ public class SlotManager : MonoBehaviour
         // **YENİ**: Shift sonrası durumu logla
         Debug.Log($"[ShiftRightFromData3D] After shift - Reserved indices: {string.Join(", ", reservedIndices.Values)}");
 
+        CheckSlotsAndHandleFail();
+
         return true;
     }
     public void CompactSlots3D()
@@ -699,6 +706,8 @@ public class SlotManager : MonoBehaviour
             Debug.Log($"[AnimateMatchClearance3D] Playing match particle effect at position {particlePosition} after animation completed");
         }
 
+        CheckSlotsAndHandleFail();
+
         foreach (var obj in toDestroy)
         {
             ObjectPoolManager.Instance.ReturnObjectToPool(obj); // Sadece match sonrası
@@ -826,5 +835,32 @@ public class SlotManager : MonoBehaviour
     public bool IsProcessingMatch()
     {
         return isProcessingMatch;
+    }
+
+    private void CheckSlotsAndHandleFail()
+    {
+        // eğer en az bir slot boşsa iptal et
+        bool anyAvailable = slots.Exists(s => s.IsAvailable());
+        if (anyAvailable)
+        {
+            if (failCoroutine != null)
+            {
+                StopCoroutine(failCoroutine);
+                failCoroutine = null;
+            }
+        }
+        else
+        {
+            // hepsi doluysa ve coroutine yoksa başlat
+            if (failCoroutine == null)
+                failCoroutine = StartCoroutine(FailAfterDelay());
+        }
+    }
+
+    private IEnumerator FailAfterDelay()
+    {
+        yield return new WaitForSeconds(3f);
+        GameEvents.TriggerLevelFailed();
+        failCoroutine = null;
     }
 }
