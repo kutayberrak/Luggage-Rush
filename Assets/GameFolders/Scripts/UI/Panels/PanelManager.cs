@@ -55,7 +55,6 @@ namespace GameFolders.Scripts.UI.Panels
             _gamePanel.DeactivatePanel();
 
             AudioManager.Instance.PlaySFX("WinSFX_1");
-            // Start win panel animation
             var winPanelAnimator = winPanel.GetComponent<WinPanelAnimator>();
             if (winPanelAnimator != null)
             {
@@ -67,7 +66,6 @@ namespace GameFolders.Scripts.UI.Panels
             DisablePanel(winPanel);
             DisablePanel(failPanel);
             _gamePanel.DeactivatePanel();
-            DisablePanel(gamePanel);
             EnablePanel(mainPanel);
             _mainPanel.ActivatePanel();
         }
@@ -77,7 +75,6 @@ namespace GameFolders.Scripts.UI.Panels
             DisablePanel(failPanel);
             _mainPanel.DeactivatePanel();
             DisablePanel(mainPanel);
-            EnablePanel(gamePanel);
             _gamePanel.ActivatePanel();
         }
         #endregion

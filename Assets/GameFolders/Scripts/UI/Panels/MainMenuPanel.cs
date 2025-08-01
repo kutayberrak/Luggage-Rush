@@ -10,21 +10,21 @@ namespace GameFolders.Scripts.UI.Panels
         [SerializeField] private RectTransform navBarButtons;
         [SerializeField] private RectTransform startButton;
         [Header("Settings")]
-        [SerializeField] private float buttonsClosedPosition; 
-        [SerializeField] private float buttonsOpenPosition;
-        [SerializeField] private float startButtonClosedPos = -150f;
-        [SerializeField] private float startButtonOpenPos = 477f;
+        [SerializeField] private RectTransform buttonsClosedPosition; 
+        [SerializeField] private RectTransform buttonsOpenPosition;
+        [SerializeField] private RectTransform startButtonClosedPos;
+        [SerializeField] private RectTransform startButtonOpenPos;
         
         public void DeactivatePanel()
         {
-            navBarButtons.DOAnchorPos(new Vector2(navBarButtons.anchoredPosition.x,buttonsClosedPosition), 0.5f);
-            startButton.DOAnchorPosY(startButtonClosedPos, 0.5f);
+            navBarButtons.DOAnchorPos(new Vector2(navBarButtons.anchoredPosition.x,buttonsClosedPosition.anchoredPosition.y), 0.5f);
+            startButton.DOAnchorPosY(startButtonClosedPos.anchoredPosition.y, 0.5f);
         }
 
         public void ActivatePanel()
         {
-            navBarButtons.DOAnchorPos(new Vector2(navBarButtons.anchoredPosition.x,buttonsOpenPosition), 0.5f);
-            startButton.DOAnchorPosY(startButtonOpenPos, 0.5f);
+            navBarButtons.DOAnchorPos(new Vector2(navBarButtons.anchoredPosition.x,buttonsOpenPosition.pivot.y), 0.5f);
+            startButton.DOAnchorPosY(startButtonOpenPos.anchoredPosition.y, 0.5f);
         }
     }
 }
