@@ -40,6 +40,13 @@ namespace GameFolders.Scripts.UI.Panels
         {
             EnablePanel(failPanel);
             _gamePanel.DeactivatePanel();
+            
+            // Start fail panel animation
+            var failPanelAnimator = failPanel.GetComponent<FailPanelAnimator>();
+            if (failPanelAnimator != null)
+            {
+                failPanelAnimator.PlayFailAnimation();
+            }
         }
         private void OnLevelWin()
         {
