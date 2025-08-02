@@ -11180,7 +11180,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4f4bb7dc1b039c447ab287e594fa3b3e, type: 2}
   - {fileID: 11400000, guid: 99e45ce80c2ce1b4bb1c7c9ef90af22f, type: 2}
   - {fileID: 11400000, guid: cccc6a9f5df5aa6468dbd62744d9893b, type: 2}
-  - {fileID: 11400000, guid: d7711167cf5ea4d4da120fd842916de9, type: 2}
   collectionPanels: []
 --- !u!4 &958617323
 Transform:
