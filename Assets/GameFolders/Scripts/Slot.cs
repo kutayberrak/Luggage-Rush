@@ -10,6 +10,8 @@ public class Slot : MonoBehaviour
     public bool IsReserved { get; private set; }
     public string StoredUniqueID { get; private set; }
     public GameObject Occupant { get; private set; }
+
+    public Vector3 assignOffset;
     public void ClearDataOnly()
     {
         // **YENİ**: İşlem sırasında temizlik yapma - shift işlemlerinde bu kontrolü kaldır
@@ -64,7 +66,7 @@ public class Slot : MonoBehaviour
         // Sadece pozisyonu güncelle, parent'a dokunma
         if (obj != null)
         {
-            obj.transform.position = transform.position;
+            obj.transform.position = transform.position + assignOffset;
             obj.SetActive(true);
 
             // Notify slotted on the new occupant

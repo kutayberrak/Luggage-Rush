@@ -110,7 +110,7 @@ public class ClickableObject : MonoBehaviour
         Slot slot = SlotManager.Instance.slots[reservedSlotIndex];
 
         // — Taşıma bilgilerini kaydet —
-        moveTargetPos = slot.transform.position;
+        moveTargetPos = slot.transform.position + slot.assignOffset;
         startDistance = Vector3.Distance(transform.position, moveTargetPos);
         originalScale = transform.localScale;
     }
@@ -145,7 +145,7 @@ public class ClickableObject : MonoBehaviour
         if (useRotationAnimation)
         {
             Vector3 startRotation = transform.eulerAngles;
-            Vector3 endRotation = Vector3.zero;
+            Vector3 endRotation = new Vector3(45f,0f,0f);
 
             curveMovementSequence.Join(transform.DORotate(endRotation, rotationDuration)
                 .SetEase(Ease.OutBack));
@@ -193,7 +193,7 @@ public class ClickableObject : MonoBehaviour
         SlotManager.Instance.TryPlaceObject3D(gameObject, UniqueID);
 
         clickSequence.Append(transform.DOMove(risePosition, riseDuration).SetEase(riseEase));
-        clickSequence.Join(transform.DORotate(Vector3.zero, riseDuration).SetEase(riseEase));
+        clickSequence.Join(transform.DORotate(new Vector3(45f,0f,0f), riseDuration).SetEase(riseEase));
 
         // Animasyon tamamlandığında slot hareketini başlat
         clickSequence.OnComplete(() =>

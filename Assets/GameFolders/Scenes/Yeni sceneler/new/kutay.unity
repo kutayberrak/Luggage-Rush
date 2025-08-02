@@ -1740,6 +1740,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 143da7516beac48499907664ec7741dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  assignOffset: {x: -0.05, y: 0.5, z: -0.03}
 --- !u!114 &197118220
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3238,6 +3239,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 143da7516beac48499907664ec7741dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  assignOffset: {x: 0.1, y: 0.5, z: -0.03}
 --- !u!114 &468895878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3537,6 +3539,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 143da7516beac48499907664ec7741dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  assignOffset: {x: 0.085, y: 0.5, z: -0.03}
 --- !u!114 &494032004
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3792,6 +3795,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 143da7516beac48499907664ec7741dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  assignOffset: {x: -0.065, y: 0.5, z: -0.03}
 --- !u!114 &537243987
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12289,6 +12293,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 143da7516beac48499907664ec7741dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  assignOffset: {x: 0.02, y: 0.5, z: -0.03}
 --- !u!114 &1702010331
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12668,6 +12673,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 143da7516beac48499907664ec7741dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  assignOffset: {x: 0.052, y: 0.5, z: -0.03}
 --- !u!114 &1760571162
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15218,7 +15224,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   mainCam: {fileID: 713802193}
-  liftOffset: 0.5
 --- !u!4 &2124378176
 Transform:
   m_ObjectHideFlags: 0
@@ -15284,6 +15289,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 143da7516beac48499907664ec7741dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  assignOffset: {x: -0.02, y: 0.5, z: -0.03}
 --- !u!114 &2140090680
 MonoBehaviour:
   m_ObjectHideFlags: 0
