@@ -8,7 +8,7 @@ public class CollectionManager : MonoBehaviour
     [Header("Collection Settings")]
     [SerializeField] private List<CollectionData> allCollections = new List<CollectionData>();
 
-    public CollectionPanel collectionPanel;
+    public List<CollectionPanel> collectionPanels;
 
     // Singleton pattern
     public static CollectionManager Instance { get; private set; }
@@ -209,7 +209,7 @@ public class CollectionManager : MonoBehaviour
     /// </summary>
     private void UpdateCollectionPanel(CollectiblePieceType type)
     {
-        if (collectionPanel != null)
+        foreach (var collectionPanel in collectionPanels)
         {
             collectionPanel.UpdateCollection(type);
         }
@@ -220,7 +220,7 @@ public class CollectionManager : MonoBehaviour
     /// </summary>
     public void UpdateAllCollectionPanels()
     {
-        if (collectionPanel != null)
+        foreach (var collectionPanel in collectionPanels)
         {
             collectionPanel.UpdateAllCollections();
         }

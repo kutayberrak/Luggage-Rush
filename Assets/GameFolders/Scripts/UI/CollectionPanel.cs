@@ -10,7 +10,8 @@ public class CollectionPanel : MonoBehaviour
     [SerializeField] private GameObject collectionItemPrefab;
     
     private List<CollectionItemUI> collectionItems = new List<CollectionItemUI>();
-    private bool isPanelOpen = false;
+
+    public string collectionCountry;
     
     private void Start()
     {
@@ -32,7 +33,10 @@ public class CollectionPanel : MonoBehaviour
         // Create UI items for each collection
         foreach (var collection in allCollections)
         {
-            CreateCollectionItem(collection);
+            if (collection.CollectionCountry == collectionCountry)
+            {
+                CreateCollectionItem(collection);
+            }
         }
         
         Debug.Log($"[CollectionPanel] Initialized with {collectionItems.Count} collection items");
@@ -51,6 +55,9 @@ public class CollectionPanel : MonoBehaviour
         
         // Instantiate the prefab
         GameObject itemGO = Instantiate(collectionItemPrefab, collectionContainer);
+        itemGO.transform.localPosition = collection.collectionInstantiatePosition;
+        itemGO.transform.localRotation = collection.collectionInstantiateRotation;
+        itemGO.transform.localScale = collection.collectionInstantiateScale;
         CollectionItemUI itemUI = itemGO.GetComponent<CollectionItemUI>();
         
         if (itemUI != null)
