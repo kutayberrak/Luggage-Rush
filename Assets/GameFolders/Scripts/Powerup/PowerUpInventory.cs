@@ -22,7 +22,11 @@ public class PowerUpInventory : MonoBehaviour
     [SerializeField] private GameObject slotBombBuyImage;
     public ConveyorBeltController conveyor;
 
-    public GameObject explosionEffect;
+    [SerializeField] private GameObject explosionEffect;
+    [SerializeField] private GameObject freezeEffect;
+    [SerializeField] private MeshRenderer conveyorMeshRenderer;
+    [SerializeField] private Texture2D conveyorDefaultMaterial;
+    [SerializeField] private Texture2D conveyorFrozenMaterial;
     private Vector3 explosionParticleOffset = Vector3.up * 0.3f;
 
     private const int DefaultCount = 3;
@@ -185,9 +189,31 @@ public class PowerUpInventory : MonoBehaviour
         Vector3 newPos = position + explosionParticleOffset;
 
         GameObject effect = Instantiate(explosionEffect, newPos, Quaternion.identity);
-        Destroy(effect, 2f); 
+        Destroy(effect, 2f);
     }
 
+    public void PlayFreezeEffectAtPosition()
+    {
+        if (freezeEffect == null) return;
+
+        GameObject effect = Instantiate(freezeEffect, freezeEffect.transform.position, freezeEffect.transform.rotation);
+
+
+        Destroy(effect, 7f);
+
+        if (conveyorMeshRenderer != null && conveyorFrozenMaterial != null)
+        {
+            conveyorMeshRenderer.material.mainTexture = conveyorFrozenMaterial;
+            Invoke(nameof(ResetConveyorMaterial), 3f);
+        }
+    }
+    public void ResetConveyorMaterial()
+    {
+        if (conveyorMeshRenderer != null && conveyorDefaultMaterial != null)
+        {
+            conveyorMeshRenderer.material.mainTexture = conveyorDefaultMaterial;
+        }
+    }
     // UI binding
     public int GetCount(PowerUpType type)
         => powerUpCounts.TryGetValue(type, out var c) ? c : 0;
