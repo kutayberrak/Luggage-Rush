@@ -22,6 +22,7 @@ public class FreezePowerUp : IPowerUp
 
         PowerUpInventory.Instance.DecreaseCount(PowerUpType.Freeze);
 
+        PowerUpInventory.Instance.PlayFreezeEffectAtPosition();
         AudioManager.Instance?.PlaySFX("FreezeSFX");
     }
 
