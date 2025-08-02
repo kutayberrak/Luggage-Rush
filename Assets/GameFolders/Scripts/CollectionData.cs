@@ -7,10 +7,14 @@ public class CollectionData : ScriptableObject
     [Header("Collection Information")]
     [SerializeField] private CollectiblePieceType collectionType;
     [SerializeField] private Sprite collectionImage;
-    
+    [SerializeField] private string collectionCountry;
+    public Vector3 collectionInstantiatePosition = Vector3.zero;
+    public Quaternion collectionInstantiateRotation = Quaternion.identity;
+    public Vector3 collectionInstantiateScale = Vector3.zero;
     // Properties
     public CollectiblePieceType CollectionType => collectionType;
     public Sprite CollectionImage => collectionImage;
+    public string CollectionCountry => collectionCountry;
     
     // Optional: Additional properties you might need
     [Header("Additional Properties")]
@@ -26,6 +30,12 @@ public class CollectionData : ScriptableObject
     public void UnlockCollection()
     {
         isUnlocked = true;
+    }
+    
+    // Method to reset the collection
+    public void ResetCollection()
+    {
+        isUnlocked = false;
     }
     
     // Method to set collection data

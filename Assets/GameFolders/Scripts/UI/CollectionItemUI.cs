@@ -7,8 +7,6 @@ public class CollectionItemUI : MonoBehaviour
 {
     [Header("UI References")]
     [SerializeField] private Image collectionImage;
-    [SerializeField] private TextMeshProUGUI collectionNameText;
-    [SerializeField] private GameObject lockedIcon;
     
     private CollectionData collectionData;
     public CollectiblePieceType CollectionType => collectionData?.CollectionType ?? CollectiblePieceType.None;
@@ -35,15 +33,8 @@ public class CollectionItemUI : MonoBehaviour
             collectionImage.sprite = collectionData.CollectionImage;
         }
 
-        // Update name
-        if (collectionNameText != null)
-        {
-            collectionNameText.text = collectionData.CollectionName;
-        }
-        if (lockedIcon != null)
-        {
-            lockedIcon.SetActive(!collectionData.IsUnlocked);
-        }
+        collectionImage.color = collectionData.IsUnlocked ? Color.white : Color.black; 
+
     }
     
     /// <summary>
