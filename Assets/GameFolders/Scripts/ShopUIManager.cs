@@ -7,8 +7,8 @@ public class ShopUIManager : MonoBehaviour
 {
     [Header("UI References")]
     [SerializeField] private TextMeshProUGUI moneyText;
-    //[SerializeField] private TextMeshProUGUI slotBombCountText;
-    //[SerializeField] private TextMeshProUGUI freezeCountText;
+    [SerializeField] private TextMeshProUGUI slotBombCountText;
+    [SerializeField] private TextMeshProUGUI freezeCountText;
 
     [Header("Buttons")]
     [SerializeField] private Button slotBombBuyButton;
@@ -26,13 +26,16 @@ public class ShopUIManager : MonoBehaviour
     {
         UpdateUI();
     }
+    private void OnEnable()
+    {
+        UpdateUI();
+    }
     public void UpdateUI()
     {
         if (moneyText != null && MoneyManager.Instance != null)
         {
             moneyText.text = MoneyManager.Instance.GetCurrentMoney().ToString();
         }
-        /*
         if (slotBombCountText != null && PowerUpInventory.Instance != null)
         {
             int count = PowerUpInventory.Instance.GetCount(PowerUpType.SlotBomb);
@@ -44,7 +47,6 @@ public class ShopUIManager : MonoBehaviour
             int count = PowerUpInventory.Instance.GetCount(PowerUpType.Freeze);
             freezeCountText.text = count.ToString();
         }
-        */
     }
 
     public void OnBuySlotBomb()
