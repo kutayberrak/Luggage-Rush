@@ -14239,7 +14239,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   navBarButtons: {fileID: 109655811}
-  buttonsClosedPosition: {fileID: 1199753287}
+  buttonsClosedPosition: {fileID: 1874375392}
   buttonsOpenPosition: {fileID: 1237892745}
 --- !u!224 &1227751273
 RectTransform:
