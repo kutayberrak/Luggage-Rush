@@ -14,13 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelTimeInSeconds: 60
   targetLuggageInfo:
-  - LuggageType: 2
+  - LuggageType: 7
     Count: 9
-  - LuggageType: 3
+  - LuggageType: 8
     Count: 3
   hasCollectiblePiece: 1
   collectablePieceType: 07000000
-  luggageTypesToSpawn: 02000000030000000100000000000000
+  luggageTypesToSpawn: 070000000800000009000000
   junkPieceType: 01000000
   spawnWeightData:
     LuggageSpawnWeight: 9
