@@ -93,7 +93,7 @@ public class PowerUpInventory : MonoBehaviour
         }
         else
         {
-            PurchasePowerUp(PowerUpType.SlotBomb);
+            PurchasePowerUp(PowerUpType.Freeze);
         }
     }
 
