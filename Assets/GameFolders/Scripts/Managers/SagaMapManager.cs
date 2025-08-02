@@ -50,7 +50,7 @@ namespace GameFolders.Scripts.Managers
             _currentLevel = GameManager.Instance.CurrentLevel;
             Debug.Log(_currentLevel);
             SetButtonVisual(buttons[_currentLevel], completedLevelSprite, inactiveScale, 1f);
-            if (_currentLevel >= buttons.Count - 1) return;
+            if (_currentLevel == buttons.Count - 1) return;
             SetRoadmapFillAmount(_currentLevel + 1);
             SetButtonVisual(buttons[_currentLevel + 1], currentLevelSprite, activeScale, 1f);
         }
