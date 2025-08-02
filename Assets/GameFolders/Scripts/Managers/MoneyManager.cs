@@ -7,7 +7,7 @@ namespace GameFolders.Scripts.Managers
     {
         public static MoneyManager Instance { get; private set; }
 
-        [SerializeField] private TextMeshProUGUI moneyText, moneyText2;
+        [SerializeField] private TextMeshProUGUI moneyText;
         private int _currentMoney;
 
         private const string MONEY_KEY = "Money";
@@ -53,9 +53,6 @@ namespace GameFolders.Scripts.Managers
         {
             if (moneyText != null)
                 moneyText.text = _currentMoney.ToString();
-
-            if (moneyText2 != null)
-                moneyText2.text = _currentMoney.ToString();
         }
 
         private void SaveMoney()
