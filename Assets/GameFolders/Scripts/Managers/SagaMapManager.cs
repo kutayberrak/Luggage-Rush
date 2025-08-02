@@ -33,11 +33,11 @@ namespace GameFolders.Scripts.Managers
             for (int i = 0; i < buttons.Count; i++)
             {
                 if (i < _currentLevel)
-                    SetButtonVisual(buttons[i], completedLevelSprite, inactiveScale, 0.9f);
+                    SetButtonVisual(buttons[i], completedLevelSprite, inactiveScale, 1f);
                 else if (i == _currentLevel)
                     SetButtonVisual(buttons[i], currentLevelSprite, activeScale, 1f);
                 else
-                    SetButtonVisual(buttons[i], lockedLevelSprite, inactiveScale, 0.5f);
+                    SetButtonVisual(buttons[i], lockedLevelSprite, inactiveScale, 1f);
             }
         }
 

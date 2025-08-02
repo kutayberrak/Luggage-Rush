@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/GameFolders/Scenes/Yeni sceneler/Basar_Yeni.unity
     guid: 719232160554c6b4abbfef6fa463fd2b
   m_configObjects:
