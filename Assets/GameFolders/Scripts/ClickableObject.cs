@@ -287,6 +287,9 @@ public class ClickableObject : MonoBehaviour
         isClickProcessed = true;
         Debug.Log($"[ClickableObject] Processing click for {UniqueID}");
 
+
+        gameObject.GetComponent<Collider>().isTrigger = true;
+
         // **YENİ**: Tıklama animasyonunu başlat
         StartClickAnimation();
     }

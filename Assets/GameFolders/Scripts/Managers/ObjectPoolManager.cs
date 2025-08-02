@@ -158,10 +158,12 @@ public class ObjectPoolManager : MonoBehaviour
     public void ReturnObjectToPool(GameObject obj)
     {
         Rigidbody rb = obj.GetComponent<Rigidbody>();
+        Collider collider = rb.GetComponent<Collider>();
         if (rb != null)
         {
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
+            collider.isTrigger = false;
             rb.isKinematic = false;
             rb.detectCollisions = true;
             rb.useGravity = true;
