@@ -20,4 +20,4 @@ MonoBehaviour:
   collectionInstantiateScale: {x: -2.2, y: 2.2, z: 2.2}
   collectionName: El Castillo
   description: 
-  isUnlocked: 1
+  isUnlocked: 0

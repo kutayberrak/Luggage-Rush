@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using GameFolders.Scripts.Enums;
+using TMPro;
 
 public class CollectionPanel : MonoBehaviour
 {
@@ -11,7 +12,13 @@ public class CollectionPanel : MonoBehaviour
     
     private List<CollectionItemUI> collectionItems = new List<CollectionItemUI>();
 
+    public TextMeshProUGUI collectionText;
+
     public string collectionCountry;
+
+    public int collectionAmount;
+    public int unlockedAmount;
+
     
     private void Start()
     {
@@ -24,6 +31,8 @@ public class CollectionPanel : MonoBehaviour
     /// </summary>
     private void InitializePanel()
     {
+        collectionAmount = 0;
+        unlockedAmount = 0;
         // Clear existing items
         ClearCollectionItems();
         
@@ -36,10 +45,19 @@ public class CollectionPanel : MonoBehaviour
             if (collection.CollectionCountry == collectionCountry)
             {
                 CreateCollectionItem(collection);
+                collectionAmount++;
             }
         }
+
+        UpdateCollectionText();
         
+
         Debug.Log($"[CollectionPanel] Initialized with {collectionItems.Count} collection items");
+    }
+
+    private void UpdateCollectionText()
+    {
+        collectionText.text = collectionCountry + " " + CalculateUnlockedCollections() + "/" + collectionAmount;
     }
     
     /// <summary>
@@ -80,7 +98,21 @@ public class CollectionPanel : MonoBehaviour
             item.UpdateVisual();
         }
     }
-    
+
+    public int CalculateUnlockedCollections()
+    {
+        unlockedAmount = 0;
+        foreach (var item in collectionItems)
+        {
+            if (item.collectionData.CollectionCountry == collectionCountry && item.collectionData.IsUnlocked)
+            {
+                unlockedAmount++;
+            }
+        }
+
+        return unlockedAmount;
+    }
+
     /// <summary>
     /// Update specific collection item
     /// </summary>
@@ -91,6 +123,8 @@ public class CollectionPanel : MonoBehaviour
         {
             item.UpdateVisual();
         }
+
+        UpdateCollectionText();
     }
     
     /// <summary>

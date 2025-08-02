@@ -207,7 +207,7 @@ public class CollectionManager : MonoBehaviour
     /// <summary>
     /// Update collection panel UI
     /// </summary>
-    private void UpdateCollectionPanel(CollectiblePieceType type)
+    public void UpdateCollectionPanel(CollectiblePieceType type)
     {
         foreach (var collectionPanel in collectionPanels)
         {

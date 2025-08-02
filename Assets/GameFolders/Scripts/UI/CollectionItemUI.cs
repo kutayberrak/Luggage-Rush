@@ -8,7 +8,7 @@ public class CollectionItemUI : MonoBehaviour
     [Header("UI References")]
     [SerializeField] private Image collectionImage;
     
-    private CollectionData collectionData;
+    public CollectionData collectionData;
     public CollectiblePieceType CollectionType => collectionData?.CollectionType ?? CollectiblePieceType.None;
 
     /// <summary>

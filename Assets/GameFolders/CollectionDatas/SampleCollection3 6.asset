@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cba6975dfe04fa043a0ae602f691a511, type: 3}
-  m_Name: SampleCollection
+  m_Name: SampleCollection3 6
   m_EditorClassIdentifier: 
-  collectionType: 1
-  collectionImage: {fileID: 21300000, guid: b262ba80bbc34d845943a889ad7b6d51, type: 3}
-  collectionCountry: Mexico
-  collectionInstantiatePosition: {x: 280, y: -150, z: 0}
-  collectionInstantiateRotation: {x: 0, y: 0, z: 0.25881904, w: 0.9659258}
-  collectionInstantiateScale: {x: 1, y: 1, z: 1}
-  collectionName: Pepper
+  collectionType: 9
+  collectionImage: {fileID: 21300000, guid: e454b5322d1430643866a048e690e5a7, type: 3}
+  collectionCountry: France
+  collectionInstantiatePosition: {x: 45, y: -80, z: 0}
+  collectionInstantiateRotation: {x: 0, y: 0, z: 0, w: 1}
+  collectionInstantiateScale: {x: 0.9, y: 0.9, z: 0.9}
+  collectionName: Macaron
   description: 
   isUnlocked: 0

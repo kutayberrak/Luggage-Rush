@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cba6975dfe04fa043a0ae602f691a511, type: 3}
-  m_Name: SampleCollection
+  m_Name: SampleCollection3 3
   m_EditorClassIdentifier: 
-  collectionType: 1
-  collectionImage: {fileID: 21300000, guid: b262ba80bbc34d845943a889ad7b6d51, type: 3}
-  collectionCountry: Mexico
-  collectionInstantiatePosition: {x: 280, y: -150, z: 0}
-  collectionInstantiateRotation: {x: 0, y: 0, z: 0.25881904, w: 0.9659258}
-  collectionInstantiateScale: {x: 1, y: 1, z: 1}
-  collectionName: Pepper
+  collectionType: 6
+  collectionImage: {fileID: 21300000, guid: b16593e9cd11a1548b19cb514a5931a8, type: 3}
+  collectionCountry: France
+  collectionInstantiatePosition: {x: -240, y: -61, z: 0}
+  collectionInstantiateRotation: {x: 0, y: 0, z: 0, w: 1}
+  collectionInstantiateScale: {x: -1.6, y: 1.6, z: 1.6}
+  collectionName: Archdetriomphe
   description: 
   isUnlocked: 0
