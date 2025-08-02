@@ -33,6 +33,7 @@ namespace GameFolders.Scripts.Managers
             GameEvents.OnLevelWin += OnLevelWin;
             GameEvents.OnLevelRestarted += OnRestartLevel;
             GameEvents.OnGameStart += StartLevel;
+            GameEvents.OnReturnToMainMenu += ClearLevelData;
         }
         private void OnDisable()
         {
@@ -40,6 +41,7 @@ namespace GameFolders.Scripts.Managers
             GameEvents.OnLevelWin -= OnLevelWin;
             GameEvents.OnLevelRestarted -= OnRestartLevel;
             GameEvents.OnGameStart -= StartLevel;
+            GameEvents.OnReturnToMainMenu -= ClearLevelData;
         }
         private void Update()
         {

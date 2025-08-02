@@ -96,8 +96,14 @@ namespace GameFolders.Scripts.UI.Panels
         }
         #endregion
         #region Button Functions
-        public void ContinueButton() => GameEvents.TriggerReturnToMainMenu();
-        public void MainMenuButton() => GameEvents.TriggerReturnToMainMenu();
+        public void ContinueButton()
+        {
+            GameEvents.TriggerReturnToMainMenu();
+        }
+        public void MainMenuButton()
+        {
+            GameEvents.TriggerReturnToMainMenu();
+        }
         public void RestartLevelButton() => GameEvents.TriggerGameStart();
         #endregion
     }

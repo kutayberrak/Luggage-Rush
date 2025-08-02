@@ -122,8 +122,6 @@ public class SettingsMenu : MonoBehaviour
                 // backgroundImage.DOFade(0f, collapseFadeDuration);
             }
         }
-
-
     }
 
 

@@ -7,7 +7,11 @@ namespace GameFolders.Scripts.Managers
     public class SagaMapManager : MonoBehaviour
     {
         [SerializeField] private List<Button> buttons;
-
+        [SerializeField] private List<float> fillAmounts;
+        
+        [Header("Road")]
+        [SerializeField] private Image roadImage;
+        
         [Header("Button Sprites")]
         [SerializeField] private Sprite lockedLevelSprite;
         [SerializeField] private Sprite completedLevelSprite;
@@ -18,10 +22,10 @@ namespace GameFolders.Scripts.Managers
         [SerializeField] private float inactiveScale = 0.7f;
 
         private int _currentLevel;
-
         private void Start()
         {
             _currentLevel = GameManager.Instance.CurrentLevel;
+            SetRoadmapFillAmount(_currentLevel);
             InitializeButtons();
         }
 
@@ -43,12 +47,12 @@ namespace GameFolders.Scripts.Managers
 
         private void OnLevelWin()
         {
-            int currentLevel = GameManager.Instance.CurrentLevel;
-            SetButtonVisual(buttons[currentLevel], completedLevelSprite, inactiveScale, 0.9f);
-
-            if (currentLevel >= buttons.Count - 1) return;
-
-            SetButtonVisual(buttons[currentLevel + 1], currentLevelSprite, activeScale, 1f);
+            _currentLevel = GameManager.Instance.CurrentLevel;
+            Debug.Log(_currentLevel);
+            SetButtonVisual(buttons[_currentLevel], completedLevelSprite, inactiveScale, 1f);
+            if (_currentLevel >= buttons.Count - 1) return;
+            SetRoadmapFillAmount(_currentLevel + 1);
+            SetButtonVisual(buttons[_currentLevel + 1], currentLevelSprite, activeScale, 1f);
         }
 
         private void SetButtonVisual(Button button, Sprite sprite, float scale, float alpha)
@@ -63,6 +67,11 @@ namespace GameFolders.Scripts.Managers
         {
             if (GameManager.Instance.CurrentLevel != levelIndex) return;
             GameEvents.TriggerGameStart();
+        }
+
+        private void SetRoadmapFillAmount(int levelIndex)
+        {
+            roadImage.fillAmount = fillAmounts[levelIndex];
         }
     }
 }
