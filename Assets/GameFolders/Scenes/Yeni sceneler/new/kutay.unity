@@ -4424,6 +4424,11 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 050d96bd16bb763499b14de6f98f791a, type: 3}
   - {fileID: 21300000, guid: a8cdf3fb3c9a47c499c5b4cc25784590, type: 3}
   - {fileID: 21300000, guid: e86f6090759881e44bc56a196e64cb9f, type: 3}
+  - {fileID: 21300000, guid: f6587ed87423f014391eed2c6f23b1fc, type: 3}
+  - {fileID: 21300000, guid: a7b68b0566b740846b7247557e54848a, type: 3}
+  - {fileID: 21300000, guid: f1ffc91afa1d7eb40832cac6f12ae65f, type: 3}
+  - {fileID: 21300000, guid: ab461a1aa2694db4a825a283240e5bc6, type: 3}
+  - {fileID: 21300000, guid: d6a51ada8ef6f1b4c9cc75b14f5ea00d, type: 3}
   luggageTypeNames: []
 --- !u!4 &462526796
 Transform:
@@ -15761,11 +15766,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelData:
-  - {fileID: 11400000, guid: ca6b6990fefca564b80ab0ab5148dd35, type: 2}
-  - {fileID: 11400000, guid: 58c44add72ad443459d7909e05c085c7, type: 2}
-  - {fileID: 11400000, guid: 4d0e06accd8aa914aaccdf34e57aa45a, type: 2}
-  - {fileID: 11400000, guid: bbb39cd9315837143969760e8f10e14e, type: 2}
-  - {fileID: 11400000, guid: 9056fcc836e70614cbef4c8f940778e5, type: 2}
+  - {fileID: 11400000, guid: e00206f3e28209042b1383dd6c262e69, type: 2}
+  - {fileID: 11400000, guid: e03feb8a46559f840865e76fdf3dfdb5, type: 2}
+  - {fileID: 11400000, guid: 35bbee7d1c6c7b245a5f86c79a486d97, type: 2}
+  - {fileID: 11400000, guid: e89ef8a2e0cd123428f5db3a7f3617cb, type: 2}
+  - {fileID: 11400000, guid: 29cfc7f40a1fdc34f91c4ed5e55dd034, type: 2}
+  - {fileID: 11400000, guid: 408bc7b6c7314d0438b0d23034b1f5b9, type: 2}
+  - {fileID: 11400000, guid: 3af14aabfc07fbd45bd419264fa7c0d9, type: 2}
+  - {fileID: 11400000, guid: 30f8c259d471d6d48ae5428302156568, type: 2}
+  - {fileID: 11400000, guid: 8d2561ffa6dce0f458af849cb9ec2780, type: 2}
+  - {fileID: 11400000, guid: fec80965d02b148428583890bf8b8590, type: 2}
   levelText: {fileID: 1117807477}
 --- !u!4 &1268513128
 Transform:
@@ -25104,6 +25114,62 @@ PrefabInstance:
       propertyPath: m_Name
       value: Object Pool Manager
       objectReference: {fileID: 0}
+    - target: {fileID: 8466464633084687791, guid: 803744fdf23664843b22c657a63e50ce, type: 3}
+      propertyPath: garbagePrefabs.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8466464633084687791, guid: 803744fdf23664843b22c657a63e50ce, type: 3}
+      propertyPath: luggagePrefabs.Array.size
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8466464633084687791, guid: 803744fdf23664843b22c657a63e50ce, type: 3}
+      propertyPath: collectionPrefabs.Array.size
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8466464633084687791, guid: 803744fdf23664843b22c657a63e50ce, type: 3}
+      propertyPath: 'garbagePrefabs.Array.data[3]'
+      value: 
+      objectReference: {fileID: 2060156258613641332, guid: f58895547fe5870478d28d1f789c5d54, type: 3}
+    - target: {fileID: 8466464633084687791, guid: 803744fdf23664843b22c657a63e50ce, type: 3}
+      propertyPath: 'luggagePrefabs.Array.data[5]'
+      value: 
+      objectReference: {fileID: 5386174106921542671, guid: 4aed56bcc79c5c54a9008a4760817a86, type: 3}
+    - target: {fileID: 8466464633084687791, guid: 803744fdf23664843b22c657a63e50ce, type: 3}
+      propertyPath: 'luggagePrefabs.Array.data[6]'
+      value: 
+      objectReference: {fileID: 5612018446511564995, guid: 17beb6b198a30e14c86173db0f9c2f00, type: 3}
+    - target: {fileID: 8466464633084687791, guid: 803744fdf23664843b22c657a63e50ce, type: 3}
+      propertyPath: 'luggagePrefabs.Array.data[7]'
+      value: 
+      objectReference: {fileID: 2891740084553361905, guid: 4bd53fde7e9c1384aa888331fb0791ba, type: 3}
+    - target: {fileID: 8466464633084687791, guid: 803744fdf23664843b22c657a63e50ce, type: 3}
+      propertyPath: 'luggagePrefabs.Array.data[8]'
+      value: 
+      objectReference: {fileID: 1747672369503712941, guid: 7c5910b77628e9546a022080ef337066, type: 3}
+    - target: {fileID: 8466464633084687791, guid: 803744fdf23664843b22c657a63e50ce, type: 3}
+      propertyPath: 'luggagePrefabs.Array.data[9]'
+      value: 
+      objectReference: {fileID: 5939354479724947701, guid: 8d21f98c2c251184e990aa1231602d88, type: 3}
+    - target: {fileID: 8466464633084687791, guid: 803744fdf23664843b22c657a63e50ce, type: 3}
+      propertyPath: 'collectionPrefabs.Array.data[5]'
+      value: 
+      objectReference: {fileID: 6821658586991434294, guid: cecbb12dd95c8a94d92edcd536905d28, type: 3}
+    - target: {fileID: 8466464633084687791, guid: 803744fdf23664843b22c657a63e50ce, type: 3}
+      propertyPath: 'collectionPrefabs.Array.data[6]'
+      value: 
+      objectReference: {fileID: 605177036433344451, guid: 41cc92d16c0eedb4cbf7185105a5d72f, type: 3}
+    - target: {fileID: 8466464633084687791, guid: 803744fdf23664843b22c657a63e50ce, type: 3}
+      propertyPath: 'collectionPrefabs.Array.data[7]'
+      value: 
+      objectReference: {fileID: 24360092398293527, guid: a11a7cf17bfa8ff4690927886edc2940, type: 3}
+    - target: {fileID: 8466464633084687791, guid: 803744fdf23664843b22c657a63e50ce, type: 3}
+      propertyPath: 'collectionPrefabs.Array.data[8]'
+      value: 
+      objectReference: {fileID: 8543613597186373216, guid: ccf55881e467b684baf6e37802a0636d, type: 3}
+    - target: {fileID: 8466464633084687791, guid: 803744fdf23664843b22c657a63e50ce, type: 3}
+      propertyPath: 'collectionPrefabs.Array.data[9]'
+      value: 
+      objectReference: {fileID: 1888748332690853013, guid: 8172922d89748294db071a89a9142d86, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
