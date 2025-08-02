@@ -424,6 +424,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 634831407}
+        m_TargetAssemblyTypeName: GameFolders.Scripts.UI.Panels.PanelManager, Assembly-CSharp
+        m_MethodName: MainMenuButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &18675153
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -444,7 +456,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ada5bcd83f393ce4299738c386e94ead, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 992a7bfc1bf4052449ad087b39a3a778, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1104,7 +1116,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2112976334}
         m_TargetAssemblyTypeName: ButtonAudio, Assembly-CSharp
         m_MethodName: ClickSound
         m_Mode: 1
@@ -1116,7 +1128,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2112976332}
         m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
         m_MethodName: ToggleMusic
         m_Mode: 1
@@ -1148,7 +1160,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 42bc5389fe1184d4cb2ae01c2487ff01, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 140803e4db29f2f43a8b540ec6542eec, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2381,7 +2393,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 2a21f9cf3961ef640a13159e523cbd5b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d76a84813b0c19042afbd37eef9d28bc, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3195,9 +3207,21 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2112976334}
         m_TargetAssemblyTypeName: ButtonAudio, Assembly-CSharp
         m_MethodName: ClickSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 634831407}
+        m_TargetAssemblyTypeName: GameFolders.Scripts.UI.Panels.PanelManager, Assembly-CSharp
+        m_MethodName: MainMenuButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3227,7 +3251,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ada5bcd83f393ce4299738c386e94ead, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 992a7bfc1bf4052449ad087b39a3a778, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -10134,7 +10158,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 6d2e623e74de8254584fc98bc4582a41, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1bec09da54dd4294ca6b7c26161f037b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -15699,7 +15723,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2112976334}
         m_TargetAssemblyTypeName: ButtonAudio, Assembly-CSharp
         m_MethodName: ClickSound
         m_Mode: 1
@@ -15711,7 +15735,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2112976332}
         m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
         m_MethodName: ToggleSFX
         m_Mode: 1
@@ -15743,7 +15767,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 6d2e623e74de8254584fc98bc4582a41, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1bec09da54dd4294ca6b7c26161f037b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -17994,7 +18018,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 42bc5389fe1184d4cb2ae01c2487ff01, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 140803e4db29f2f43a8b540ec6542eec, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -18230,7 +18254,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2112976334}
         m_TargetAssemblyTypeName: ButtonAudio, Assembly-CSharp
         m_MethodName: ClickSound
         m_Mode: 1
@@ -18262,7 +18286,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 2a21f9cf3961ef640a13159e523cbd5b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d76a84813b0c19042afbd37eef9d28bc, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -18690,7 +18714,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -11.023987, y: -998.4065}
+  m_AnchoredPosition: {x: -11.024048, y: -998.4065}
   m_SizeDelta: {x: 22.048, y: -1996.9869}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1711312445
