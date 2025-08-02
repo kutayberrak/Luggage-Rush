@@ -11,7 +11,7 @@ namespace GameFolders.Scripts.Managers
         [SerializeField] private LevelDataSO[] levelData;
         [SerializeField] private TextMeshProUGUI levelText;
         public LevelDataSO CurrentLevelData => _currentLevelData;
-        public int CurrentLevel => _currentLevelIndex; // Assuming levels are 1-indexed for display purposes
+        public int CurrentLevel => _currentLevelIndex; 
 
         private int _currentLevelIndex = 0;
         private LevelDataSO _currentLevelData;
@@ -32,12 +32,14 @@ namespace GameFolders.Scripts.Managers
             GameEvents.OnLevelFailed += OnLevelFailed;
             GameEvents.OnLevelWin += OnLevelWin;
             GameEvents.OnLevelRestarted += OnRestartLevel;
+            GameEvents.OnGameStart += StartLevel;
         }
         private void OnDisable()
         {
             GameEvents.OnLevelFailed -= OnLevelFailed;
             GameEvents.OnLevelWin -= OnLevelWin;
             GameEvents.OnLevelRestarted -= OnRestartLevel;
+            GameEvents.OnGameStart -= StartLevel;
         }
         private void Update()
         {
@@ -70,9 +72,8 @@ namespace GameFolders.Scripts.Managers
             SpawnManager.Instance.LoadLevelSpawnRequirements();
         }
 
-        public void StartLevel()
+        private void StartLevel()
         {
-            GameEvents.TriggerGameStart();
             ShowLevelText();
             LoadLevelRequirements();
 

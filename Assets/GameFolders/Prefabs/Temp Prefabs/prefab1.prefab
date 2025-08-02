@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 6650981994061986445}
   - component: {fileID: 5737957169442224983}
   - component: {fileID: 3547826111038438581}
-  - component: {fileID: 4946194017888660032}
   - component: {fileID: -1261079373292554587}
   m_Layer: 0
   m_Name: prefab1
@@ -138,27 +137,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &4946194017888660032
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8927863972817789624}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &-1261079373292554587
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -171,5 +149,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d0c638e55de17448a17816a9cc576d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  category: 0
   luggageType: 2
-  useColliderReturn: 1
+  garbageType: 0
+  collectionType: 0
+  speed: 5
+  arrivalThreshold: 0.05
+  riseDuration: 0.3
+  riseHeight: 1
+  riseEase: 6
+  useCurveMovement: 1
+  curveMoveDuration: 0.8
+  curveEase: 12
+  curveHeight: 1.5
+  useRotationAnimation: 1
+  rotationDuration: 0.6
+  minScale: 0.7
+  targetScale: 1
+  reservedSlotIndex: -1
