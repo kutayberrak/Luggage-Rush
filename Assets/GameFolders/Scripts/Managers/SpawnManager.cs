@@ -71,6 +71,9 @@ public class SpawnManager : MonoBehaviour
 
         _hasCollectiblePiece = levelData.HasCollectiblePiece;
 
+        // Load spawn interval from level data
+        spawnInterval = levelData.SpawnInterval;
+
         //load spawn weights from level data
         LoadSpawnWeightsFromLevelData(levelData);
 
