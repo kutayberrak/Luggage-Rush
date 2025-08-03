@@ -22,6 +22,7 @@ public class GarbageItem : ClickableObject, ISlottable
         // Subscribe to level win event
         GameEvents.OnLevelWin += ReturnToPool;
         GameEvents.OnLevelFailed += ReturnToPool;
+        GameEvents.OnReturnToMainMenu += ReturnToPool;
     }
 
     private void OnDisable()
@@ -31,6 +32,7 @@ public class GarbageItem : ClickableObject, ISlottable
         // Unsubscribe from level win event
         GameEvents.OnLevelWin -= ReturnToPool;
         GameEvents.OnLevelFailed -= ReturnToPool;
+        GameEvents.OnReturnToMainMenu -= ReturnToPool;
     }
 
     private async UniTaskVoid StartMaxLifeTimeTimer()

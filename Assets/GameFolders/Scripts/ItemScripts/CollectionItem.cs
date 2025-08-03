@@ -107,6 +107,7 @@ public class CollectionItem : ClickableObject
         // Subscribe to level win event
         GameEvents.OnLevelWin += ReturnToPool;
         GameEvents.OnLevelFailed += ReturnToPool;
+        GameEvents.OnReturnToMainMenu += ReturnToPool;
     }
 
     private void OnDisable()
@@ -116,6 +117,7 @@ public class CollectionItem : ClickableObject
         // Unsubscribe from level win event
         GameEvents.OnLevelWin -= ReturnToPool;
         GameEvents.OnLevelFailed -= ReturnToPool;
+        GameEvents.OnReturnToMainMenu -= ReturnToPool;
     }
 
     private async UniTaskVoid StartMaxLifeTimeTimer()
