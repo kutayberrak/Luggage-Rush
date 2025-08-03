@@ -53,6 +53,7 @@ public class PlayerController : MonoBehaviour
         {
             if (currentClickable != null)
             {
+                AudioManager.Instance.PlaySFX("CollectSFX_1");
                 currentClickable.OnClickedByPlayer();
                 ClearOutline(currentClickable);
                 currentClickable = null;
