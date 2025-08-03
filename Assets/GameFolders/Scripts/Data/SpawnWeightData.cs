@@ -6,8 +6,8 @@ namespace GameFolders.Scripts.Data
     [Serializable]
     public struct SpawnWeightData
     {
-        [Range(0,10)] public int LuggageSpawnWeight;
-        [Range(0,10)] public int CollectableSpawnWeight;
-        [Range(0,10)] public int JunkSpawnWeight;
+        [Range(0,10)] public float LuggageSpawnWeight;
+        [Range(0,10)] public float CollectableSpawnWeight;
+        [Range(0,10)] public float JunkSpawnWeight;
     }
 }

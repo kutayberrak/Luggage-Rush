@@ -24,5 +24,6 @@ MonoBehaviour:
   junkPieceType: 04000000
   spawnWeightData:
     LuggageSpawnWeight: 9
-    CollectableSpawnWeight: 1
-    JunkSpawnWeight: 5
+    CollectableSpawnWeight: 0.5
+    JunkSpawnWeight: 2
+  spawnInterval: 0.14

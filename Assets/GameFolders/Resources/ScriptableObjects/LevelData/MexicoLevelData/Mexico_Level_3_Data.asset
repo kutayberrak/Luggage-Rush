@@ -16,11 +16,14 @@ MonoBehaviour:
   targetLuggageInfo:
   - LuggageType: 4
     Count: 9
+  - LuggageType: 5
+    Count: 3
   hasCollectiblePiece: 1
-  collectablePieceType: 0200000004000000
+  collectablePieceType: 04000000
   luggageTypesToSpawn: 030000000400000005000000
   junkPieceType: 02000000
   spawnWeightData:
     LuggageSpawnWeight: 9
-    CollectableSpawnWeight: 3
-    JunkSpawnWeight: 4
+    CollectableSpawnWeight: 0.5
+    JunkSpawnWeight: 2
+  spawnInterval: 0.06

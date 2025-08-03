@@ -158,6 +158,8 @@ MonoBehaviour:
   curveHeight: 2
   useRotationAnimation: 1
   rotationDuration: 0.8
+  minScale: 0.7
+  targetScale: 1
   reservedSlotIndex: -1
 --- !u!65 &-5599556615702046552
 BoxCollider:
@@ -178,5 +180,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.1976125, y: 0.5196902, z: 1.1976128}
-  m_Center: {x: 0, y: 0.2598451, z: 0}
+  m_Size: {x: 1.1976125, y: 0.4, z: 1.1976128}
+  m_Center: {x: 0, y: 0.2, z: 0}

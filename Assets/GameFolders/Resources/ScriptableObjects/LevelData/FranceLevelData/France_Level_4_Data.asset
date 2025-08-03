@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89b21b5d0567bef4aa52dc9b3c0f8ad4, type: 3}
   m_Name: France_Level_4_Data
   m_EditorClassIdentifier: 
-  levelTimeInSeconds: 70
+  levelTimeInSeconds: 60
   targetLuggageInfo:
   - LuggageType: 10
     Count: 12
@@ -21,8 +21,9 @@ MonoBehaviour:
   hasCollectiblePiece: 1
   collectablePieceType: 0a000000
   luggageTypesToSpawn: 0a00000009000000060000000a000000
-  junkPieceType: 01000000
+  junkPieceType: 0100000002000000
   spawnWeightData:
     LuggageSpawnWeight: 9
-    CollectableSpawnWeight: 2
-    JunkSpawnWeight: 7
+    CollectableSpawnWeight: 0.5
+    JunkSpawnWeight: 4
+  spawnInterval: 0.08
