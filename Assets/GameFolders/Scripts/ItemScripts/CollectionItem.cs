@@ -39,7 +39,8 @@ public class CollectionItem : ClickableObject
         clickSequence.Join(transform.DORotate(Vector3.zero, riseDuration).SetEase(riseEase));
 
         // Animasyon tamamland���nda slot hareketini ba�lat
-        clickSequence.OnComplete(() => {
+        clickSequence.OnComplete(() =>
+        {
             isMoving = false;
         });
 
@@ -53,9 +54,42 @@ public class CollectionItem : ClickableObject
         {
             endPos = rt.position;
         }
-            StartCurveMovement();
+        StartCurveMovement();
     }
 
+    public override void OnClickedByPlayer()
+    {
+        // **YENİ**: Tıklama cooldown kontrolü
+        if (Time.time - lastClickTime < CLICK_COOLDOWN)
+        {
+            return;
+        }
+        lastClickTime = Time.time;
+
+        // Eğer zaten bir slot'a rezerveliysen veya hâlihazırda hareket ediyorsa
+        if (reservedSlotIndex >= 0 || isMoving)
+        {
+            Debug.Log($"[ClickableObject] Object already reserved or moving. Slot: {reservedSlotIndex}, Moving: {isMoving}");
+            return;
+        }
+
+        // **YENİ**: Tıklama animasyonu sırasında tekrar tıklamayı engelle
+        if (isInClickAnimation)
+        {
+            Debug.Log($"[ClickableObject] Click animation in progress for {UniqueID}");
+            return;
+        }
+
+
+
+        Debug.Log($"[ClickableObject] Processing click for {UniqueID}");
+
+
+        gameObject.GetComponent<Collider>().isTrigger = true;
+
+        // **YENİ**: Tıklama animasyonunu başlat
+        StartClickAnimation();
+    }
     protected override void StartCurveMovement()
     {
         if (isInCurveMovement) return;
@@ -87,7 +121,8 @@ public class CollectionItem : ClickableObject
         curveMovementSequence.Insert(0.5f, transform.DOScale(Vector3.zero, 0.5f)
             .SetEase(Ease.InQuad));
 
-        curveMovementSequence.OnComplete(() => {
+        curveMovementSequence.OnComplete(() =>
+        {
             isInCurveMovement = false;
 
             SlotManager.Instance.PlayCollectionParticle(endPos);

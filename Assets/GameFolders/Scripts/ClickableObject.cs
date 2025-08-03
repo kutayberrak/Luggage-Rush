@@ -63,7 +63,7 @@ public class ClickableObject : MonoBehaviour
 
     [HideInInspector] public int reservedSlotIndex = -1;
     protected bool isMoving = false;
-    private bool isInClickAnimation = false;
+    protected bool isInClickAnimation = false;
     protected bool isInCurveMovement = false;
 
     // **Yeni** alanlar:
@@ -71,9 +71,9 @@ public class ClickableObject : MonoBehaviour
     private float moveStartTime = 0f;
 
     // **YENİ**: Tıklama kilidi
-    private bool isClickProcessed = false;
-    private float lastClickTime = 0f;
-    private const float CLICK_COOLDOWN = 0.05f; // 50ms tıklama bekleme süresi (daha hızlı)
+    protected bool isClickProcessed = false;
+    protected float lastClickTime = 0f;
+    protected const float CLICK_COOLDOWN = 0.05f; // 50ms tıklama bekleme süresi (daha hızlı)
 
     // **YENİ**: Animasyon için orijinal pozisyon ve rotasyon
     protected Vector3 originalPosition;
@@ -145,7 +145,7 @@ public class ClickableObject : MonoBehaviour
         if (useRotationAnimation)
         {
             Vector3 startRotation = transform.eulerAngles;
-            Vector3 endRotation = new Vector3(45f,0f,0f);
+            Vector3 endRotation = new Vector3(45f, 0f, 0f);
 
             curveMovementSequence.Join(transform.DORotate(endRotation, rotationDuration)
                 .SetEase(Ease.OutBack));
@@ -193,7 +193,7 @@ public class ClickableObject : MonoBehaviour
         SlotManager.Instance.TryPlaceObject3D(gameObject, UniqueID);
 
         clickSequence.Append(transform.DOMove(risePosition, riseDuration).SetEase(riseEase));
-        clickSequence.Join(transform.DORotate(new Vector3(45f,0f,0f), riseDuration).SetEase(riseEase));
+        clickSequence.Join(transform.DORotate(new Vector3(45f, 0f, 0f), riseDuration).SetEase(riseEase));
 
         // Animasyon tamamlandığında slot hareketini başlat
         clickSequence.OnComplete(() =>
@@ -246,7 +246,7 @@ public class ClickableObject : MonoBehaviour
         }
     }
 
-    public void OnClickedByPlayer()
+    public virtual void OnClickedByPlayer()
     {
         // **YENİ**: Tıklama cooldown kontrolü
         if (Time.time - lastClickTime < CLICK_COOLDOWN)
