@@ -7,9 +7,21 @@ public class CollectionItemUI : MonoBehaviour
 {
     [Header("UI References")]
     [SerializeField] private Image collectionImage;
-    
+
     public CollectionData collectionData;
     public CollectiblePieceType CollectionType => collectionData?.CollectionType ?? CollectiblePieceType.None;
+
+    /// <summary>
+    /// OnEnable'da UI'ý güncelle
+    /// </summary>
+    private void OnEnable()
+    {
+        // Eðer collection data varsa güncelle
+        if (collectionData != null)
+        {
+            UpdateVisual();
+        }
+    }
 
     /// <summary>
     /// Initialize the collection item with data
@@ -33,10 +45,18 @@ public class CollectionItemUI : MonoBehaviour
             collectionImage.sprite = collectionData.CollectionImage;
         }
 
-        collectionImage.color = collectionData.IsUnlocked ? Color.white : Color.black; 
+        // CollectionData artýk PlayerPrefs'ten okuyacak
+        bool isUnlocked = collectionData.IsUnlocked;
 
+        // Görsel durumu güncelle
+        if (collectionImage != null)
+        {
+            collectionImage.color = isUnlocked ? Color.white : Color.black;
+        }
+
+        Debug.Log($"[CollectionItemUI] Updated visual for {collectionData.CollectionType} in {collectionData.CollectionCountry}: {(isUnlocked ? "UNLOCKED" : "LOCKED")}");
     }
-    
+
     /// <summary>
     /// Get collection data
     /// </summary>
@@ -44,13 +64,45 @@ public class CollectionItemUI : MonoBehaviour
     {
         return collectionData;
     }
-    
+
     /// <summary>
-    /// Check if collection is unlocked
+    /// Check if collection is unlocked (CollectionData'dan)
     /// </summary>
     public bool IsUnlocked()
     {
         return collectionData?.IsUnlocked ?? false;
     }
 
-} 
+    /// <summary>
+    /// Koleksiyonu aç (CollectionData üzerinden)
+    /// </summary>
+    public void UnlockCollection()
+    {
+        collectionData?.UnlockCollection();
+        UpdateVisual();
+    }
+
+    /// <summary>
+    /// Koleksiyonu kilitle (CollectionData üzerinden)
+    /// </summary>
+    public void LockCollection()
+    {
+        collectionData?.ResetCollection();
+        UpdateVisual();
+    }
+
+    /// <summary>
+    /// Koleksiyon durumunu deðiþtir (toggle)
+    /// </summary>
+    public void ToggleCollection()
+    {
+        if (IsUnlocked())
+        {
+            LockCollection();
+        }
+        else
+        {
+            UnlockCollection();
+        }
+    }
+}

@@ -27,22 +27,6 @@ public class CollectionInventory : MonoBehaviour
 
     public bool TryCollect(GameObject collection)
     {
-        // Diðer Collection iþlemleri
-        /*var set = collectedByLevel[currentLevelData];
-
-        if (set.Contains(type))
-        {
-            Debug.Log($"[CollectionInventory] Already collected {type} in level {currentLevelData.name}");
-            return false;
-        }
-
-        set.Add(type);
-        Debug.Log($"[CollectionInventory] Collected {type} in level {currentLevelData.name}");
-        return true;*/
-
-
-
-
         CollectionItem collectionItem = collection.GetComponent<CollectionItem>();
         collectionItem.StartCurve();
         return true;
