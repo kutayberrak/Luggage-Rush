@@ -13,7 +13,7 @@ namespace GameFolders.Scripts
 
         // Cooldown variables for level end events
         private static float lastLevelEndTime = -1f;
-        private static readonly float levelEndCooldown = 2f; // 2 seconds cooldown
+        private static readonly float levelEndCooldown = 4f; // 4 seconds cooldown
 
         public static void TriggerLevelRestarted() => OnLevelRestarted?.Invoke();
         public static void TriggerReturnToMainMenu() => OnReturnToMainMenu?.Invoke();
