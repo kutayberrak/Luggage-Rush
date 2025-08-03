@@ -23,7 +23,8 @@ namespace GameFolders.Scripts.ScriptableObjects
         [SerializeField] private List<LuggageType> luggageTypesToSpawn;
         [SerializeField] private List<JunkPieceType> junkPieceType;
         [SerializeField] private SpawnWeightData spawnWeightData;
-        
+        [SerializeField] private float spawnInterval = 0.2f;
+        public float SpawnInterval => spawnInterval;
         public List<JunkPieceType> JunkPieceTypes => junkPieceType;
         public List<LuggageType> LuggageTypesToSpawn => luggageTypesToSpawn;
         public List<CollectiblePieceType> CollectablePieceType => collectablePieceType;

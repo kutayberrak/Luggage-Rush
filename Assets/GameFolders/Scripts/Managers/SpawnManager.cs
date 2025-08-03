@@ -5,8 +5,6 @@ using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using GameFolders.Scripts.ScriptableObjects;
 using GameFolders.Scripts.Managers;
-using GameFolders.Scripts;
-using GameFolders.Scripts.Data;
 
 public class SpawnManager : MonoBehaviour
 {
