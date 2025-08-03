@@ -116,7 +116,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6751747ec16ccfb469ba7d4ad62a230a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  category: 0
+  category: 1
   luggageType: 0
   garbageType: 4
   collectionType: 0
