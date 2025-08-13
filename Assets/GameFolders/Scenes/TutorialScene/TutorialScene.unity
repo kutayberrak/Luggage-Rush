@@ -26091,6 +26091,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tutorialText: {fileID: 171512690}
   darkenStencil: {fileID: 449707992}
+  backgroundImage: {fileID: 709103983}
 --- !u!1 &2098917598
 GameObject:
   m_ObjectHideFlags: 0
