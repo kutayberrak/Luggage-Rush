@@ -26413,7 +26413,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   clickableLayer:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 3072
   mainCam: {fileID: 713802193}
 --- !u!4 &2124378176
 Transform:

@@ -137,10 +137,10 @@ public class ObjectPoolManager : MonoBehaviour
         if (collectionPrefabs.Contains(prefab))
             return collecitonParent;
 
-        if(specialPrefabs.Contains(prefab))
+        if (specialPrefabs.Contains(prefab))
             return specialParent;
 
-        return poolParent; // fallback (kategori dýþý)
+        return poolParent; // fallback (kategori dï¿½ï¿½ï¿½)
     }
 
 
@@ -174,6 +174,7 @@ public class ObjectPoolManager : MonoBehaviour
     {
         Rigidbody rb = obj.GetComponent<Rigidbody>();
         Collider collider = rb.GetComponent<Collider>();
+        obj.layer = LayerMask.NameToLayer("Clickable");
         if (rb != null)
         {
             rb.linearVelocity = Vector3.zero;
