@@ -121,6 +121,9 @@ MonoBehaviour:
   targetScale: 1
   reservedSlotIndex: -1
   boxCollider: {fileID: 0}
+  timeToRemove: 5
+  explosionForce: 250
+  explosionRadius: 10
 --- !u!135 &7507342101462974404
 SphereCollider:
   m_ObjectHideFlags: 0
