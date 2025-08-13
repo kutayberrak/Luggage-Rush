@@ -20,6 +20,9 @@ public class ObjectPoolManager : MonoBehaviour
     [Header("Collection Prefabs")]
     [SerializeField] private List<GameObject> collectionPrefabs = new();
 
+    [Header("Special Prefabs")]
+    [SerializeField] private List<GameObject> specialPrefabs = new();
+
     public static ObjectPoolManager Instance { get; private set; }
 
     [SerializeField] private int poolSize = 10;
@@ -29,6 +32,7 @@ public class ObjectPoolManager : MonoBehaviour
     private Transform lugageParent;
     private Transform garbageParent;
     private Transform collecitonParent;
+    private Transform specialParent;
 
     private void Awake()
     {
@@ -55,6 +59,10 @@ public class ObjectPoolManager : MonoBehaviour
         collecitonParent = collectionParenObj.transform;
         collecitonParent.SetParent(poolParent);
 
+        GameObject specialParenObj = new GameObject("Specials");
+        specialParent = specialParenObj.transform;
+        specialParent.SetParent(poolParent);
+
         InitializePool();
     }
 
@@ -63,6 +71,7 @@ public class ObjectPoolManager : MonoBehaviour
         AddToPool(luggagePrefabs, lugageParent);
         AddToPool(garbagePrefabs, garbageParent);
         AddToPool(collectionPrefabs, collecitonParent);
+        AddToPool(specialPrefabs, specialParent);
     }
 
     private void AddToPool(List<GameObject> prefabs, Transform parent)
@@ -128,6 +137,9 @@ public class ObjectPoolManager : MonoBehaviour
         if (collectionPrefabs.Contains(prefab))
             return collecitonParent;
 
+        if(specialPrefabs.Contains(prefab))
+            return specialParent;
+
         return poolParent; // fallback (kategori dýþý)
     }
 
@@ -152,6 +164,8 @@ public class ObjectPoolManager : MonoBehaviour
                 return garbagePrefabs;
             case ObjectType.Collection:
                 return collectionPrefabs;
+            case ObjectType.Special:
+                return specialPrefabs;
             default:
                 return new List<GameObject>();
         }

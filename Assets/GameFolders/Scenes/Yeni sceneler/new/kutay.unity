@@ -7627,6 +7627,9 @@ MonoBehaviour:
   - objectType: 2
     spawnWeight: 1
     currentWeight: 0
+  - objectType: 3
+    spawnWeight: 0.5
+    currentWeight: 0
   newSpawnInterval: 2
 --- !u!1 &634831406
 GameObject:
@@ -16056,6 +16059,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelData:
+  - {fileID: 11400000, guid: 38283d146731b3240941f4d9c1e1ea90, type: 2}
   - {fileID: 11400000, guid: e00206f3e28209042b1383dd6c262e69, type: 2}
   - {fileID: 11400000, guid: e03feb8a46559f840865e76fdf3dfdb5, type: 2}
   - {fileID: 11400000, guid: 35bbee7d1c6c7b245a5f86c79a486d97, type: 2}
@@ -26436,6 +26440,10 @@ PrefabInstance:
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8466464633084687791, guid: 803744fdf23664843b22c657a63e50ce, type: 3}
+      propertyPath: specialPrefabs.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8466464633084687791, guid: 803744fdf23664843b22c657a63e50ce, type: 3}
       propertyPath: collectionPrefabs.Array.size
       value: 10
       objectReference: {fileID: 0}
@@ -26463,6 +26471,14 @@ PrefabInstance:
       propertyPath: 'luggagePrefabs.Array.data[9]'
       value: 
       objectReference: {fileID: 5939354479724947701, guid: 8d21f98c2c251184e990aa1231602d88, type: 3}
+    - target: {fileID: 8466464633084687791, guid: 803744fdf23664843b22c657a63e50ce, type: 3}
+      propertyPath: 'specialPrefabs.Array.data[0]'
+      value: 
+      objectReference: {fileID: 6204804707525332649, guid: 987425c417a46fe45a68808036f5d4bb, type: 3}
+    - target: {fileID: 8466464633084687791, guid: 803744fdf23664843b22c657a63e50ce, type: 3}
+      propertyPath: 'specialPrefabs.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2657068063412885924, guid: 8779d42da946b57409e914e96fd4f5a6, type: 3}
     - target: {fileID: 8466464633084687791, guid: 803744fdf23664843b22c657a63e50ce, type: 3}
       propertyPath: 'collectionPrefabs.Array.data[5]'
       value: 

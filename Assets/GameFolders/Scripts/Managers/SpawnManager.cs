@@ -22,7 +22,8 @@ public class SpawnManager : MonoBehaviour
     {
         new SpawnWeightEntry { objectType = ObjectType.Luggage, spawnWeight = 5f },
         new SpawnWeightEntry { objectType = ObjectType.Garbage, spawnWeight = 2f },
-        new SpawnWeightEntry { objectType = ObjectType.Collection, spawnWeight = 1f }
+        new SpawnWeightEntry { objectType = ObjectType.Collection, spawnWeight = 1f },
+        new SpawnWeightEntry { objectType = ObjectType.Special, spawnWeight = 0.5f }
     };
 
     [Header("Runtime Controls")]
@@ -54,6 +55,7 @@ public class SpawnManager : MonoBehaviour
         allowedObjectsByType[ObjectType.Luggage] = new List<GameObject>();
         allowedObjectsByType[ObjectType.Garbage] = new List<GameObject>();
         allowedObjectsByType[ObjectType.Collection] = new List<GameObject>();
+        allowedObjectsByType[ObjectType.Special] = new List<GameObject>();
     }
 
     public void LoadLevelSpawnRequirements()
@@ -69,6 +71,7 @@ public class SpawnManager : MonoBehaviour
         var luggagePrefabs = ObjectPoolManager.Instance.GetObjectsByType(ObjectType.Luggage);
         var garbagePrefabs = ObjectPoolManager.Instance.GetObjectsByType(ObjectType.Garbage);
         var collectionPrefabs = ObjectPoolManager.Instance.GetObjectsByType(ObjectType.Collection);
+        var specialPrefabs = ObjectPoolManager.Instance.GetObjectsByType(ObjectType.Special);
 
         _hasCollectiblePiece = levelData.HasCollectiblePiece;
 
@@ -131,6 +134,21 @@ public class SpawnManager : MonoBehaviour
             }
         }
 
+        foreach (var specialType in levelData.SpecialTypesToSpawn)
+        {
+            foreach (GameObject prefab in specialPrefabs)
+            {
+                var specialItem = prefab.GetComponent<SpecialItem>();
+                if (specialItem != null && specialItem.specialType == specialType)
+                {
+                    allowedObjectsByType[ObjectType.Special].Add(prefab);
+
+                    break;
+                }
+            }
+        }
+
+
         if (allowedObjectsByType.TryGetValue(ObjectType.Collection, out var collectionList))
         {
             _hasCollectiblePiece = collectionList.Count > 0;
@@ -157,6 +175,9 @@ public class SpawnManager : MonoBehaviour
                     break;
                 case ObjectType.Collection:
                     entry.spawnWeight = weightData.CollectableSpawnWeight;
+                    break;
+                case ObjectType.Special:
+                    entry.spawnWeight = weightData.SpecialSpawnWeight;
                     break;
             }
 

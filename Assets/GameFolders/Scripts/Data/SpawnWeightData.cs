@@ -9,5 +9,6 @@ namespace GameFolders.Scripts.Data
         [Range(0,10)] public float LuggageSpawnWeight;
         [Range(0,10)] public float CollectableSpawnWeight;
         [Range(0,10)] public float JunkSpawnWeight;
+        [Range(0,10)] public float SpecialSpawnWeight;
     }
 }

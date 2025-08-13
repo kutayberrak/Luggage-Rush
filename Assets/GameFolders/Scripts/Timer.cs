@@ -99,5 +99,22 @@ namespace GameFolders.Scripts
             string timeFormatted = $"{minutes:00}:{seconds:00}";
             return timeFormatted;
         }
+
+        public void AddTime(float timeInSeconds)
+        {
+            _currentTime += timeInSeconds;
+
+            timerText.text = TimerText();
+        }
+
+        public void RemoveTime(float seconds)
+        {
+            _currentTime -= seconds;
+            if (_currentTime < 0f)
+                _currentTime = 0f;
+
+            timerText.text = TimerText();
+        }
+
     }
 }

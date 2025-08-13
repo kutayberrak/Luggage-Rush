@@ -12,21 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89b21b5d0567bef4aa52dc9b3c0f8ad4, type: 3}
   m_Name: Level_3
   m_EditorClassIdentifier: 
-  levelTimeInSeconds: 630
+  levelLimitType: 0
+  levelTimeInSeconds: 40
+  levelMoveLimitCount: 0
   targetLuggageInfo:
-  - LuggageType: 1
-    Count: 3
-  - LuggageType: 5
-    Count: 6
   - LuggageType: 3
     Count: 9
-  luggageTypesToSpawn: 010000000300000005000000020000000400000006000000
-  collectablePieceInfo:
-  - CollectiblePieceType: 1
-    Count: 1
-  - CollectiblePieceType: 2
-    Count: 1
-  - CollectiblePieceType: 3
-    Count: 1
   hasCollectiblePiece: 1
-  junkPieceInfo: []
+  collectablePieceType: 
+  luggageTypesToSpawn: 03000000
+  junkPieceType: 
+  specialTypesToSpawn: 0100000000000000
+  spawnWeightData:
+    LuggageSpawnWeight: 1
+    CollectableSpawnWeight: 0
+    JunkSpawnWeight: 0
+    SpecialSpawnWeight: 0.1
+  spawnInterval: 0.2

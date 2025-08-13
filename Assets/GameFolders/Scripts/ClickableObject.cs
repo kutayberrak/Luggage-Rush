@@ -17,6 +17,8 @@ public class ClickableObject : MonoBehaviour
     public LuggageType luggageType;
     public JunkPieceType garbageType;
     public CollectiblePieceType collectionType;
+    public SpecialType specialType;
+
 
     public string GetID()
     {
@@ -25,6 +27,7 @@ public class ClickableObject : MonoBehaviour
             ObjectType.Luggage => luggageType.ToString(),
             ObjectType.Garbage => garbageType.ToString(),
             ObjectType.Collection => collectionType.ToString(),
+            ObjectType.Special => specialType.ToString(),
             _ => "Unknown"
         };
     }
