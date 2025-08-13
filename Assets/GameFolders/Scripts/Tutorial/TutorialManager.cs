@@ -41,13 +41,13 @@ public class TutorialManager : MonoBehaviour
         switch (currentLevel)
         {
 
+            case 0:
+                ActivateTutorialCamera("Level1 Tutorial"); //currentLevel 0 = Level 1
+                break;
             case 1:
-                ActivateTutorialCamera("Level1 Tutorial");
+                ActivateTutorialCamera("Level2 Tutorial"); //currentLevel 1 = Level 2
                 break;
             case 2:
-                ActivateTutorialCamera("Level2 Tutorial");
-                break;
-            case 3:
                 ActivateTutorialCamera("Level3 Tutorial");
                 break;
             default:
