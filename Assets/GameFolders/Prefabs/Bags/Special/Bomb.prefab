@@ -124,6 +124,7 @@ MonoBehaviour:
   timeToRemove: 5
   explosionForce: 250
   explosionRadius: 10
+  explosionParticlePrefab: {fileID: 2031289090366417528, guid: f8840ce17875b4d42895361983e734a2, type: 3}
 --- !u!135 &7507342101462974404
 SphereCollider:
   m_ObjectHideFlags: 0

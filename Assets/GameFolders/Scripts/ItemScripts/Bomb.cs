@@ -6,6 +6,7 @@ public class Bomb : SpecialItem
     [SerializeField] private float timeToRemove = 5f;
     [SerializeField] private float explosionForce = 250f;
     [SerializeField] private float explosionRadius = 10f;
+    [SerializeField] private GameObject explosionParticlePrefab;
 
     public override void OnClickedByPlayer()
     {
@@ -35,6 +36,15 @@ public class Bomb : SpecialItem
             {
                 rb.AddExplosionForce(explosionForce, transform.position, explosionRadius);
             }
+        }
+
+        AudioManager.Instance.PlaySFX("etfx_explosion_grenade");
+
+        if (explosionParticlePrefab != null)
+        {
+            GameObject particle = Instantiate(explosionParticlePrefab, transform.position, Quaternion.identity);
+            ParticleSystem ps = particle.GetComponent<ParticleSystem>();
+            Destroy(particle, ps.main.duration);
         }
     }
 }
