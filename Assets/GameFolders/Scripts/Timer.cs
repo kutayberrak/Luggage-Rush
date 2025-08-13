@@ -57,9 +57,16 @@ namespace GameFolders.Scripts
         [Button("Start Timer")]
         public void StartTimer()
         {
+            // Only start timer for time-based levels
+            if (GameManager.Instance?.CurrentLevelData?.IsTimeBased != true)
+            {
+                Debug.LogWarning("Timer can only be started for time-based levels.");
+                return;
+            }
             _isTimerRunning = true;
             _currentTime = GameManager.Instance.CurrentLevelData.TimeInSeconds;
             OnTimerStart?.Invoke();
+
         }
 
         [Button("Stop Timer")]
@@ -72,6 +79,19 @@ namespace GameFolders.Scripts
         {
             _currentTime = timeInSeconds;
         }
+
+        public void ShowUI()
+        {
+            if (timerText != null)
+                timerText.transform.parent.gameObject.SetActive(true);
+        }
+
+        public void HideUI()
+        {
+            if (timerText != null)
+                timerText.transform.parent.gameObject.SetActive(false);
+        }
+
         private string TimerText()
         {
             int minutes = Mathf.FloorToInt(_currentTime / 60f);

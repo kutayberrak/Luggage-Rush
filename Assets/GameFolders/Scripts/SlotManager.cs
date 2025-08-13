@@ -374,6 +374,13 @@ public class SlotManager : MonoBehaviour
 
         CheckSlotsAndHandleFail();
 
+        // **YENİ**: Move-based seviyeler için move sayacını artır (obje slota ulaştığında)
+        if (MoveCounter.IsMoveBasedLevel && MoveCounter.Instance != null)
+        {
+            MoveCounter.Instance.RegisterMove();
+        }
+
+
         if (movingItems.Count == 0)
             StartCoroutine(ProcessSlotChanges());
     }

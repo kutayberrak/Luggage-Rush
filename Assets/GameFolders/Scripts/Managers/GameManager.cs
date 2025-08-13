@@ -11,7 +11,7 @@ namespace GameFolders.Scripts.Managers
         [SerializeField] private LevelDataSO[] levelData;
         [SerializeField] private TextMeshProUGUI levelText;
         public LevelDataSO CurrentLevelData => _currentLevelData;
-        public int CurrentLevel => _currentLevelIndex; 
+        public int CurrentLevel => _currentLevelIndex;
 
         private int _currentLevelIndex = 0;
         private LevelDataSO _currentLevelData;
@@ -50,7 +50,7 @@ namespace GameFolders.Scripts.Managers
                 GameEvents.TriggerLevelWin();
             }
         }
-        
+
         public void LevelUp()
         {
             _currentLevelIndex++;
@@ -83,8 +83,34 @@ namespace GameFolders.Scripts.Managers
 
             SlotManager.Instance.ClearAllSlots();
             InGameUIManager.Instance.InitializeObjectivesUI();
-            Timer.Instance.SetTimer(_currentLevelData.TimeInSeconds);
-            Timer.Instance.StartTimer();
+
+            // Start appropriate limit system based on level type
+            if (_currentLevelData.IsTimeBased)
+            {
+                // Timer UI'ını göster, MoveCounter UI'ını gizle
+                Timer.Instance.ShowUI();
+                if (MoveCounter.Instance != null)
+                {
+                    MoveCounter.Instance.HideUI();
+                    MoveCounter.Instance.StopMoveCounter();
+                }
+
+                Timer.Instance.SetTimer(_currentLevelData.TimeInSeconds);
+                Timer.Instance.StartTimer();
+            }
+            else if (_currentLevelData.IsMoveBased)
+            {
+                // MoveCounter UI'ını göster, Timer UI'ını gizle
+                if (MoveCounter.Instance != null)
+                {
+                    MoveCounter.Instance.ShowUI();
+                    MoveCounter.Instance.SetMoveLimit(_currentLevelData.MoveLimitCount);
+                    MoveCounter.Instance.StartMoveCounter();
+                }
+
+                Timer.Instance.HideUI();
+                Timer.Instance.StopTimer();
+            }
         }
 
         private void ShowLevelText()
@@ -144,7 +170,17 @@ namespace GameFolders.Scripts.Managers
         {
             SpawnManager.Instance.StopSpawning();
             SlotManager.Instance.ClearAllSlots();
+
+            // Stop and hide Timer
             Timer.Instance.StopTimer();
+            Timer.Instance.HideUI();
+
+            // Stop and hide MoveCounter if it exists
+            if (MoveCounter.Instance != null)
+            {
+                MoveCounter.Instance.StopMoveCounter();
+                MoveCounter.Instance.HideUI();
+            }
         }
     }
 }
