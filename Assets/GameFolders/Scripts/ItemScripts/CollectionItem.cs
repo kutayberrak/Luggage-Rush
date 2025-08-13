@@ -66,24 +66,12 @@ public class CollectionItem : ClickableObject
         }
         lastClickTime = Time.time;
 
-        // Eğer zaten bir slot'a rezerveliysen veya hâlihazırda hareket ediyorsa
-        if (reservedSlotIndex >= 0 || isMoving)
-        {
-            Debug.Log($"[ClickableObject] Object already reserved or moving. Slot: {reservedSlotIndex}, Moving: {isMoving}");
-            return;
-        }
-
         // **YENİ**: Tıklama animasyonu sırasında tekrar tıklamayı engelle
         if (isInClickAnimation)
         {
             Debug.Log($"[ClickableObject] Click animation in progress for {UniqueID}");
             return;
         }
-
-
-
-        Debug.Log($"[ClickableObject] Processing click for {UniqueID}");
-
 
         gameObject.GetComponent<Collider>().isTrigger = true;
 

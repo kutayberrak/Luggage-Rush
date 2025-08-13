@@ -19,14 +19,6 @@ public class Bomb : SpecialItem
         ObjectPoolManager.Instance.ReturnObjectToPool(gameObject);
     }
 
-    protected override void StartCurveMovement()
-    {
-    }
-
-    protected override void StartClickAnimation()
-    {
-    }
-
     private void Explode()
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius);

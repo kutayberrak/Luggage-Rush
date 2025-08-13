@@ -12,8 +12,21 @@ public class Hourglass : SpecialItem
 
     public override void OnClickedByPlayer()
     {
-        var col = GetComponent<Collider>();
-        if (col != null) col.enabled = false;
+                // **YENÝ**: Týklama cooldown kontrolü
+        if (Time.time - lastClickTime < CLICK_COOLDOWN)
+        {
+            return;
+        }
+        lastClickTime = Time.time;
+
+        // **YENÝ**: Týklama animasyonu sýrasýnda tekrar týklamayý engelle
+        if (isInClickAnimation)
+        {
+            Debug.Log($"[ClickableObject] Click animation in progress for {UniqueID}");
+            return;
+        }
+
+        gameObject.GetComponent<Collider>().isTrigger = true;
 
         PlayCollectAnimation();
     }
