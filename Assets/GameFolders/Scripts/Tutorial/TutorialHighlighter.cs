@@ -12,20 +12,23 @@ public class TutorialHighlighter : MonoBehaviour
     {
         Invoke(nameof(StartHighlighting), 0.1f);
 
+        GameEvents.OnTutorialCompleted += StopHighlighting;
+
         //     GameEvents.OnLevelFailed += StopHighlighting;
         //     GameEvents.OnLevelRestarted += StopHighlighting;
         //     GameEvents.OnLevelWin += StopHighlighting;
         //     GameEvents.OnReturnToMainMenu += StopHighlighting;
     }
 
-    // private void OnDisable()
-    // {
+    private void OnDisable()
+    {
+        GameEvents.OnTutorialCompleted -= StopHighlighting;
 
-    //     // GameEvents.OnLevelFailed -= StopHighlighting;
-    //     // GameEvents.OnLevelRestarted -= StopHighlighting;
-    //     // GameEvents.OnLevelWin -= StopHighlighting;
-    //     // GameEvents.OnReturnToMainMenu -= StopHighlighting;
-    // }
+        // GameEvents.OnLevelFailed -= StopHighlighting;
+        // GameEvents.OnLevelRestarted -= StopHighlighting;
+        // GameEvents.OnLevelWin -= StopHighlighting;
+        // GameEvents.OnReturnToMainMenu -= StopHighlighting;
+    }
 
     private void StartHighlighting()
     {
@@ -40,11 +43,11 @@ public class TutorialHighlighter : MonoBehaviour
 
     }
 
-    // private void StopHighlighting()
-    // {
-    //     if (currentLevel == highlightLevel)
-    //     {
-    //         gameObject.layer = LayerMask.NameToLayer("Clickable");
-    //     }
-    // }
+    private void StopHighlighting()
+    {
+        if (currentLevel == highlightLevel)
+        {
+            gameObject.layer = LayerMask.NameToLayer("Clickable");
+        }
+    }
 }

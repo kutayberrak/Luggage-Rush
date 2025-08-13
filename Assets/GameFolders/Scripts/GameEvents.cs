@@ -10,6 +10,7 @@ namespace GameFolders.Scripts
         public static event Action OnGameStart;
         public static event Action OnReturnToMainMenu;
         public static event Action OnLevelRestarted;
+        public static event Action OnTutorialCompleted;
 
         // Cooldown variables for level end events
         private static float lastLevelEndTime = -1f;

@@ -19,6 +19,9 @@ public class TutorialManager : MonoBehaviour
     void OnEnable()
     {
         GameEvents.OnGameStart += StartTutorial;
+
+        GameEvents.OnTutorialCompleted += StopTutorial;
+
         GameEvents.OnLevelFailed += StopTutorial;
         GameEvents.OnLevelRestarted += StopTutorial;
         GameEvents.OnLevelWin += StopTutorial;
@@ -27,7 +30,11 @@ public class TutorialManager : MonoBehaviour
 
     void OnDisable()
     {
+
         GameEvents.OnGameStart -= StartTutorial;
+
+        GameEvents.OnTutorialCompleted -= StopTutorial;
+
         GameEvents.OnLevelFailed -= StopTutorial;
         GameEvents.OnLevelRestarted -= StopTutorial;
         GameEvents.OnLevelWin -= StopTutorial;
