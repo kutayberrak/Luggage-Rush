@@ -127,10 +127,25 @@ public class PlayerController : MonoBehaviour
     private void SetOutline(ClickableObject obj, float value)
     {
         var rend = obj.GetComponent<Renderer>();
-        rend.GetPropertyBlock(mpb);
-        mpb.SetFloat("_OutlineMultiplier", value);
-        rend.SetPropertyBlock(mpb);
+
+        if (rend != null)
+        {
+            rend.GetPropertyBlock(mpb);
+            mpb.SetFloat("_OutlineMultiplier", value);
+            rend.SetPropertyBlock(mpb);
+        }
+        else
+        {
+            var renderers = obj.GetComponentsInChildren<Renderer>();
+            foreach (var childRend in renderers)
+            {
+                childRend.GetPropertyBlock(mpb);
+                mpb.SetFloat("_OutlineMultiplier", value);
+                childRend.SetPropertyBlock(mpb);
+            }
+        }
     }
+
 
     private void ClearOutline(ClickableObject obj)
     {
