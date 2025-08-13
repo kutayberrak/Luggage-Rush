@@ -1,5 +1,6 @@
-using UnityEngine;
+using GameFolders.Scripts.Enums;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class ObjectPoolManager : MonoBehaviour
 {
@@ -178,5 +179,24 @@ public class ObjectPoolManager : MonoBehaviour
         }
 
         obj.SetActive(false);
+    }
+    public void DespawnActiveCollectionsByType(CollectiblePieceType targetType, float boundaryX = -4f)
+    {
+        for (int i = 0; i < collecitonParent.childCount; i++)
+        {
+            Transform child = collecitonParent.GetChild(i);
+
+            if (!child.gameObject.activeInHierarchy)
+                continue;
+
+            CollectionItem collectionItem = child.GetComponent<CollectionItem>();
+            if (collectionItem == null)
+                continue;
+
+            if (collectionItem.collectionType == targetType && child.position.x <= boundaryX)
+            {
+                ReturnObjectToPool(child.gameObject);
+            }
+        }
     }
 }

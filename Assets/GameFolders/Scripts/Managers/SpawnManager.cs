@@ -1,10 +1,11 @@
-using UnityEngine;
 using Cysharp.Threading.Tasks;
-using System.Threading;
+using GameFolders.Scripts.Enums;
+using GameFolders.Scripts.Managers;
+using GameFolders.Scripts.ScriptableObjects;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
-using GameFolders.Scripts.ScriptableObjects;
-using GameFolders.Scripts.Managers;
+using System.Threading;
+using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
@@ -130,7 +131,14 @@ public class SpawnManager : MonoBehaviour
             }
         }
 
-
+        if (allowedObjectsByType.TryGetValue(ObjectType.Collection, out var collectionList))
+        {
+            _hasCollectiblePiece = collectionList.Count > 0;
+        }
+        else
+        {
+            _hasCollectiblePiece = false;
+        }
     }
 
     private void LoadSpawnWeightsFromLevelData(LevelDataSO levelData)
@@ -244,6 +252,23 @@ public class SpawnManager : MonoBehaviour
         _cancellationTokenSource?.Cancel();
         _cancellationTokenSource?.Dispose();
         _cancellationTokenSource = null;
+    }
+
+    public void DisableCollectionType(CollectiblePieceType collectionType)
+    {
+        if (!allowedObjectsByType.TryGetValue(ObjectType.Collection, out var list) || list.Count == 0)
+            return;
+
+        for (int i = list.Count - 1; i >= 0; i--)
+        {
+            var prefab = list[i];
+            var collectionInfo = prefab.GetComponent<CollectionItem>();
+            if (collectionInfo != null && collectionInfo.collectionType == collectionType)
+            {
+                list.RemoveAt(i);
+            }
+        }
+        _hasCollectiblePiece = list.Count > 0;
     }
 
     void OnDestroy()

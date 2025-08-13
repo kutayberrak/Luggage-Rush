@@ -237,17 +237,19 @@ public class InGameUIManager : MonoBehaviour
             Debug.LogWarning($"[InGameUIManager] {luggageType} için objective item bulunamadı!");
         }
     }
-    
-    // **YENİ**: Collection toplandığında çağrılacak method
     public void OnCollectionCollected(CollectiblePieceType collectionType)
     {
         if (collectionObjectiveItems.ContainsKey(collectionType))
         {
             ObjectiveUIItem objectiveItem = collectionObjectiveItems[collectionType];
-            objectiveItem.IncreaseCollectCount(); // Bu zaten UI'ı güncelliyor
-            Debug.Log($"[InGameUIManager] {collectionType} collection'ı toplandı. Mevcut: {objectiveItem.GetCurrentCollected()}");
-            
-            // **YENİ**: Bütün hedeflerin tamamlanıp tamamlanmadığını kontrol et
+            objectiveItem.IncreaseCollectCount();
+
+            if (objectiveItem.IsCompleted())
+            {
+                SpawnManager.Instance.DisableCollectionType(collectionType);
+                ObjectPoolManager.Instance.DespawnActiveCollectionsByType(collectionType);
+            }
+
             CheckAllObjectivesCompleted();
         }
         else
@@ -255,8 +257,7 @@ public class InGameUIManager : MonoBehaviour
             Debug.LogWarning($"[InGameUIManager] {collectionType} için collection objective item bulunamadı!");
         }
     }
-    
-    // **YENİ**: Bütün hedeflerin tamamlanıp tamamlanmadığını kontrol et
+
     private void CheckAllObjectivesCompleted()
     {
         bool allCompleted = true;
