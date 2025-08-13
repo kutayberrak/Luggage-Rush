@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 3
   tags:
   - DestroyZone
+  - Missile
+  - TypeChangeZone
   layers:
   - Default
   - TransparentFX

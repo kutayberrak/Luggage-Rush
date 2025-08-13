@@ -78,8 +78,9 @@ public class ClickableObject : MonoBehaviour
     // **YENİ**: Animasyon için orijinal pozisyon ve rotasyon
     protected Vector3 originalPosition;
     protected Vector3 originalRotation;
-
+    
     private Rigidbody rigidBody;
+    public BoxCollider boxCollider;
     private Vector3 moveTargetPos;
     private float startDistance;
     private Vector3 originalScale;
@@ -91,6 +92,7 @@ public class ClickableObject : MonoBehaviour
     private void Awake()
     {
         rigidBody = GetComponent<Rigidbody>();
+        boxCollider = GetComponent<BoxCollider>();
     }
     /// <summary>
     /// SlotManager tarafından atanacak gecikme süresi.
