@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using GameFolders.Scripts.Managers;
 using Sirenix.OdinInspector;
 using TMPro;
@@ -114,6 +115,30 @@ namespace GameFolders.Scripts
                 _currentTime = 0f;
 
             timerText.text = TimerText();
+        }
+
+        public Vector3 GetTextPosition()
+        {
+            return timerText.transform.position;
+        }
+
+        public void FlashTimerColor(Color color, float duration = 1f)
+        {
+            StopAllCoroutines();
+            StartCoroutine(FlashColorRoutine(color, duration));
+        }
+
+        private IEnumerator FlashColorRoutine(Color flashColor, float duration)
+        {
+            if (timerText == null)
+                yield break;
+
+            Color originalColor = Color.white;
+            timerText.color = flashColor;
+
+            yield return new WaitForSeconds(duration);
+
+            timerText.color = originalColor;
         }
 
     }

@@ -195,7 +195,7 @@ public class ObjectPoolManager : MonoBehaviour
 
         obj.SetActive(false);
     }
-    public void DespawnActiveCollectionsByType(CollectiblePieceType targetType, float boundaryX = -4f)
+    public void DespawnActiveCollectionsByType(CollectiblePieceType targetType, float boundaryX = 4f)
     {
         for (int i = 0; i < collecitonParent.childCount; i++)
         {
@@ -208,7 +208,7 @@ public class ObjectPoolManager : MonoBehaviour
             if (collectionItem == null)
                 continue;
 
-            if (collectionItem.collectionType == targetType && child.position.x <= boundaryX)
+            if (collectionItem.collectionType == targetType && child.position.x <= -boundaryX || child.position.x > boundaryX)
             {
                 ReturnObjectToPool(child.gameObject);
             }

@@ -12,6 +12,8 @@ public class Bomb : SpecialItem
     {
         Timer.Instance.RemoveTime(timeToRemove);
 
+        Timer.Instance.FlashTimerColor(Color.red);
+
         Explode();
 
         ObjectPoolManager.Instance.ReturnObjectToPool(gameObject);
