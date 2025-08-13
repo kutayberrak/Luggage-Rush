@@ -7,14 +7,28 @@ using UnityEngine;
 
 namespace GameFolders.Scripts.ScriptableObjects
 {
+    public enum LevelLimitType
+    {
+        Time,
+        MoveCount
+    }
+
     [CreateAssetMenu(fileName = "LevelDataSO", menuName = "ScriptableObjects/LevelDataSO")]
     public class LevelDataSO : ScriptableObject
     {
         [InfoBox("Luggage target count must be power of 3 (3, 9, 27, etc.)")]
 
         [Header("Level Configuration")]
+        [SerializeField] private LevelLimitType levelLimitType = LevelLimitType.Time;
+        
+        [ShowIf("levelLimitType", LevelLimitType.Time)]
         [Tooltip("Seconds")]
         [SerializeField] private float levelTimeInSeconds;
+        
+        [ShowIf("levelLimitType", LevelLimitType.MoveCount)]
+        [Tooltip("Number of moves allowed")]
+        [SerializeField] private int levelMoveLimitCount;
+        
         [SerializeField] private List<TargetLuggageInfo> targetLuggageInfo;
         [SerializeField] private bool hasCollectiblePiece;
         
@@ -32,6 +46,10 @@ namespace GameFolders.Scripts.ScriptableObjects
         public SpawnWeightData SpawnWeightData => spawnWeightData;
         public bool HasCollectiblePiece => hasCollectiblePiece;
         public float TimeInSeconds => levelTimeInSeconds;
+        public int MoveLimitCount => levelMoveLimitCount;
+        public LevelLimitType LimitType => levelLimitType;
+        public bool IsTimeBased => levelLimitType == LevelLimitType.Time;
+        public bool IsMoveBased => levelLimitType == LevelLimitType.MoveCount;
 
         private void OnValidate()
         {
