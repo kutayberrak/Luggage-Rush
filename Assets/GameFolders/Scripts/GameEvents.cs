@@ -19,6 +19,7 @@ namespace GameFolders.Scripts
         public static void TriggerLevelRestarted() => OnLevelRestarted?.Invoke();
         public static void TriggerReturnToMainMenu() => OnReturnToMainMenu?.Invoke();
         public static void TriggerGameStart() => OnGameStart?.Invoke();
+        public static void TriggerTutorialCompleted() => OnTutorialCompleted?.Invoke();
 
         public static void TriggerLevelWin()
         {

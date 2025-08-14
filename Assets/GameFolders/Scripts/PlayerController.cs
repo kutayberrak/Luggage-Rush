@@ -53,10 +53,14 @@ public class PlayerController : MonoBehaviour
         {
             if (currentClickable != null)
             {
-                if(currentClickable.specialType != SpecialType.Bomb)
+                if (currentClickable.specialType != SpecialType.Bomb)
                 {
                     AudioManager.Instance.PlaySFX("CollectSFX_1");
                 }
+                currentClickable.TryGetComponent(out GarbageItem garbageItem){
+                    GameEvents
+                }
+                ;
                 currentClickable.OnClickedByPlayer();
                 ClearOutline(currentClickable);
                 currentClickable = null;

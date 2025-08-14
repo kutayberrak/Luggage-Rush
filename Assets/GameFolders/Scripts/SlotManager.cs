@@ -5,6 +5,7 @@ using DG.Tweening;
 using GameFolders.Scripts.Enums;
 using System;
 using GameFolders.Scripts;
+using GameFolders.Scripts.Managers;
 
 public class SlotManager : MonoBehaviour
 {
@@ -722,6 +723,11 @@ public class SlotManager : MonoBehaviour
             ObjectPoolManager.Instance.ReturnObjectToPool(obj); // Sadece match sonrası
         }
 
+        if (GameManager.Instance.CurrentLevel == 0)
+        {
+            GameEvents.TriggerTutorialCompleted();
+        }
+
         Debug.Log($"[AnimateMatchClearance3D] Match clearance completed, destroyed {toDestroy.Count} objects");
     }
 
@@ -729,6 +735,10 @@ public class SlotManager : MonoBehaviour
     {
         if (matchParticlePrefab == null) return;
         GameObject fx = Instantiate(matchParticlePrefab, worldPos, Quaternion.identity);
+        if (GameManager.Instance.CurrentLevel == 1)
+        {
+            GameEvents.TriggerTutorialCompleted();
+        }
         Destroy(fx, 2f);
     }
 

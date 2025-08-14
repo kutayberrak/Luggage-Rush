@@ -6,7 +6,7 @@ namespace GameFolders.Scripts.Tutorial
     public class TutorialHighlighter : MonoBehaviour
     {
         [SerializeField] private int highlightLevel;
-        
+
         private static readonly int GlowSpeed = Shader.PropertyToID("_GlowSpeed");
         private Material _material;
         private int _currentLevel;
@@ -45,12 +45,14 @@ namespace GameFolders.Scripts.Tutorial
             {
                 return;
             }
-            _material.SetFloat(GlowSpeed,1.8f);
+            _material.SetFloat(GlowSpeed, 1.8f);
+            gameObject.layer = LayerMask.NameToLayer("Highlight");
         }
 
         private void StopHighlighting()
         {
             _material.SetFloat(GlowSpeed, 0f);
+            gameObject.layer = LayerMask.NameToLayer("Clickable");
         }
     }
 }

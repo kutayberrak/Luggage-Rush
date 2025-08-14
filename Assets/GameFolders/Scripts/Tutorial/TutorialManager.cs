@@ -12,23 +12,26 @@ namespace GameFolders.Scripts.Tutorial
         [Header("References")]
         [SerializeField] private TextMeshProUGUI tutorialText;
         [SerializeField] private MeshRenderer darkenStencil;
-        
+
         [Header("Tutorial Objects")]
         [SerializeField] private Button bombButton;
         [SerializeField] private Button freezeButton;
-        
+
         [Header("Tutorial Items")]
         [SerializeField] private GameObject pointerHand;
         [SerializeField] private GameObject infoBox;
 
-        [Header("Settings")] 
+        [Header("Settings")]
         [SerializeField] private RectTransform pointerBombPosition;
         [SerializeField] private RectTransform pointerLuggagePosition;
         [SerializeField] private RectTransform pointerFreezePosition;
-        
-        
+        [SerializeField] private Image background;
+        private Color darkenColor = new Color(0.3f, 0.3f, 0.3f);
+        private Color normalColor = Color.white;
+
+
         private int _currentLevel;
-        
+
         private void Start()
         {
             pointerHand.SetActive(false);
@@ -105,7 +108,7 @@ namespace GameFolders.Scripts.Tutorial
             tutorialText.text = message;
             tutorialText.gameObject.SetActive(true);
             pointerHand.SetActive(true);
-
+            background.color = darkenColor;
             // MeshRenderer'ı etkinleştir
             if (darkenStencil != null)
             {
@@ -118,6 +121,8 @@ namespace GameFolders.Scripts.Tutorial
             infoBox.SetActive(false);
             tutorialText.gameObject.SetActive(false);
             pointerHand.SetActive(false);
+            background.color = normalColor;
+
             // Volume weight'ini 0 yap
             if (darkenStencil != null)
             {
@@ -127,6 +132,7 @@ namespace GameFolders.Scripts.Tutorial
 
         private void DeactivateTutorialObjects()
         {
+            GameEvents.TriggerTutorialCompleted();
             infoBox.transform.DOScale(Vector3.zero, 0.1f).OnComplete(() => infoBox.SetActive(false));
             pointerHand.transform.DOScale(Vector3.zero, 0.1f).OnComplete(() => pointerHand.SetActive(false));
         }
