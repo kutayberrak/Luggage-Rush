@@ -124,8 +124,9 @@ namespace GameFolders.Scripts.Tutorial
                     }
                     if (tempNum == 1)
                     {
-                        StopTutorial();
-                        ActivateTutorialCamera("Garbage can't be matched. Use dynamite power-up!", true, false);
+                        //StopTutorial();
+                        HideInfoBoxAnimated();
+                        DOVirtual.DelayedCall(1f, () => ActivateTutorialCamera("Garbage can't be matched. Use dynamite power-up!", true, false));
                         pointerHand.transform.DOScale(Vector3.one, 0.1f);
                         ActivateTutorialObjects();
                         pointerHand.GetComponent<RectTransform>().anchoredPosition = pointerBombPosition.anchoredPosition;
@@ -168,8 +169,6 @@ namespace GameFolders.Scripts.Tutorial
 
         private void ActivateTutorialCamera(string message)
         {
-            //  tutorialCamera.SetActive(true);
-            infoBox.SetActive(true);
             tutorialText.text = message;
             tutorialText.gameObject.SetActive(true);
             pointerHand.SetActive(true);
@@ -177,14 +176,12 @@ namespace GameFolders.Scripts.Tutorial
             // MeshRenderer'ı etkinleştir
             if (darkenStencil != null && GameManager.Instance.CurrentLevel != 3)
             {
-
                 darkenStencil.enabled = true;
             }
+            ShowInfoBoxAnimated();
         }
         private void ActivateTutorialCamera(string message, bool havePointer, bool haveDarken)
         {
-            //  tutorialCamera.SetActive(true);
-            infoBox.SetActive(true);
             tutorialText.text = message;
             tutorialText.gameObject.SetActive(true);
             if (havePointer)
@@ -208,12 +205,26 @@ namespace GameFolders.Scripts.Tutorial
                     darkenStencil.enabled = false;
                 }
             }
+            ShowInfoBoxAnimated();
+
         }
         private void ActivateTutorialCamera(string message, float time)
         {
             tutorialText.text = message;
             tutorialText.gameObject.SetActive(true);
 
+            ShowInfoBoxAnimated(() =>
+            {
+                // Belirtilen süre sonunda kapanma animasyonu
+                DOVirtual.DelayedCall(time, () =>
+                {
+                    HideInfoBoxAnimated();
+                });
+            });
+        }
+
+        private void ShowInfoBoxAnimated(System.Action onComplete = null)
+        {
             // InfoBox'ı aktif et
             infoBox.SetActive(true);
 
@@ -228,36 +239,38 @@ namespace GameFolders.Scripts.Tutorial
 
             openSequence.OnComplete(() =>
             {
-                // Belirtilen süre sonunda kapanma animasyonu
-                DOVirtual.DelayedCall(time, () =>
-                {
-                    Sequence closeSequence = DOTween.Sequence();
-                    closeSequence.Append(infoBoxRect.DOAnchorPos(infoBoxStartPosition, 0.4f).SetEase(Ease.InBack));
-                    closeSequence.Join(infoBox.transform.DOScale(Vector3.zero, 0.4f).SetEase(Ease.InBack));
+                onComplete?.Invoke();
+            });
+        }
 
-                    closeSequence.OnComplete(() =>
-                    {
-                        infoBox.SetActive(false);
-                        tutorialText.gameObject.SetActive(false);
-                        // Pozisyonu orijinal haline getir (bir sonrakine hazırlık)
-                        infoBoxRect.anchoredPosition = infoBoxOriginalPosition;
-                    });
-                });
+        private void HideInfoBoxAnimated(System.Action onComplete = null)
+        {
+            Sequence closeSequence = DOTween.Sequence();
+            closeSequence.Append(infoBoxRect.DOAnchorPos(infoBoxStartPosition, 0.4f).SetEase(Ease.InBack));
+            closeSequence.Join(infoBox.transform.DOScale(Vector3.zero, 0.4f).SetEase(Ease.InBack));
+
+            closeSequence.OnComplete(() =>
+            {
+                infoBox.SetActive(false);
+                tutorialText.gameObject.SetActive(false);
+                // Pozisyonu orijinal haline getir (bir sonrakine hazırlık)
+                infoBoxRect.anchoredPosition = infoBoxOriginalPosition;
+                onComplete?.Invoke();
             });
         }
         private void StopTutorial()
         {
-            // tutorialCamera.SetActive(false);
-            infoBox.SetActive(false);
-            tutorialText.gameObject.SetActive(false);
-            pointerHand.SetActive(false);
-            background.color = normalColor;
-
-            // Volume weight'ini 0 yap
-            if (darkenStencil != null)
+            HideInfoBoxAnimated(() =>
             {
-                darkenStencil.enabled = false;
-            }
+                pointerHand.SetActive(false);
+                background.color = normalColor;
+
+                // Volume weight'ini 0 yap
+                if (darkenStencil != null)
+                {
+                    darkenStencil.enabled = false;
+                }
+            });
         }
 
         private void DeactivateTutorialObjects()
