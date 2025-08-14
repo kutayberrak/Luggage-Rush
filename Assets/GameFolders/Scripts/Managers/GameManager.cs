@@ -18,6 +18,10 @@ namespace GameFolders.Scripts.Managers
 
         private const string LEVEL_INDEX_KEY = "CurrentLevelIndex";
 
+        [Header("Conveyor Adjustment")]
+        [SerializeField] private GameObject[] conveyors;
+        private GameObject _activeConveyor;
+
         private void Awake()
         {
             if (Instance == null)
@@ -79,6 +83,8 @@ namespace GameFolders.Scripts.Managers
             ShowLevelText();
             LoadLevelRequirements();
 
+            AdjustConveyor();
+            SpawnManager.Instance.RefreshActiveSpawnPoints();
             SpawnManager.Instance.RunSpawn();
 
             SlotManager.Instance.ClearAllSlots();
@@ -168,6 +174,12 @@ namespace GameFolders.Scripts.Managers
         }
         private void ClearLevelData()
         {
+            if (_activeConveyor != null)
+            {
+                _activeConveyor.SetActive(false);
+                _activeConveyor = null;
+            }
+
             SpawnManager.Instance.StopSpawning();
             SlotManager.Instance.ClearAllSlots();
 
@@ -180,6 +192,25 @@ namespace GameFolders.Scripts.Managers
             {
                 MoveCounter.Instance.StopMoveCounter();
                 MoveCounter.Instance.HideUI();
+            }
+        }
+
+        private void AdjustConveyor()
+        {
+            foreach (var c in conveyors)
+            {
+                if (c != null) c.SetActive(false);
+            }
+
+            int index = (int)_currentLevelData.ConveyorType;
+            if (index >= 0 && index < conveyors.Length && conveyors[index] != null)
+            {
+                conveyors[index].SetActive(true);
+                _activeConveyor = conveyors[index];
+            }
+            else
+            {
+                Debug.LogError($"Conveyor bulunamadı: {_currentLevelData.ConveyorType}");
             }
         }
     }

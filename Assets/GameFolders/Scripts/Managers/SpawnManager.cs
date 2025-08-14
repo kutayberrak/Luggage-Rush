@@ -13,6 +13,8 @@ public class SpawnManager : MonoBehaviour
 
     [Header("Spawn Settings")]
     [SerializeField] private Transform[] spawnPoints;
+    private List<Transform> _activeSpawnPoints = new List<Transform>();
+    private int _currentActiveIndex = 0;
     [SerializeField] private float spawnInterval = 2f;
     [SerializeField] private bool autoSpawn = true;
 
@@ -197,18 +199,39 @@ public class SpawnManager : MonoBehaviour
 
     private void SpawnObject()
     {
-        if (spawnPoints.Length == 0) return;
+        // Cache’lenmiþ aktif listeyi kullan
+        if (_activeSpawnPoints.Count == 0) return;
 
-        Transform spawnPoint = spawnPoints[_currentSpawnIndex];
+        Transform spawnPoint = _activeSpawnPoints[_currentActiveIndex];
+        _currentActiveIndex = (_currentActiveIndex + 1) % _activeSpawnPoints.Count;
+
         ObjectType selectedType = GetWeightedRandomObjectType();
         GameObject prefabToSpawn = GetRandomPrefabOfType(selectedType);
-
         if (prefabToSpawn != null)
         {
             ObjectPoolManager.Instance.GetObjectFromPool(prefabToSpawn, spawnPoint.position, spawnPoint.rotation);
         }
+    }
 
-        _currentSpawnIndex = (_currentSpawnIndex + 1) % spawnPoints.Length;
+    public void RefreshActiveSpawnPoints()
+    {
+        _activeSpawnPoints.Clear();
+        if (spawnPoints == null || spawnPoints.Length == 0) return;
+
+        for (int i = 0; i < spawnPoints.Length; i++)
+        {
+            var t = spawnPoints[i];
+            if (t != null && t.gameObject.activeInHierarchy)
+                _activeSpawnPoints.Add(t);
+        }
+
+        _currentActiveIndex = 0;
+
+        if (_activeSpawnPoints.Count == 0)
+        {
+            Debug.LogWarning("[SpawnManager] Aktif spawn point bulunamadý. Spawn durduruluyor.");
+            StopSpawning();
+        }
     }
 
     private ObjectType GetWeightedRandomObjectType()

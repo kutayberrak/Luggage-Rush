@@ -13,6 +13,13 @@ namespace GameFolders.Scripts.ScriptableObjects
         MoveCount
     }
 
+    public enum ConveyorType
+    {
+        ConveyorA,
+        ConveyorB,
+        ConveyorC
+    }
+
     [CreateAssetMenu(fileName = "LevelDataSO", menuName = "ScriptableObjects/LevelDataSO")]
     public class LevelDataSO : ScriptableObject
     {
@@ -39,6 +46,11 @@ namespace GameFolders.Scripts.ScriptableObjects
         [SerializeField] private List<SpecialType> specialTypesToSpawn;
         [SerializeField] private SpawnWeightData spawnWeightData;
         [SerializeField] private float spawnInterval = 0.2f;
+
+        [Header("Conveyor Types")]
+        [SerializeField] private ConveyorType conveyorType;
+
+        public ConveyorType ConveyorType => conveyorType;
         public float SpawnInterval => spawnInterval;
         public List<JunkPieceType> JunkPieceTypes => junkPieceType;
         public List<LuggageType> LuggageTypesToSpawn => luggageTypesToSpawn;
