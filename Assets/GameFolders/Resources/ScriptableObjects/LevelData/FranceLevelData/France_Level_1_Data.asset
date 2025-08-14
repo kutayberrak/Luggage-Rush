@@ -22,12 +22,12 @@ MonoBehaviour:
     Count: 3
   hasCollectiblePiece: 1
   collectablePieceType: 06000000
-  luggageTypesToSpawn: 080000000600000007000000
+  luggageTypesToSpawn: 0800000006000000070000000b0000000c000000
   junkPieceType: 04000000
   specialTypesToSpawn: 02000000
   spawnWeightData:
     LuggageSpawnWeight: 9
     CollectableSpawnWeight: 0.5
     JunkSpawnWeight: 2
-    SpecialSpawnWeight: 0
+    SpecialSpawnWeight: 3
   spawnInterval: 0.14
