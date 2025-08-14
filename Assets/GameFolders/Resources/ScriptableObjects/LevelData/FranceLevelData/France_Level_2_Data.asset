@@ -29,5 +29,6 @@ MonoBehaviour:
     LuggageSpawnWeight: 9
     CollectableSpawnWeight: 0.5
     JunkSpawnWeight: 3
-    SpecialSpawnWeight: 3
+    SpecialSpawnWeight: 1.25
   spawnInterval: 0.12
+  conveyorType: 0
