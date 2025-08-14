@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using GameFolders.Scripts;
+using GameFolders.Scripts.Managers;
 
 public class PlayerController : MonoBehaviour
 {
@@ -57,10 +58,15 @@ public class PlayerController : MonoBehaviour
                 {
                     AudioManager.Instance.PlaySFX("CollectSFX_1");
                 }
-                currentClickable.TryGetComponent(out GarbageItem garbageItem){
-                    GameEvents
+
+                if (currentClickable.TryGetComponent(out GarbageItem garbageItem))
+                {
+                    if (GameManager.Instance.CurrentLevel == 2)
+                    {
+                        GameEvents.TriggerTutorialStarted();
+                    }
                 }
-                ;
+
                 currentClickable.OnClickedByPlayer();
                 ClearOutline(currentClickable);
                 currentClickable = null;

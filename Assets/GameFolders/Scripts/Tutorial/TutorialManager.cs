@@ -29,6 +29,8 @@ namespace GameFolders.Scripts.Tutorial
         private Color darkenColor = new Color(0.3f, 0.3f, 0.3f);
         private Color normalColor = Color.white;
 
+        private int tempNum = 0;
+
 
         private int _currentLevel;
 
@@ -40,6 +42,7 @@ namespace GameFolders.Scripts.Tutorial
         private void OnEnable()
         {
             GameEvents.OnGameStart += StartTutorial;
+            GameEvents.OnTutorialStarted += StartTutorial;
             GameEvents.OnTutorialCompleted += StopTutorial;
             GameEvents.OnLevelFailed += StopTutorial;
             GameEvents.OnLevelRestarted += StopTutorial;
@@ -50,6 +53,8 @@ namespace GameFolders.Scripts.Tutorial
         private void OnDisable()
         {
             GameEvents.OnGameStart -= StartTutorial;
+            GameEvents.OnTutorialStarted -= StartTutorial;
+
             GameEvents.OnTutorialCompleted -= StopTutorial;
             GameEvents.OnLevelFailed -= StopTutorial;
             GameEvents.OnLevelRestarted -= StopTutorial;
@@ -78,13 +83,23 @@ namespace GameFolders.Scripts.Tutorial
                     freezeButton.interactable = false;
                     break;
                 case 2:
-                    ActivateTutorialCamera("Use your bomb power to clean slot from garbage");
-                    pointerHand.transform.DOScale(Vector3.one, 0.1f);
-                    ActivateTutorialObjects();
-                    pointerHand.GetComponent<RectTransform>().anchoredPosition = pointerBombPosition.anchoredPosition;
-                    pointerHand.GetComponent<PointerHandAnimation>().PointerAnimation(MoveDirection.Y);
-                    bombButton.onClick.AddListener(DeactivateTutorialObjects);
-                    bombButton.interactable = true;
+                    if (tempNum == 0)
+                    {
+                        ActivateTutorialCamera("Try to collect garbage", false);
+                    }
+                    if (tempNum == 1)
+                    {
+                        StopTutorial();
+                        ActivateTutorialCamera("Garbage can't be match");
+                        pointerHand.transform.DOScale(Vector3.one, 0.1f);
+                        ActivateTutorialObjects();
+                        pointerHand.GetComponent<RectTransform>().anchoredPosition = pointerBombPosition.anchoredPosition;
+                        pointerHand.GetComponent<PointerHandAnimation>().PointerAnimation(MoveDirection.Y);
+                        bombButton.onClick.AddListener(DeactivateTutorialObjects);
+                        bombButton.interactable = true;
+
+                    }
+                    tempNum++;
                     break;
                 case 3:
                     ActivateTutorialCamera("Use your freeze power to slow down the conveyor belt");
@@ -108,6 +123,27 @@ namespace GameFolders.Scripts.Tutorial
             tutorialText.text = message;
             tutorialText.gameObject.SetActive(true);
             pointerHand.SetActive(true);
+            background.color = darkenColor;
+            // MeshRenderer'ı etkinleştir
+            if (darkenStencil != null)
+            {
+                darkenStencil.enabled = true;
+            }
+        }
+        private void ActivateTutorialCamera(string message, bool havePointer)
+        {
+            //  tutorialCamera.SetActive(true);
+            infoBox.SetActive(true);
+            tutorialText.text = message;
+            tutorialText.gameObject.SetActive(true);
+            if (havePointer)
+            {
+                pointerHand.SetActive(true);
+            }
+            else
+            {
+                pointerHand.SetActive(false);
+            }
             background.color = darkenColor;
             // MeshRenderer'ı etkinleştir
             if (darkenStencil != null)

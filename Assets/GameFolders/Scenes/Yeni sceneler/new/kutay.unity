@@ -4687,6 +4687,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: InfoBox
       objectReference: {fileID: 0}
+    - target: {fileID: 2248573611704460362, guid: fa7d4498aa7b0b041a4b812421186cc3, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2676206994272391984, guid: fa7d4498aa7b0b041a4b812421186cc3, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
