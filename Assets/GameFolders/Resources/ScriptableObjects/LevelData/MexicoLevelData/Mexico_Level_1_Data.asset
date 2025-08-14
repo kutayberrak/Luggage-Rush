@@ -12,18 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89b21b5d0567bef4aa52dc9b3c0f8ad4, type: 3}
   m_Name: Mexico_Level_1_Data
   m_EditorClassIdentifier: 
-  levelLimitType: 1
+  levelLimitType: 0
   levelTimeInSeconds: 60
   levelMoveLimitCount: 60
   targetLuggageInfo:
   - LuggageType: 1
     Count: 6
   hasCollectiblePiece: 1
-  collectablePieceType: 01000000
+  collectablePieceType: 
   luggageTypesToSpawn: 01000000
   junkPieceType: 
+  specialTypesToSpawn: 
   spawnWeightData:
     LuggageSpawnWeight: 9
-    CollectableSpawnWeight: 1
+    CollectableSpawnWeight: 0
     JunkSpawnWeight: 2
+    SpecialSpawnWeight: 0
   spawnInterval: 0.2

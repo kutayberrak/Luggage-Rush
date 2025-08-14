@@ -3,27 +3,22 @@ using UnityEngine;
 
 namespace GameFolders.Scripts.UI
 {
+    public enum MoveDirection
+    {
+        X,
+        Y,
+        XY
+    }
     public class PointerHandAnimation : MonoBehaviour
     {
-        enum MoveDirection
-        {
-            X,
-            Y,
-            XY
-        }
+
         
         [Header("Settings")] 
         [SerializeField] private float animationSpeed;
         [SerializeField] private Ease animationEase;
         [SerializeField] private float moveAmount = 0.5f;
-        [SerializeField] private MoveDirection moveDirection = MoveDirection.Y;
 
         private Tween _pointerTween;
-        
-        private void OnEnable()
-        {
-            PointerAnimation();
-        }
 
         private void OnDisable()
         {
@@ -36,7 +31,7 @@ namespace GameFolders.Scripts.UI
         /// To set the pointer animation based on the move direction and amount.
         /// Y for vertical movement, X for horizontal movement, XY for diagonal movement.
         /// </summary>
-        private void PointerAnimation()
+        public void PointerAnimation(MoveDirection moveDirection)
         {
             _pointerTween = moveDirection switch
             {

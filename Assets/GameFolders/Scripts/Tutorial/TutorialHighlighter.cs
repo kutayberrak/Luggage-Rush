@@ -1,53 +1,56 @@
-using System.Collections.Generic;
-using UnityEngine;
-using GameFolders.Scripts;
 using GameFolders.Scripts.Managers;
+using UnityEngine;
 
-public class TutorialHighlighter : MonoBehaviour
+namespace GameFolders.Scripts.Tutorial
 {
-    [SerializeField] private int highlightLevel;
-    private int currentLevel;
-
-    void OnEnable()
+    public class TutorialHighlighter : MonoBehaviour
     {
-        Invoke(nameof(StartHighlighting), 0.1f);
+        [SerializeField] private int highlightLevel;
+        
+        private static readonly int GlowSpeed = Shader.PropertyToID("_GlowSpeed");
+        private Material _material;
+        private int _currentLevel;
 
-        GameEvents.OnTutorialCompleted += StopHighlighting;
-
-        //     GameEvents.OnLevelFailed += StopHighlighting;
-        //     GameEvents.OnLevelRestarted += StopHighlighting;
-        //     GameEvents.OnLevelWin += StopHighlighting;
-        //     GameEvents.OnReturnToMainMenu += StopHighlighting;
-    }
-
-    private void OnDisable()
-    {
-        GameEvents.OnTutorialCompleted -= StopHighlighting;
-
-        // GameEvents.OnLevelFailed -= StopHighlighting;
-        // GameEvents.OnLevelRestarted -= StopHighlighting;
-        // GameEvents.OnLevelWin -= StopHighlighting;
-        // GameEvents.OnReturnToMainMenu -= StopHighlighting;
-    }
-
-    private void StartHighlighting()
-    {
-        currentLevel = GameManager.Instance.CurrentLevel;
-
-        if (currentLevel != highlightLevel)
+        private void Awake()
         {
-            return;
+            _material = GetComponent<MeshRenderer>().material;
+            if (_material == null)
+            {
+                Debug.LogError("Material not found on the TutorialHighlighter GameObject.");
+                return;
+            }
+            _material.SetFloat(GlowSpeed, 0f);
         }
 
-        gameObject.layer = LayerMask.NameToLayer("Highlight");
-
-    }
-
-    private void StopHighlighting()
-    {
-        if (currentLevel == highlightLevel)
+        private void OnEnable()
         {
-            gameObject.layer = LayerMask.NameToLayer("Clickable");
+            Invoke(nameof(StartHighlighting), 0.1f);
+
+            GameEvents.OnTutorialCompleted += StopHighlighting;
+            GameEvents.OnLevelWin += StopHighlighting;
+            GameEvents.OnLevelFailed += StopHighlighting;
+        }
+
+        private void OnDisable()
+        {
+            GameEvents.OnTutorialCompleted -= StopHighlighting;
+            GameEvents.OnLevelWin -= StopHighlighting;
+            GameEvents.OnLevelFailed -= StopHighlighting;
+        }
+
+        private void StartHighlighting()
+        {
+            _currentLevel = GameManager.Instance.CurrentLevel;
+            if (_currentLevel != highlightLevel)
+            {
+                return;
+            }
+            _material.SetFloat(GlowSpeed,1.8f);
+        }
+
+        private void StopHighlighting()
+        {
+            _material.SetFloat(GlowSpeed, 0f);
         }
     }
 }

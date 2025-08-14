@@ -331,6 +331,7 @@ MonoBehaviour:
   reservedSlotIndex: -1
   boxCollider: {fileID: 0}
   timeToAdd: 5
+  moveDuration: 1
 --- !u!54 &5213259028247387537
 Rigidbody:
   m_ObjectHideFlags: 0
