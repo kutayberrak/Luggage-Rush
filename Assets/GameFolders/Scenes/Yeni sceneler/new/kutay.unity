@@ -26438,7 +26438,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8466464633084687791, guid: 803744fdf23664843b22c657a63e50ce, type: 3}
       propertyPath: luggagePrefabs.Array.size
-      value: 10
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 8466464633084687791, guid: 803744fdf23664843b22c657a63e50ce, type: 3}
       propertyPath: specialPrefabs.Array.size
@@ -26480,6 +26480,26 @@ PrefabInstance:
       propertyPath: 'specialPrefabs.Array.data[1]'
       value: 
       objectReference: {fileID: 2405603349070634176, guid: 8779d42da946b57409e914e96fd4f5a6, type: 3}
+    - target: {fileID: 8466464633084687791, guid: 803744fdf23664843b22c657a63e50ce, type: 3}
+      propertyPath: 'luggagePrefabs.Array.data[10]'
+      value: 
+      objectReference: {fileID: 2037991375907920852, guid: 91b3eec8084ec124aa3f942032fd4878, type: 3}
+    - target: {fileID: 8466464633084687791, guid: 803744fdf23664843b22c657a63e50ce, type: 3}
+      propertyPath: 'luggagePrefabs.Array.data[11]'
+      value: 
+      objectReference: {fileID: 603125447558223870, guid: e66801747675d1d4393671db9884155d, type: 3}
+    - target: {fileID: 8466464633084687791, guid: 803744fdf23664843b22c657a63e50ce, type: 3}
+      propertyPath: 'luggagePrefabs.Array.data[12]'
+      value: 
+      objectReference: {fileID: 582909565776718955, guid: e345db6a122eb0544b517ef91cd505f5, type: 3}
+    - target: {fileID: 8466464633084687791, guid: 803744fdf23664843b22c657a63e50ce, type: 3}
+      propertyPath: 'luggagePrefabs.Array.data[13]'
+      value: 
+      objectReference: {fileID: 6297320497952660918, guid: 0a364a4f0174ab842829ca4fc9bef80e, type: 3}
+    - target: {fileID: 8466464633084687791, guid: 803744fdf23664843b22c657a63e50ce, type: 3}
+      propertyPath: 'luggagePrefabs.Array.data[14]'
+      value: 
+      objectReference: {fileID: 3856967545545575566, guid: 13b2acc5c0c6e774b93599212198ab0f, type: 3}
     - target: {fileID: 8466464633084687791, guid: 803744fdf23664843b22c657a63e50ce, type: 3}
       propertyPath: 'collectionPrefabs.Array.data[5]'
       value: 

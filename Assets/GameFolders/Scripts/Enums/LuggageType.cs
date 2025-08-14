@@ -13,5 +13,10 @@
         Luggage_2_3_Purple_Thin,
         Luggage_2_4_Purple,
         Luggage_2_5_Brown,
+        Luggage_Variation_1,
+        Luggage_Variation_2,
+        Luggage_Variation_3,
+        Luggage_Variation_4,
+        Luggage_Variation_5,
     }
 }
