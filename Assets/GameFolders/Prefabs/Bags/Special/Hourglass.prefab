@@ -314,7 +314,7 @@ MonoBehaviour:
   luggageType: 0
   garbageType: 0
   collectionType: 0
-  specialType: 0
+  specialType: 1
   speed: 5
   arrivalThreshold: 0.05
   riseDuration: 0.3
