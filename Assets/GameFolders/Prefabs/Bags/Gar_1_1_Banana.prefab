@@ -147,6 +147,7 @@ MonoBehaviour:
   luggageType: 0
   garbageType: 1
   collectionType: 0
+  specialType: 0
   speed: 5
   arrivalThreshold: 0.05
   riseDuration: 0.3
@@ -161,6 +162,7 @@ MonoBehaviour:
   minScale: 0.7
   targetScale: 0.4
   reservedSlotIndex: -1
+  boxCollider: {fileID: 0}
 --- !u!65 &800826045754968876
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 2127625652470064692}
   - component: {fileID: 7167181307331866590}
   - component: {fileID: -2020798972996527734}
+  - component: {fileID: -755838559130035354}
   m_Layer: 10
   m_Name: Gar_1_2_Cola
   m_TagString: Untagged
@@ -147,6 +148,7 @@ MonoBehaviour:
   luggageType: 0
   garbageType: 2
   collectionType: 0
+  specialType: 0
   speed: 5
   arrivalThreshold: 0.05
   riseDuration: 0.3
@@ -161,6 +163,7 @@ MonoBehaviour:
   minScale: 0.7
   targetScale: 0.4
   reservedSlotIndex: -1
+  boxCollider: {fileID: 0}
 --- !u!65 &-2020798972996527734
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -182,3 +185,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.4810539, y: 0.69567686, z: 0.47975013}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-755838559130035354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9131223008147323745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4c14a05d5c3a054990cd6f26bc37a5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  highlightLevel: 2
