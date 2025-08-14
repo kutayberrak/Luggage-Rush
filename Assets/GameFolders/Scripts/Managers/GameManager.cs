@@ -23,6 +23,9 @@ namespace GameFolders.Scripts.Managers
         [SerializeField] private GameObject[] conveyors;
         private GameObject _activeConveyor;
 
+        [Header("Test")]
+        public GameObject poleObj;
+
         private void Awake()
         {
             if (Instance == null)
@@ -85,6 +88,11 @@ namespace GameFolders.Scripts.Managers
             LoadLevelRequirements();
 
             AdjustConveyor();
+
+
+            //this function added for testing it will remove before actually game.
+            ShowPoleForTest();
+
             SpawnManager.Instance.RefreshActiveSpawnPoints();
             SpawnManager.Instance.RunSpawn();
 
@@ -222,6 +230,18 @@ namespace GameFolders.Scripts.Managers
                 list.AddRange(_activeConveyor.GetComponentsInChildren<ConveyorBeltController>(true));
             }
             return list;
+        }
+
+        private void ShowPoleForTest()
+        {
+            if (CurrentLevelData.name.Equals("France_Level_3_Data"))
+            {
+                poleObj.SetActive(true);
+            }
+            else
+            {
+                poleObj.SetActive(false);
+            }
         }
 
     }
