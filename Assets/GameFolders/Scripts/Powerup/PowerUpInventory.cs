@@ -20,7 +20,6 @@ public class PowerUpInventory : MonoBehaviour
 
     [SerializeField] private GameObject freezeBuyImage;
     [SerializeField] private GameObject slotBombBuyImage;
-    public ConveyorBeltController conveyor;
 
     [SerializeField] private GameObject explosionEffect;
     [SerializeField] private GameObject freezeEffect;
@@ -70,7 +69,8 @@ public class PowerUpInventory : MonoBehaviour
         switch (type)
         {
             case PowerUpType.Freeze:
-                powerUp = new FreezePowerUp(duration: 3f, conveyor: conveyor);
+                var activeConveyors = GameManager.Instance.GetActiveConveyors();
+                powerUp = new FreezePowerUp(duration: 3f, conveyors: activeConveyors);
                 break;
             case PowerUpType.SlotBomb:
                 powerUp = new SlotBombPowerUp();
@@ -197,23 +197,43 @@ public class PowerUpInventory : MonoBehaviour
         if (freezeEffect == null) return;
 
         GameObject effect = Instantiate(freezeEffect, freezeEffect.transform.position, freezeEffect.transform.rotation);
-
-
         Destroy(effect, 7f);
 
-        if (conveyorMeshRenderer != null && conveyorFrozenMaterial != null)
+        var conveyors = GameManager.Instance.GetActiveConveyors();
+        foreach (var conveyor in conveyors)
         {
-            conveyorMeshRenderer.material.mainTexture = conveyorFrozenMaterial;
-            Invoke(nameof(ResetConveyorMaterial), 3f);
+            var tilingObj = conveyor.transform.Find("conveyorModel/tiling");
+            if (tilingObj != null)
+            {
+                var meshRenderer = tilingObj.GetComponent<MeshRenderer>();
+                if (meshRenderer != null && conveyorFrozenMaterial != null)
+                {
+                    meshRenderer.material.mainTexture = conveyorFrozenMaterial;
+                }
+            }
         }
+
+        Invoke(nameof(ResetConveyorMaterial), 3f);
     }
+
     public void ResetConveyorMaterial()
     {
-        if (conveyorMeshRenderer != null && conveyorDefaultMaterial != null)
+        var conveyors = GameManager.Instance.GetActiveConveyors();
+        foreach (var conveyor in conveyors)
         {
-            conveyorMeshRenderer.material.mainTexture = conveyorDefaultMaterial;
+            var tilingObj = conveyor.transform.Find("conveyorModel/tiling");
+            if (tilingObj != null)
+            {
+                var meshRenderer = tilingObj.GetComponent<MeshRenderer>();
+                if (meshRenderer != null && conveyorDefaultMaterial != null)
+                {
+                    meshRenderer.material.mainTexture = conveyorDefaultMaterial;
+                }
+            }
         }
     }
+
+
     // UI binding
     public int GetCount(PowerUpType type)
         => powerUpCounts.TryGetValue(type, out var c) ? c : 0;

@@ -29,3 +29,4 @@ MonoBehaviour:
     JunkSpawnWeight: 3
     SpecialSpawnWeight: 0
   spawnInterval: 0.16
+  conveyorType: 1

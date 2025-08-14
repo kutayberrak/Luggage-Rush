@@ -1,6 +1,7 @@
 using GameFolders.Scripts.ScriptableObjects;
-using UnityEngine;
+using System.Collections.Generic;
 using TMPro;
+using UnityEngine;
 
 namespace GameFolders.Scripts.Managers
 {
@@ -213,5 +214,15 @@ namespace GameFolders.Scripts.Managers
                 Debug.LogError($"Conveyor bulunamadı: {_currentLevelData.ConveyorType}");
             }
         }
+        public List<ConveyorBeltController> GetActiveConveyors()
+        {
+            var list = new List<ConveyorBeltController>();
+            if (_activeConveyor != null)
+            {
+                list.AddRange(_activeConveyor.GetComponentsInChildren<ConveyorBeltController>(true));
+            }
+            return list;
+        }
+
     }
 }
