@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 2474740174686312081}
   - component: {fileID: 7175525756274578418}
   - component: {fileID: 111195946181093089}
+  - component: {fileID: -468165930077406349}
   m_Layer: 10
   m_Name: Gar_1_2_Cola_v2
   m_TagString: Untagged
@@ -184,3 +185,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectType: 1
+--- !u!114 &-468165930077406349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6756377439997675048}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4c14a05d5c3a054990cd6f26bc37a5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  highlightLevel: 2
