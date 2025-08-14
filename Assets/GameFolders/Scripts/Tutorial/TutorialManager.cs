@@ -9,6 +9,8 @@ namespace GameFolders.Scripts.Tutorial
 {
     public class TutorialManager : MonoBehaviour
     {
+        public static TutorialManager Instance { get; private set; }
+
         [Header("References")]
         [SerializeField] private TextMeshProUGUI tutorialText;
         [SerializeField] private MeshRenderer darkenStencil;
@@ -30,10 +32,23 @@ namespace GameFolders.Scripts.Tutorial
         private Color normalColor = Color.white;
 
         private int tempNum = 0;
+        public bool isTutorialActive = true;
 
 
         private int _currentLevel;
 
+        private void Awake()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
         private void Start()
         {
             pointerHand.SetActive(false);
@@ -73,7 +88,9 @@ namespace GameFolders.Scripts.Tutorial
                     pointerHand.GetComponent<RectTransform>().anchoredPosition = pointerLuggagePosition.anchoredPosition;
                     pointerHand.GetComponent<PointerHandAnimation>().PointerAnimation(MoveDirection.Y);
                     bombButton.interactable = false;
+                    bombButton.transform.GetChild(3).gameObject.SetActive(true);
                     freezeButton.interactable = false;
+                    freezeButton.transform.GetChild(3).gameObject.SetActive(true);
                     break;
                 case 1:
                     ActivateTutorialCamera("To complete your collection, pick up the collection piece that glowing"); //currentLevel 1 = Level 2
@@ -81,10 +98,16 @@ namespace GameFolders.Scripts.Tutorial
                     pointerHand.GetComponent<PointerHandAnimation>().PointerAnimation(MoveDirection.Y);
                     bombButton.interactable = false;
                     freezeButton.interactable = false;
+                    bombButton.transform.GetChild(3).gameObject.SetActive(true);
+                    freezeButton.transform.GetChild(3).gameObject.SetActive(true);
                     break;
                 case 2:
                     if (tempNum == 0)
                     {
+                        bombButton.interactable = false;
+                        freezeButton.interactable = false;
+                        bombButton.transform.GetChild(3).gameObject.SetActive(true);
+                        freezeButton.transform.GetChild(3).gameObject.SetActive(true);
                         ActivateTutorialCamera("Try to collect garbage", false);
                     }
                     if (tempNum == 1)
@@ -97,6 +120,8 @@ namespace GameFolders.Scripts.Tutorial
                         pointerHand.GetComponent<PointerHandAnimation>().PointerAnimation(MoveDirection.Y);
                         bombButton.onClick.AddListener(DeactivateTutorialObjects);
                         bombButton.interactable = true;
+                        bombButton.transform.GetChild(3).gameObject.SetActive(false);
+                        freezeButton.transform.GetChild(3).gameObject.SetActive(true);
 
                     }
                     tempNum++;
@@ -109,6 +134,8 @@ namespace GameFolders.Scripts.Tutorial
                     freezeButton.onClick.AddListener(DeactivateTutorialObjects);
                     bombButton.onClick.RemoveListener(DeactivateTutorialObjects);
                     freezeButton.interactable = true;
+                    bombButton.transform.GetChild(3).gameObject.SetActive(false);
+                    freezeButton.transform.GetChild(3).gameObject.SetActive(false);
                     break;
                 default:
                     StopTutorial();
@@ -127,6 +154,7 @@ namespace GameFolders.Scripts.Tutorial
             // MeshRenderer'ı etkinleştir
             if (darkenStencil != null && GameManager.Instance.CurrentLevel != 3)
             {
+
                 darkenStencil.enabled = true;
             }
         }
@@ -168,6 +196,11 @@ namespace GameFolders.Scripts.Tutorial
 
         private void DeactivateTutorialObjects()
         {
+            if (GameManager.Instance.CurrentLevel == 2)
+            {
+                isTutorialActive = false;
+            }
+
             GameEvents.TriggerTutorialCompleted();
             infoBox.transform.DOScale(Vector3.zero, 0.1f).OnComplete(() => infoBox.SetActive(false));
             pointerHand.transform.DOScale(Vector3.zero, 0.1f).OnComplete(() => pointerHand.SetActive(false));

@@ -49,6 +49,10 @@ namespace GameFolders.Scripts.Tutorial
             {
                 return;
             }
+            if (!TutorialManager.Instance.isTutorialActive && GameManager.Instance.CurrentLevel == 2)
+            {
+                return;
+            }
             _material.SetFloat(GlowSpeed, 1.8f);
 
             if (GameManager.Instance.CurrentLevel == 2 && gameObject.TryGetComponent(out GarbageItem garbageItem))
@@ -69,6 +73,7 @@ namespace GameFolders.Scripts.Tutorial
             {
                 _material.SetFloat(_GlowRepeatTime, 3.25f);
                 _material.SetFloat(_Brightness, 1f);
+
             }
 
             gameObject.layer = LayerMask.NameToLayer("Clickable");
