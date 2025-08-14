@@ -36,6 +36,10 @@ namespace GameFolders.Scripts.Tutorial
         public bool isTutorialActive0 = true;
         public bool isTutorialActive2 = true;
 
+        // Cache edilen pozisyonlar
+        private Vector2 infoBoxOriginalPosition;
+        private Vector2 infoBoxStartPosition;
+        private RectTransform infoBoxRect;
 
         private int _currentLevel;
 
@@ -54,6 +58,11 @@ namespace GameFolders.Scripts.Tutorial
         private void Start()
         {
             pointerHand.SetActive(false);
+
+            // InfoBox pozisyonlarını cache le
+            infoBoxRect = infoBox.GetComponent<RectTransform>();
+            infoBoxOriginalPosition = infoBoxRect.anchoredPosition;
+            infoBoxStartPosition = new Vector2(infoBoxOriginalPosition.x + 300f, infoBoxOriginalPosition.y - 200f);
         }
 
         private void OnEnable()
@@ -95,7 +104,7 @@ namespace GameFolders.Scripts.Tutorial
                     freezeButton.transform.GetChild(3).gameObject.SetActive(true);
                     break;
                 case 1:
-                    ActivateTutorialCamera("Tap the glowing piece to complete your collection - no matching needed."); //currentLevel 1 = Level 2
+                    ActivateTutorialCamera("Tap the glowing piece to complete your collection - no matching needed!"); //currentLevel 1 = Level 2
                     pointerHand.GetComponent<RectTransform>().anchoredPosition = pointerLuggagePosition.anchoredPosition;
                     pointerHand.GetComponent<PointerHandAnimation>().PointerAnimation(MoveDirection.Y);
                     bombButton.interactable = false;
@@ -110,7 +119,7 @@ namespace GameFolders.Scripts.Tutorial
                         freezeButton.interactable = false;
                         bombButton.transform.GetChild(3).gameObject.SetActive(true);
                         freezeButton.transform.GetChild(3).gameObject.SetActive(true);
-                        ActivateTutorialCamera("Try to collect garbage", false, true);
+                        ActivateTutorialCamera("Try to collect garbage!", false, true);
 
                     }
                     if (tempNum == 1)
@@ -135,7 +144,7 @@ namespace GameFolders.Scripts.Tutorial
                     tempNum++;
                     break;
                 case 3:
-                    ActivateTutorialCamera("Use your freeze power to slow down the conveyor belt");
+                    ActivateTutorialCamera("Use your freeze power to slow down the conveyor belt!");
                     ActivateTutorialObjects();
                     pointerHand.GetComponent<RectTransform>().anchoredPosition = pointerFreezePosition.anchoredPosition;
                     pointerHand.GetComponent<PointerHandAnimation>().PointerAnimation(MoveDirection.Y);
@@ -144,6 +153,12 @@ namespace GameFolders.Scripts.Tutorial
                     freezeButton.interactable = true;
                     bombButton.transform.GetChild(3).gameObject.SetActive(false);
                     freezeButton.transform.GetChild(3).gameObject.SetActive(false);
+                    break;
+                case 4:
+                    ActivateTutorialCamera("Careful! Bombs on the conveyor!", 2f);
+                    break;
+                case 5:
+                    ActivateTutorialCamera("Hourglass on conveyor helps you!", 2f);
                     break;
                 default:
                     StopTutorial();
@@ -193,6 +208,42 @@ namespace GameFolders.Scripts.Tutorial
                     darkenStencil.enabled = false;
                 }
             }
+        }
+        private void ActivateTutorialCamera(string message, float time)
+        {
+            tutorialText.text = message;
+            tutorialText.gameObject.SetActive(true);
+
+            // InfoBox'ı aktif et
+            infoBox.SetActive(true);
+
+            // Başlangıç durumu ayarla (cache'lenmiş değerleri kullan)
+            infoBoxRect.anchoredPosition = infoBoxStartPosition;
+            infoBox.transform.localScale = Vector3.zero;
+
+            // DOTween ile hem position hem scale animasyonu
+            Sequence openSequence = DOTween.Sequence();
+            openSequence.Append(infoBoxRect.DOAnchorPos(infoBoxOriginalPosition, 0.5f).SetEase(Ease.OutBack));
+            openSequence.Join(infoBox.transform.DOScale(Vector3.one, 0.5f).SetEase(Ease.OutBack));
+
+            openSequence.OnComplete(() =>
+            {
+                // Belirtilen süre sonunda kapanma animasyonu
+                DOVirtual.DelayedCall(time, () =>
+                {
+                    Sequence closeSequence = DOTween.Sequence();
+                    closeSequence.Append(infoBoxRect.DOAnchorPos(infoBoxStartPosition, 0.4f).SetEase(Ease.InBack));
+                    closeSequence.Join(infoBox.transform.DOScale(Vector3.zero, 0.4f).SetEase(Ease.InBack));
+
+                    closeSequence.OnComplete(() =>
+                    {
+                        infoBox.SetActive(false);
+                        tutorialText.gameObject.SetActive(false);
+                        // Pozisyonu orijinal haline getir (bir sonrakine hazırlık)
+                        infoBoxRect.anchoredPosition = infoBoxOriginalPosition;
+                    });
+                });
+            });
         }
         private void StopTutorial()
         {
