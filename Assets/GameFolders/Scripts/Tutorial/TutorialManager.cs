@@ -161,6 +161,9 @@ namespace GameFolders.Scripts.Tutorial
                 case 5:
                     ActivateTutorialCamera("Hourglass on conveyor helps you!", 2f);
                     break;
+                case 6:
+                    ActivateTutorialCamera("Luggages might be  mixed up in the \nX-ray!", 2f);
+                    break;
                 default:
                     StopTutorial();
                     break;
