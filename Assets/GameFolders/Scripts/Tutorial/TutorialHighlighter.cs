@@ -8,6 +8,8 @@ namespace GameFolders.Scripts.Tutorial
         [SerializeField] private int highlightLevel;
 
         private static readonly int GlowSpeed = Shader.PropertyToID("_GlowSpeed");
+        private static readonly int _GlowRepeatTime = Shader.PropertyToID("_GlowRepeatTime");
+        private static readonly int _Brightness = Shader.PropertyToID("_Brightness");
         private Material _material;
         private int _currentLevel;
 
@@ -33,6 +35,8 @@ namespace GameFolders.Scripts.Tutorial
 
         private void OnDisable()
         {
+            Invoke(nameof(StopHighlighting), 0.1f);
+
             GameEvents.OnTutorialCompleted -= StopHighlighting;
             GameEvents.OnLevelWin -= StopHighlighting;
             GameEvents.OnLevelFailed -= StopHighlighting;
@@ -46,13 +50,29 @@ namespace GameFolders.Scripts.Tutorial
                 return;
             }
             _material.SetFloat(GlowSpeed, 1.8f);
+
+            if (GameManager.Instance.CurrentLevel == 2 && gameObject.TryGetComponent(out GarbageItem garbageItem))
+            {
+                _material.SetFloat(_GlowRepeatTime, 1.5f);
+                _material.SetFloat(_Brightness, 2f);
+                //_material.SetFloat(GlowSpeed, 0.1f);
+            }
             gameObject.layer = LayerMask.NameToLayer("Highlight");
         }
 
         private void StopHighlighting()
         {
             _material.SetFloat(GlowSpeed, 0f);
+
+
+            if ((GameManager.Instance.CurrentLevel == 2 || GameManager.Instance.CurrentLevel == 3) && gameObject.TryGetComponent(out GarbageItem garbageItem))
+            {
+                _material.SetFloat(_GlowRepeatTime, 3.25f);
+                _material.SetFloat(_Brightness, 1f);
+            }
+
             gameObject.layer = LayerMask.NameToLayer("Clickable");
+
         }
     }
 }

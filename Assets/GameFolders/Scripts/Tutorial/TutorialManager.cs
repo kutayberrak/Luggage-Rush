@@ -90,7 +90,7 @@ namespace GameFolders.Scripts.Tutorial
                     if (tempNum == 1)
                     {
                         StopTutorial();
-                        ActivateTutorialCamera("Garbage can't be match");
+                        ActivateTutorialCamera("Garbage can't be matched. Use bomb power-up!");
                         pointerHand.transform.DOScale(Vector3.one, 0.1f);
                         ActivateTutorialObjects();
                         pointerHand.GetComponent<RectTransform>().anchoredPosition = pointerBombPosition.anchoredPosition;
@@ -125,7 +125,7 @@ namespace GameFolders.Scripts.Tutorial
             pointerHand.SetActive(true);
             background.color = darkenColor;
             // MeshRenderer'ı etkinleştir
-            if (darkenStencil != null)
+            if (darkenStencil != null && GameManager.Instance.CurrentLevel != 3)
             {
                 darkenStencil.enabled = true;
             }
