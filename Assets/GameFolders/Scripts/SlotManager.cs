@@ -6,6 +6,8 @@ using GameFolders.Scripts.Enums;
 using System;
 using GameFolders.Scripts;
 using GameFolders.Scripts.Managers;
+using Sirenix.OdinInspector.Editor.GettingStarted;
+using GameFolders.Scripts.Tutorial;
 
 public class SlotManager : MonoBehaviour
 {
@@ -725,6 +727,7 @@ public class SlotManager : MonoBehaviour
 
         if (GameManager.Instance.CurrentLevel == 0)
         {
+            TutorialManager.Instance.isTutorialActive0 = false;
             GameEvents.TriggerTutorialCompleted();
         }
 

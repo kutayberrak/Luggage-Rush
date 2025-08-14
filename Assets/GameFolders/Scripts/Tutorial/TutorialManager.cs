@@ -32,7 +32,9 @@ namespace GameFolders.Scripts.Tutorial
         private Color normalColor = Color.white;
 
         private int tempNum = 0;
-        public bool isTutorialActive = true;
+
+        public bool isTutorialActive0 = true;
+        public bool isTutorialActive2 = true;
 
 
         private int _currentLevel;
@@ -84,7 +86,7 @@ namespace GameFolders.Scripts.Tutorial
             switch (_currentLevel)
             {
                 case 0:
-                    ActivateTutorialCamera("Tap the target luggage to complete level "); //currentLevel 0 = Level 1
+                    ActivateTutorialCamera("Tap three identical luggages to match them!"); //currentLevel 0 = Level 1
                     pointerHand.GetComponent<RectTransform>().anchoredPosition = pointerLuggagePosition.anchoredPosition;
                     pointerHand.GetComponent<PointerHandAnimation>().PointerAnimation(MoveDirection.Y);
                     bombButton.interactable = false;
@@ -93,7 +95,7 @@ namespace GameFolders.Scripts.Tutorial
                     freezeButton.transform.GetChild(3).gameObject.SetActive(true);
                     break;
                 case 1:
-                    ActivateTutorialCamera("To complete your collection, pick up the collection piece that glowing"); //currentLevel 1 = Level 2
+                    ActivateTutorialCamera("Tap the glowing piece to complete your collection - no matching needed."); //currentLevel 1 = Level 2
                     pointerHand.GetComponent<RectTransform>().anchoredPosition = pointerLuggagePosition.anchoredPosition;
                     pointerHand.GetComponent<PointerHandAnimation>().PointerAnimation(MoveDirection.Y);
                     bombButton.interactable = false;
@@ -108,12 +110,13 @@ namespace GameFolders.Scripts.Tutorial
                         freezeButton.interactable = false;
                         bombButton.transform.GetChild(3).gameObject.SetActive(true);
                         freezeButton.transform.GetChild(3).gameObject.SetActive(true);
-                        ActivateTutorialCamera("Try to collect garbage", false);
+                        ActivateTutorialCamera("Try to collect garbage", false, true);
+
                     }
                     if (tempNum == 1)
                     {
                         StopTutorial();
-                        ActivateTutorialCamera("Garbage can't be matched. Use bomb power-up!");
+                        ActivateTutorialCamera("Garbage can't be matched. Use dynamite power-up!", true, false);
                         pointerHand.transform.DOScale(Vector3.one, 0.1f);
                         ActivateTutorialObjects();
                         pointerHand.GetComponent<RectTransform>().anchoredPosition = pointerBombPosition.anchoredPosition;
@@ -123,6 +126,11 @@ namespace GameFolders.Scripts.Tutorial
                         bombButton.transform.GetChild(3).gameObject.SetActive(false);
                         freezeButton.transform.GetChild(3).gameObject.SetActive(true);
 
+                        if (GameManager.Instance.CurrentLevel == 2)
+                        {
+                            isTutorialActive2 = false;
+                        }
+                        GameEvents.TriggerHighlightCompleted();
                     }
                     tempNum++;
                     break;
@@ -158,7 +166,7 @@ namespace GameFolders.Scripts.Tutorial
                 darkenStencil.enabled = true;
             }
         }
-        private void ActivateTutorialCamera(string message, bool havePointer)
+        private void ActivateTutorialCamera(string message, bool havePointer, bool haveDarken)
         {
             //  tutorialCamera.SetActive(true);
             infoBox.SetActive(true);
@@ -176,7 +184,14 @@ namespace GameFolders.Scripts.Tutorial
             // MeshRenderer'ı etkinleştir
             if (darkenStencil != null)
             {
-                darkenStencil.enabled = true;
+                if (haveDarken)
+                {
+                    darkenStencil.enabled = true;
+                }
+                else
+                {
+                    darkenStencil.enabled = false;
+                }
             }
         }
         private void StopTutorial()
@@ -196,10 +211,7 @@ namespace GameFolders.Scripts.Tutorial
 
         private void DeactivateTutorialObjects()
         {
-            if (GameManager.Instance.CurrentLevel == 2)
-            {
-                isTutorialActive = false;
-            }
+
 
             GameEvents.TriggerTutorialCompleted();
             infoBox.transform.DOScale(Vector3.zero, 0.1f).OnComplete(() => infoBox.SetActive(false));

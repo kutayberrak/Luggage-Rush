@@ -12,6 +12,7 @@ namespace GameFolders.Scripts
         public static event Action OnLevelRestarted;
         public static event Action OnTutorialCompleted;
         public static event Action OnTutorialStarted;
+        public static event Action OnHighlightCompleted;
 
         // Cooldown variables for level end events
         private static float lastLevelEndTime = -1f;
@@ -22,6 +23,7 @@ namespace GameFolders.Scripts
         public static void TriggerGameStart() => OnGameStart?.Invoke();
         public static void TriggerTutorialCompleted() => OnTutorialCompleted?.Invoke();
         public static void TriggerTutorialStarted() => OnTutorialStarted?.Invoke();
+        public static void TriggerHighlightCompleted() => OnHighlightCompleted?.Invoke();
 
         public static void TriggerLevelWin()
         {

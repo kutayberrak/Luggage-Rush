@@ -29,6 +29,7 @@ namespace GameFolders.Scripts.Tutorial
             Invoke(nameof(StartHighlighting), 0.1f);
 
             GameEvents.OnTutorialCompleted += StopHighlighting;
+            GameEvents.OnHighlightCompleted += StopHighlighting;
             GameEvents.OnLevelWin += StopHighlighting;
             GameEvents.OnLevelFailed += StopHighlighting;
         }
@@ -38,6 +39,7 @@ namespace GameFolders.Scripts.Tutorial
             Invoke(nameof(StopHighlighting), 0.1f);
 
             GameEvents.OnTutorialCompleted -= StopHighlighting;
+            GameEvents.OnHighlightCompleted -= StopHighlighting;
             GameEvents.OnLevelWin -= StopHighlighting;
             GameEvents.OnLevelFailed -= StopHighlighting;
         }
@@ -49,7 +51,11 @@ namespace GameFolders.Scripts.Tutorial
             {
                 return;
             }
-            if (!TutorialManager.Instance.isTutorialActive && GameManager.Instance.CurrentLevel == 2)
+            if (!TutorialManager.Instance.isTutorialActive2 && GameManager.Instance.CurrentLevel == 2)
+            {
+                return;
+            }
+            if (!TutorialManager.Instance.isTutorialActive0 && GameManager.Instance.CurrentLevel == 0)
             {
                 return;
             }
@@ -66,7 +72,11 @@ namespace GameFolders.Scripts.Tutorial
 
         private void StopHighlighting()
         {
-            _material.SetFloat(GlowSpeed, 0f);
+            if (!TryGetComponent(out CollectionItem collection))
+            {
+                _material.SetFloat(GlowSpeed, 0f);
+            }
+
 
 
             if ((GameManager.Instance.CurrentLevel == 2 || GameManager.Instance.CurrentLevel == 3) && gameObject.TryGetComponent(out GarbageItem garbageItem))
