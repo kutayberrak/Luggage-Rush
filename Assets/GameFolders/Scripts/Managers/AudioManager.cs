@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using CandyCoded.HapticFeedback;
 
 public class AudioManager : MonoBehaviour
 {
@@ -23,10 +24,12 @@ public class AudioManager : MonoBehaviour
     private const string SFX_ENABLED_KEY = "SFXEnabled";
     private const string MUSIC_VOLUME_KEY = "MusicVolume";
     private const string SFX_VOLUME_KEY = "SFXVolume";
+    private const string VIBRATION_ENABLED_KEY = "VibrationEnabled";
 
     // State variables
     private bool isMusicEnabled = true;
     private bool isSFXEnabled = true;
+    private bool isVibrationEnabled = true;
 
     // SFX dictionary for easy access
     private Dictionary<string, AudioClip> sfxDictionary = new Dictionary<string, AudioClip>();
@@ -161,6 +164,39 @@ public class AudioManager : MonoBehaviour
 
     #endregion
 
+    #region Vibration Controls
+
+    public void TriggerVibration()
+    {
+        if (!isVibrationEnabled) return;
+
+        HapticFeedback.LightFeedback();
+    }
+
+    public void TriggerMediumVibration()
+    {
+        if (!isVibrationEnabled) return;
+
+        HapticFeedback.MediumFeedback();
+    }
+
+    public void TriggerHeavyVibration()
+    {
+        if (!isVibrationEnabled) return;
+
+        HapticFeedback.HeavyFeedback();
+    }
+
+    public void ToggleVibration()
+    {
+        isVibrationEnabled = !isVibrationEnabled;
+        SaveAudioSettings();
+
+        Debug.Log(isVibrationEnabled ? "Vibration enabled" : "Vibration disabled");
+    }
+
+    #endregion
+
     #region Volume Controls
 
     public void SetMasterVolume(float volume)
@@ -204,6 +240,7 @@ public class AudioManager : MonoBehaviour
         PlayerPrefs.SetInt(SFX_ENABLED_KEY, isSFXEnabled ? 1 : 0);
         PlayerPrefs.SetFloat(MUSIC_VOLUME_KEY, musicVolume);
         PlayerPrefs.SetFloat(SFX_VOLUME_KEY, sfxVolume);
+        PlayerPrefs.SetInt(VIBRATION_ENABLED_KEY, isVibrationEnabled ? 1 : 0);
         PlayerPrefs.Save();
     }
 
@@ -213,6 +250,7 @@ public class AudioManager : MonoBehaviour
         isSFXEnabled = PlayerPrefs.GetInt(SFX_ENABLED_KEY, 1) == 1;
         musicVolume = PlayerPrefs.GetFloat(MUSIC_VOLUME_KEY, musicVolume);
         sfxVolume = PlayerPrefs.GetFloat(SFX_VOLUME_KEY, sfxVolume);
+        isVibrationEnabled = PlayerPrefs.GetInt(VIBRATION_ENABLED_KEY, 1) == 1;
 
         UpdateAudioSources();
     }
@@ -223,6 +261,7 @@ public class AudioManager : MonoBehaviour
 
     public bool IsMusicEnabled() => isMusicEnabled;
     public bool IsSFXEnabled() => isSFXEnabled;
+    public bool IsVibrationEnabled() => isVibrationEnabled;
     public float GetMusicVolume() => musicVolume;
     public float GetSFXVolume() => sfxVolume;
 
@@ -238,6 +277,11 @@ public class AudioManager : MonoBehaviour
     public void OnAudioButtonPressed()
     {
         ToggleSFX();
+    }
+
+    public void OnVibrationButtonPressed()
+    {
+        ToggleVibration();
     }
 
     #endregion

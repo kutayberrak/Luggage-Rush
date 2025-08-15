@@ -57,6 +57,7 @@ public class PlayerController : MonoBehaviour
                 if (currentClickable.specialType != SpecialType.Bomb)
                 {
                     AudioManager.Instance.PlaySFX("CollectSFX_1");
+                    AudioManager.Instance.TriggerVibration();
                 }
 
                 if (currentClickable.TryGetComponent(out GarbageItem garbageItem))

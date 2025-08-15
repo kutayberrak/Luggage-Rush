@@ -33,6 +33,7 @@ public class Bomb : SpecialItem
         }
 
         AudioManager.Instance.PlaySFX("etfx_explosion_grenade");
+        AudioManager.Instance.TriggerMediumVibration();
 
         if (explosionParticlePrefab != null)
         {

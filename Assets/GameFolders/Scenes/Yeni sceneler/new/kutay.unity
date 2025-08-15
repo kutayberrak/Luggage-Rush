@@ -6652,9 +6652,37 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2112976334}
     - target: {fileID: 3288498332999042803, guid: 800e7fe6f1f67db48ada4ab8ab520daa, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3288498332999042803, guid: 800e7fe6f1f67db48ada4ab8ab520daa, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3288498332999042803, guid: 800e7fe6f1f67db48ada4ab8ab520daa, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 2112976334}
+    - target: {fileID: 3288498332999042803, guid: 800e7fe6f1f67db48ada4ab8ab520daa, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 2112976332}
+    - target: {fileID: 3288498332999042803, guid: 800e7fe6f1f67db48ada4ab8ab520daa, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3288498332999042803, guid: 800e7fe6f1f67db48ada4ab8ab520daa, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: ToggleVibration
+      objectReference: {fileID: 0}
+    - target: {fileID: 3288498332999042803, guid: 800e7fe6f1f67db48ada4ab8ab520daa, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: AudioManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3288498332999042803, guid: 800e7fe6f1f67db48ada4ab8ab520daa, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 5673333256697941660, guid: 800e7fe6f1f67db48ada4ab8ab520daa, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -26524,9 +26552,37 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2112976334}
     - target: {fileID: 8662732082100675208, guid: 159043cd601fefc4bb8f538158232509, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8662732082100675208, guid: 159043cd601fefc4bb8f538158232509, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8662732082100675208, guid: 159043cd601fefc4bb8f538158232509, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 2112976334}
+    - target: {fileID: 8662732082100675208, guid: 159043cd601fefc4bb8f538158232509, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 2112976332}
+    - target: {fileID: 8662732082100675208, guid: 159043cd601fefc4bb8f538158232509, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8662732082100675208, guid: 159043cd601fefc4bb8f538158232509, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: ToggleVibration
+      objectReference: {fileID: 0}
+    - target: {fileID: 8662732082100675208, guid: 159043cd601fefc4bb8f538158232509, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: AudioManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8662732082100675208, guid: 159043cd601fefc4bb8f538158232509, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -712,6 +712,7 @@ public class SlotManager : MonoBehaviour
             Vector3 particlePosition = center + matchParticleOffset;
             GameObject particleInstance = Instantiate(matchParticlePrefab, particlePosition, Quaternion.identity);
             AudioManager.Instance.PlaySFX("MergingSFX");
+            AudioManager.Instance.TriggerMediumVibration();
             // Match particle'ı belirli süre sonra yok et
             Destroy(particleInstance, matchParticleDuration);
 

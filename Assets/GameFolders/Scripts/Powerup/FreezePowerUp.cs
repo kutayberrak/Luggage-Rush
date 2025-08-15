@@ -33,6 +33,7 @@ public class FreezePowerUp : IPowerUp
 
         PowerUpInventory.Instance.PlayFreezeEffectAtPosition();
         AudioManager.Instance?.PlaySFX("FreezeSFX");
+        AudioManager.Instance?.TriggerMediumVibration();
     }
 
     public void Deactivate()

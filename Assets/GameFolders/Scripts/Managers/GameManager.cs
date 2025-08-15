@@ -143,7 +143,10 @@ namespace GameFolders.Scripts.Managers
         {
             // Play level fail sound
             if (AudioManager.Instance != null)
+            {
                 AudioManager.Instance.PlaySFX("LevelFail");
+                AudioManager.Instance.TriggerHeavyVibration();
+            }
             ClearLevelData();
         }
 
@@ -159,7 +162,10 @@ namespace GameFolders.Scripts.Managers
 
             // Play level win sound
             if (AudioManager.Instance != null)
+            {
                 AudioManager.Instance.PlaySFX("LevelWin");
+                AudioManager.Instance.TriggerHeavyVibration();
+            }
 
             ClearLevelData();
 

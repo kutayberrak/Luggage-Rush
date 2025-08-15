@@ -50,6 +50,7 @@ public class SlotBombPowerUp : IPowerUp
         PowerUpInventory.Instance.DecreaseCount(PowerUpType.SlotBomb);
 
         AudioManager.Instance?.PlaySFX("BombSFX");
+        AudioManager.Instance?.TriggerMediumVibration();
     }
 
     public void Deactivate() { }

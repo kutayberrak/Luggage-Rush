@@ -6,6 +6,7 @@ public class ButtonAudio : MonoBehaviour
     {
         // Play button click sound
         AudioManager.Instance.PlaySFX("ButtonClickSFX");
+        AudioManager.Instance?.TriggerVibration();
 
     }
 
