@@ -68,7 +68,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 20e2eed606540754c8c51a560390134e, type: 2}
+  - {fileID: 2100000, guid: 9c651c4c3210d504fb368db2cfe77c37, type: 2}
   - {fileID: 2100000, guid: 85626273408043849b0e098e96ed5153, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -120,13 +120,14 @@ MonoBehaviour:
   luggageType: 8
   garbageType: 0
   collectionType: 0
+  specialType: 0
   speed: 5
   arrivalThreshold: 0.05
-  riseDuration: 0.3
+  riseDuration: 0.15
   riseHeight: 1
   riseEase: 6
   useCurveMovement: 1
-  curveMoveDuration: 1.2
+  curveMoveDuration: 0.4
   curveEase: 4
   curveHeight: 2
   useRotationAnimation: 1
@@ -134,6 +135,8 @@ MonoBehaviour:
   minScale: 0.7
   targetScale: 0.35
   reservedSlotIndex: -1
+  boxCollider: {fileID: 0}
+  changeCooldown: 0.2
 --- !u!54 &7518848861915213462
 Rigidbody:
   m_ObjectHideFlags: 0

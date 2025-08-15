@@ -164,6 +164,9 @@ namespace GameFolders.Scripts.Tutorial
                 case 6:
                     ActivateTutorialCamera("Luggages might be  mixed up in the \nX-ray!", 2f);
                     break;
+                case 8:
+                    ActivateTutorialCamera("Careful, this time there's a move limit!", 2f);
+                    break;
                 default:
                     StopTutorial();
                     break;

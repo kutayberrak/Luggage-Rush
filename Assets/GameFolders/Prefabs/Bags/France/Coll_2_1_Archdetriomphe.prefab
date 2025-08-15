@@ -120,13 +120,14 @@ MonoBehaviour:
   luggageType: 0
   garbageType: 0
   collectionType: 6
+  specialType: 0
   speed: 5
   arrivalThreshold: 0.05
-  riseDuration: 0.3
+  riseDuration: 0.15
   riseHeight: 1
   riseEase: 6
   useCurveMovement: 1
-  curveMoveDuration: 1.2
+  curveMoveDuration: 0.4
   curveEase: 4
   curveHeight: 2
   useRotationAnimation: 1
@@ -134,6 +135,7 @@ MonoBehaviour:
   minScale: 0.7
   targetScale: 0.4
   reservedSlotIndex: -1
+  boxCollider: {fileID: 0}
 --- !u!65 &349236079332812364
 BoxCollider:
   m_ObjectHideFlags: 0

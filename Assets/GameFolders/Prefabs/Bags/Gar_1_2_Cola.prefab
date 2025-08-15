@@ -151,11 +151,11 @@ MonoBehaviour:
   specialType: 0
   speed: 5
   arrivalThreshold: 0.05
-  riseDuration: 0.3
+  riseDuration: 0.15
   riseHeight: 1
   riseEase: 6
   useCurveMovement: 1
-  curveMoveDuration: 1.2
+  curveMoveDuration: 0.4
   curveEase: 4
   curveHeight: 2
   useRotationAnimation: 1
